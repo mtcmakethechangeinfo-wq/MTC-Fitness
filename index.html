@@ -837,7 +837,8 @@ const HOSTED = !!document.querySelector('link[rel="manifest"]');
 const STANDALONE = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 // Öffentliche Adresse der App: Plan-Links für Kundinnen und Kunden zeigen hierhin
-const APP_URL = HOSTED ? location.origin + location.pathname.replace(/index\.html$/, '') : 'https://claude.ai/artifact/6X89R2owh5TEaDFXagbKgM';
+// Plan-Links führen immer zur installierbaren App auf GitHub Pages, auch wenn sie im Artifact erstellt werden
+const APP_URL = HOSTED ? location.origin + location.pathname.replace(/index\.html$/, '') : 'https://mtcmakethechangeinfo-wq.github.io/MTC-Fitness/';
 const ENERGY = ['Platt', 'Müde', 'Okay', 'Gut', 'Top'];
 // Cardio-Arten (Feature: Cardio erfassen)
 const CARDIO = { lauf: { n: 'Laufen', u: 'pace' }, rad: { n: 'Radfahren', u: 'kmh' }, rudern: { n: 'Rudern', u: 'p500' }, gehen: { n: 'Gehen', u: 'pace' }, cross: { n: 'Crosstrainer', u: 'kmh' }, sonst: { n: 'Sonstiges', u: 'kmh' } };
@@ -2460,7 +2461,6 @@ async function sendPlan(c, after) {
   modal('<h3>Plan an ' + esc(c.name) + ' schicken</h3><p>' + esc(c.name) + ' öffnet den Link und tippt auf „Plan übernehmen“. Bisherige Trainings bleiben erhalten.</p>' +
     '<input class="input" id="md-link" readonly aria-label="Link zum Plan" value="' + esc(link) + '">' +
     '<div class="btn-row"><a class="btn" id="md-wa" href="' + esc(waLink(text, c.ph)) + '" target="_blank" rel="noopener">WhatsApp</a><button type="button" class="btn secondary" id="md-copy">Link kopieren</button></div>' +
-    (HOSTED ? '' : '<p class="muted" style="font-size:13px">Wichtig: Die App muss über „Teilen“ öffentlich freigegeben sein, sonst kann ' + esc(c.name) + ' den Link nicht öffnen.</p>') +
     '<button type="button" class="text-btn" id="md-later" style="justify-self:center">Fertig</button>', (m, close) => {
     m.querySelector('#md-wa').addEventListener('click', sent);
     m.querySelector('#md-copy').addEventListener('click', () => { copyFrom(m.querySelector('#md-link'), link); sent(); });
