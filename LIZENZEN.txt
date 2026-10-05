@@ -1,0 +1,11 @@
+Fremde Bestandteile dieser App
+
+three.js r147 (vendor/three/): MIT-Lizenz, Copyright 2010-2022 three.js authors.
+  Volltext: vendor/three/LICENSE
+
+Chakra Petch (fonts/): SIL Open Font License 1.1, Copyright 2018 The Chakra Petch Project Authors
+  (https://github.com/m4rc1e/Chakra-Petch). https://openfontlicense.org
+
+Anatomiedaten (data/): BodyParts3D, Copyright The Database Center for Life Science (DBCLS),
+  lizenziert unter CC BY-SA 2.1 Japan (https://creativecommons.org/licenses/by-sa/2.1/jp/).
+  Für die App vereinfacht und umgerechnet; diese abgeleiteten Daten stehen unter derselben Lizenz.

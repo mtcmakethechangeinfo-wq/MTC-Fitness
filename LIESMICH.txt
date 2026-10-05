@@ -1,0 +1,30 @@
+MTC Fitness Coaching als App
+============================
+
+Dieser Ordner ist die komplette App. Sie braucht keinen Server mit Datenbank:
+alle Trainingsdaten bleiben auf dem Handy der jeweiligen Person.
+
+So kommt die App online (einmalig)
+----------------------------------
+Den Inhalt dieses Ordners auf einen Webspace mit https legen, zum Beispiel:
+
+  * GitHub Pages: Repository anlegen, alle Dateien hochladen,
+    Einstellungen > Pages > "Deploy from a branch" > main / root.
+  * Netlify: app.netlify.com > "Add new site" > "Deploy manually" > Ordner hineinziehen.
+  * Eigene Website: Ordner per FTP z. B. nach app.deine-domain.de hochladen.
+
+Wichtig: https ist Pflicht, sonst lässt sich die App nicht installieren.
+Die Datei sw.js sollte nicht lange zwischengespeichert werden (_headers regelt das bei Netlify).
+
+So installieren deine Kunden die App
+------------------------------------
+Link im Handy öffnen. Die App zeigt beim ersten Start selbst, wie es geht:
+  * iPhone: in Safari auf Teilen > "Zum Home-Bildschirm".
+  * Android: "App installieren" antippen (oder Chrome-Menü > "App installieren").
+
+Updates
+-------
+Neue Dateien hochladen. Die App meldet sich beim nächsten Öffnen mit
+"Neue Version von MTC" und lädt nach einem Tipp neu. Daten bleiben erhalten.
+
+Version: 83b11a147a
