@@ -34,6 +34,7 @@
   --accent: #b57bff;
   --accent-ink: #0a0612;
   --accent-soft: rgba(181, 123, 255, 0.14);
+  --tired: #ff8a2a;   /* ermüdete Muskeln (Erholungsansicht) */
   --glass: rgba(10, 17, 27, 0.62);
   --glass-ink: #dbe8f5;
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -199,7 +200,7 @@ details.more .more-body { padding: 0 16px 16px; display: grid; gap: 12px; font-s
 .hint-chip { position: absolute; left: 50%; top: 64px; transform: translate(-50%, -6px); max-width: calc(100% - 32px); opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px; background: var(--glass); color: var(--glass-ink); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(181, 123, 255, 0.35); text-align: center; }
 .hint-chip.show { opacity: 1; transform: translate(-50%, 0); }
 .legend { position: absolute; left: 16px; bottom: 18px; display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: rgba(244, 244, 247, 0.8); background: var(--glass); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); padding: 7px 12px; border-radius: 999px; pointer-events: none; }
-.legend i { width: 54px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, #1d6f96, var(--accent)); }
+.legend i { width: 54px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, #1d6f96, var(--accent) 55%, var(--tired)); }
 
 .card { background: var(--card); border-radius: var(--r-md); box-shadow: 0 0 0 1px var(--hair); padding: 14px 16px; display: grid; gap: 10px; min-width: 0; }
 .card p { margin: 0; }
@@ -274,6 +275,7 @@ details.more .more-body { padding: 0 16px 16px; display: grid; gap: 12px; font-s
 .rec-row { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; }
 .rec-row + .rec-row, .hist-row + .hist-row, .best-row + .best-row { border-top: 1px solid var(--hair); }
 .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.dot.tired { background: var(--tired); box-shadow: 0 0 8px rgba(255, 138, 42, 0.55); }
 .hist-row { display: grid; gap: 8px; padding: 12px 14px 12px 16px; }
 .hist-row .row-main { width: 100%; grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
 .hist-ex { display: grid; gap: 2px; font-size: 14px; }
@@ -491,7 +493,7 @@ body.resting .update-bar { display: none; }
       </button>
     </div>
     <div class="hint-chip" id="hint" role="status" aria-live="polite"></div>
-    <div class="legend" id="legend" hidden><span>erholt</span><i></i><span>frisch trainiert</span></div>
+    <div class="legend" id="legend" hidden><span>erholt</span><i></i><span>ermüdet</span></div>
     <div class="tip" id="tip" hidden></div>
     <div class="loader" id="loader"><div class="loader-box"><span id="load-text">Modell wird geladen</span><div class="bar"><i id="load-bar"></i></div></div></div>
     <div class="fail" id="fail" hidden></div>
@@ -576,7 +578,10 @@ const MUSCLES = [
       ['Schrägbankdrücken (Kurzhantel)', '3 × 8–12', 'Bank auf 30°, betont die Pars clavicularis.', 'h', 2, ['delta', 'trizeps']],
       ['Liegestütze', '3 × max', 'Körper bleibt gerade, Ellbogen etwa 45° vom Körper.', 'kg', 1, ['trizeps', 'delta']],
       ['Dips (vorgebeugt)', '3 × 8–12', 'Oberkörper nach vorn neigen, betont die untere Brust.', 'kg', 3, ['trizeps', 'delta']],
-      ['Cable Flys', '3 × 12–15', 'Arme leicht gebeugt, Hände vor der Brust zusammenführen.', 'm', 1, ['delta']]
+      ['Cable Flys', '3 × 12–15', 'Arme leicht gebeugt, Hände vor der Brust zusammenführen.', 'm', 1, ['delta']],
+      ['Wand-Liegestütze', '3 × 12–15', 'Hände schulterbreit an die Wand, Körper bleibt gerade. Brust zur Wand senken und wieder wegdrücken. Je weiter die Füße weg sind, desto schwerer.', 'kg', 1, ['trizeps', 'delta']],
+      ['Liegestütze auf den Knien', '3 × 8–12', 'Knie auf eine weiche Unterlage, Körper von den Knien bis zum Kopf gerade. Brust bis kurz über den Boden senken.', 'kg', 1, ['trizeps', 'delta']],
+      ['Brustpresse (Maschine)', '3 × 10–12', 'Sitz so einstellen, dass die Griffe auf Brusthöhe sind. Ruhig nach vorn drücken, die Ellbogen nicht ganz durchstrecken.', 'm', 1, ['trizeps', 'delta']]
     ] },
   { id: 'bauch', name: 'Bauch', latin: 'M. rectus abdominis, Mm. obliqui externus et internus', side: 'front', region: 'Bauch',
     origin: 'Rectus: Schambein und Symphyse. Obliquus externus: Außenfläche der Rippen 5–12. Obliquus internus: Fascia thoracolumbalis, Darmbeinkamm, Leistenband.',
@@ -588,7 +593,10 @@ const MUSCLES = [
       ['Crunches', '3 × 15–20', 'Nur die Schulterblätter abheben, Blick schräg nach oben.', 'kg', 1, []],
       ['Hängendes Beinheben', '3 × 8–12', 'Ohne Schwung, am Ende das Becken leicht einrollen.', 'kg', 3, ['unterarm']],
       ['Kabel-Crunches (kniend)', '3 × 12–15', 'Seil am Kopf halten, den Rumpf einrollen statt aus der Hüfte zu ziehen.', 'm', 2, []],
-      ['Pallof Press', '3 × 10 je Seite', 'Seitlich zum Kabel stehen, Griff vor der Brust wegdrücken, Rumpf nicht verdrehen lassen.', 'm', 1, []]
+      ['Pallof Press', '3 × 10 je Seite', 'Seitlich zum Kabel stehen, Griff vor der Brust wegdrücken, Rumpf nicht verdrehen lassen.', 'm', 1, []],
+      ['Dead Bug', '3 × 8 je Seite', 'Auf dem Rücken liegen, der untere Rücken bleibt am Boden. Gegenüberliegenden Arm und Bein langsam strecken und zurückholen.', 'kg', 1, []],
+      ['Seitstütz auf den Knien', '3 × 20–30 s je Seite', 'Auf Unterarm und Knien seitlich stützen, Hüfte anheben, sodass Kopf, Hüfte und Knie eine Linie bilden.', 'kg', 1, []],
+      ['Bauchmaschine (Crunch)', '3 × 12–15', 'Polster an die Brust, den Oberkörper langsam einrollen und kontrolliert zurück. Nicht mit den Armen ziehen.', 'm', 1, []]
     ] },
   { id: 'delta', name: 'Deltamuskel', latin: 'M. deltoideus', side: 'front', region: 'Schulter',
     origin: 'Laterales Drittel des Schlüsselbeins, Acromion, Spina scapulae.',
@@ -600,7 +608,10 @@ const MUSCLES = [
       ['Seitheben', '3 × 12–15', 'Leichtes Gewicht bis Schulterhöhe, trifft die Pars acromialis.', 'h', 1, ['trapez']],
       ['Face Pulls', '3 × 15', 'Seil zum Gesicht ziehen, trifft die Pars spinalis.', 'm', 1, ['trapez', 'rhomb', 'rotator']],
       ['Pike Push-ups', '3 × 8–12', 'Hüfte hoch, Kopf zwischen die Hände absenken.', 'kg', 2, ['trizeps']],
-      ['Frontheben', '3 × 10–12', 'Kontrolliert ohne Schwung, trifft die Pars clavicularis.', 'h', 1, ['brust']]
+      ['Frontheben', '3 × 10–12', 'Kontrolliert ohne Schwung, trifft die Pars clavicularis.', 'h', 1, ['brust']],
+      ['Schulterdrücken an der Maschine', '3 × 10–12', 'Rücken fest an die Lehne, Griffe auf Schulterhöhe. Nach oben drücken, ohne ins Hohlkreuz zu gehen.', 'm', 1, ['trizeps']],
+      ['Seitheben mit Band', '3 × 12–15', 'Band unter die Füße, Arme leicht gebeugt seitlich bis auf Schulterhöhe heben und langsam senken.', 'kg', 1, []],
+      ['Schulterdrücken sitzend (Kurzhantel)', '3 × 10–12', 'Auf einer Bank mit Lehne sitzen, leichte Hanteln von Schulterhöhe nach oben drücken, Bauch fest.', 'h', 1, ['trizeps']]
     ] },
   { id: 'bizeps', name: 'Bizeps', latin: 'M. biceps brachii', side: 'front', region: 'Oberarm vorne',
     origin: 'Caput longum: Tuberculum supraglenoidale. Caput breve: Processus coracoideus.',
@@ -612,7 +623,10 @@ const MUSCLES = [
       ['Hammer Curls', '3 × 10–12', 'Neutraler Griff, trifft auch M. brachialis und M. brachioradialis.', 'h', 1, ['unterarm']],
       ['Schrägbank-Curls (Kurzhantel)', '3 × 10', 'Arme hängen hinter dem Körper und dehnen das Caput longum.', 'h', 2, []],
       ['Klimmzüge im Untergriff', '3 × max', 'Schulterbreit greifen, Kinn über die Stange.', 'kg', 3, ['lat', 'rhomb']],
-      ['Kabel-Curls', '3 × 12–15', 'Konstante Spannung über den ganzen Weg.', 'm', 1, []]
+      ['Kabel-Curls', '3 × 12–15', 'Konstante Spannung über den ganzen Weg.', 'm', 1, []],
+      ['Bizeps-Curls mit Band', '3 × 12–15', 'Auf das Band stellen, die Ellbogen bleiben am Körper. Hände langsam zu den Schultern führen und kontrolliert senken.', 'kg', 1, ['unterarm']],
+      ['Konzentrationscurls (sitzend)', '3 × 10–12 je Arm', 'Ellbogen innen am Oberschenkel abstützen und die Hantel ohne Schwung zur Schulter beugen.', 'h', 1, []],
+      ['Bizepsmaschine (Scott-Curls)', '3 × 10–12', 'Oberarme liegen auf dem Polster. Ruhig beugen und langsam fast ganz strecken.', 'm', 1, ['unterarm']]
     ] },
   { id: 'trizeps', name: 'Trizeps', latin: 'M. triceps brachii', side: 'back', region: 'Oberarm hinten',
     origin: 'Caput longum: Tuberculum infraglenoidale. Caput laterale und mediale: Rückseite des Oberarmknochens.',
@@ -624,7 +638,10 @@ const MUSCLES = [
       ['Diamant-Liegestütze', '3 × max', 'Hände unter der Brust, Daumen und Zeigefinger bilden eine Raute.', 'kg', 2, ['brust']],
       ['Trizepsdrücken am Kabel', '3 × 12–15', 'Ellbogen fixiert, unten voll strecken.', 'm', 1, []],
       ['Überkopf-Trizepsstrecken (Kurzhantel)', '3 × 10–12', 'Dehnt das Caput longum am stärksten.', 'h', 1, []],
-      ['Enges Bankdrücken', '3 × 6–10', 'Griff schulterbreit, Ellbogen nah am Körper.', 'h', 2, ['brust']]
+      ['Enges Bankdrücken', '3 × 6–10', 'Griff schulterbreit, Ellbogen nah am Körper.', 'h', 2, ['brust']],
+      ['Bank-Dips mit gebeugten Beinen', '3 × 8–12', 'Hände hinter dir auf eine stabile Bank oder einen Stuhl, Füße nah am Körper. Ellbogen zeigen beim Absenken nach hinten.', 'kg', 1, ['brust', 'delta']],
+      ['Trizeps-Kickbacks (Kurzhantel)', '3 × 12 je Arm', 'Oberkörper vorgebeugt abstützen, der Oberarm bleibt am Körper. Nur den Unterarm nach hinten strecken.', 'h', 1, []],
+      ['Trizepsdrücken mit Band', '3 × 12–15', 'Band oben an einer Tür befestigen, Ellbogen am Körper lassen und die Hände nach unten strecken.', 'kg', 1, []]
     ] },
   { id: 'unterarm', name: 'Unterarme', latin: 'Unterarmbeuger und -strecker, M. brachioradialis', side: 'front', region: 'Unterarm',
     origin: 'Beuger: innerer Oberarmknorren (Epicondylus medialis). Strecker: äußerer Oberarmknorren (Epicondylus lateralis). Brachioradialis: Außenkante des Oberarmknochens.',
@@ -636,7 +653,10 @@ const MUSCLES = [
       ['Handgelenkcurls (Kurzhantel)', '3 × 15', 'Unterarme auf den Oberschenkeln ablegen, nur das Handgelenk bewegen.', 'h', 1, []],
       ['Reverse Curls (Obergriff)', '3 × 10–12', 'Stange im Obergriff, trifft besonders den Brachioradialis.', 'h', 1, ['bizeps']],
       ['Handgelenkstrecken (Kurzhantel)', '3 × 15', 'Handrücken zeigt nach oben, Hantel langsam heben und senken.', 'h', 1, []],
-      ['Handtrainer drücken', '3 × 20 je Hand', 'Langsam schließen, 1 s halten, kontrolliert öffnen.', 'kg', 1, []]
+      ['Handtrainer drücken', '3 × 20 je Hand', 'Langsam schließen, 1 s halten, kontrolliert öffnen.', 'kg', 1, []],
+      ['Handgelenkcurls mit Band', '3 × 15', 'Unterarme auf den Oberschenkeln, Band unter den Füßen. Nur die Handgelenke bewegen.', 'kg', 1, []],
+      ['Handtuch auswringen', '3 × 20 s', 'Ein Handtuch mit beiden Händen kräftig auswringen, dann die Richtung wechseln.', 'kg', 1, []],
+      ['Farmer\'s Hold (Kurzhantel)', '3 × 20–30 s', 'Zwei Hanteln seitlich halten, aufrecht stehen, Schultern locker nach hinten unten.', 'h', 1, ['trapez']]
     ] },
   { id: 'lat', name: 'Latissimus', latin: 'M. latissimus dorsi', side: 'back', region: 'Rücken seitlich',
     origin: 'Dornfortsätze Th7–L5 über die Fascia thoracolumbalis, Kreuzbein, Darmbeinkamm, Rippen 10–12.',
@@ -648,7 +668,10 @@ const MUSCLES = [
       ['Latzug zur Brust', '3 × 10–12', 'Leicht zurücklehnen, Ellbogen nach unten führen.', 'm', 1, ['bizeps']],
       ['Einarmiges Kurzhantelrudern', '3 × 10 je Seite', 'Hantel zur Hüfte ziehen, nicht zur Brust.', 'h', 1, ['rhomb', 'bizeps']],
       ['Straight-Arm Pulldown', '3 × 12–15', 'Gestreckte Arme, Stange bis zu den Oberschenkeln.', 'm', 1, ['trizeps']],
-      ['Tischrudern (Inverted Rows)', '3 × 10', 'Unter einer stabilen Stange oder Tischkante, Brust zur Kante ziehen.', 'kg', 1, ['rhomb', 'bizeps']]
+      ['Tischrudern (Inverted Rows)', '3 × 10', 'Unter einer stabilen Stange oder Tischkante, Brust zur Kante ziehen.', 'kg', 1, ['rhomb', 'bizeps']],
+      ['Latzug mit Band (kniend)', '3 × 12–15', 'Band oben befestigen, kniend die Ellbogen Richtung Hüfte ziehen und die Brust aufrichten.', 'kg', 1, ['bizeps', 'rhomb']],
+      ['Unterstützte Klimmzüge (Maschine)', '3 × 6–10', 'Die Maschine nimmt dir einen Teil des Gewichts ab. Brust zur Stange ziehen und langsam ablassen.', 'm', 1, ['bizeps', 'rhomb']],
+      ['Latzug im Untergriff (eng)', '3 × 10–12', 'Schulterbreiter Untergriff, Stange zur oberen Brust ziehen, die Schultern bleiben unten.', 'm', 1, ['bizeps']]
     ] },
   { id: 'trapez', name: 'Trapez', latin: 'M. trapezius', side: 'back', region: 'Nacken und oberer Rücken',
     origin: 'Hinterhauptbein, Nackenband, Dornfortsätze C7–Th12.',
@@ -660,7 +683,10 @@ const MUSCLES = [
       ['Face Pulls', '3 × 15', 'Trifft die Pars transversa und die hintere Schulter.', 'm', 1, ['delta', 'rhomb']],
       ['Farmer\'s Walk', '3 × 30 m', 'Schwere Hanteln, aufrecht gehen.', 'h', 2, ['unterarm', 'bauch']],
       ['Y-Raises (Schrägbank)', '3 × 12', 'Bauchlage, Arme in Y-Form heben, trifft die Pars ascendens.', 'h', 1, ['delta']],
-      ['Y-T-W am Boden', '3 × 8 je Form', 'Bauchlage, Arme in Y-, T- und W-Form vom Boden heben.', 'kg', 1, ['rhomb', 'delta']]
+      ['Y-T-W am Boden', '3 × 8 je Form', 'Bauchlage, Arme in Y-, T- und W-Form vom Boden heben.', 'kg', 1, ['rhomb', 'delta']],
+      ['Shrugs mit Band', '3 × 15', 'Auf das Band stellen und die Schultern gerade zu den Ohren ziehen, kurz halten und langsam senken.', 'kg', 1, []],
+      ['Shrugs an der Maschine', '3 × 12–15', 'Arme bleiben gestreckt, nur die Schultern heben. Nicht kreisen.', 'm', 1, []],
+      ['Wandengel (Wall Angels)', '3 × 10', 'Rücken an die Wand, Arme in U-Form an der Wand langsam hoch und wieder runter schieben.', 'kg', 1, ['rhomb', 'rotator']]
     ] },
   { id: 'rhomb', name: 'Rhomboiden', latin: 'Mm. rhomboidei major et minor', side: 'back', region: 'Zwischen den Schulterblättern',
     origin: 'Minor: Dornfortsätze C6–C7. Major: Dornfortsätze Th1–Th4.',
@@ -672,7 +698,10 @@ const MUSCLES = [
       ['Kabelrudern (enger Griff)', '3 × 12', 'Brust raus, Griff zum Bauchnabel.', 'm', 1, ['lat', 'bizeps']],
       ['Reverse Flys (Kurzhantel)', '3 × 12–15', 'Vorgebeugt, Arme seitlich öffnen.', 'h', 1, ['delta', 'trapez']],
       ['Band Pull-Aparts', '3 × 20', 'Gestreckte Arme, Band vor der Brust auseinanderziehen.', 'kg', 1, ['delta', 'trapez']],
-      ['Tischrudern (breit)', '3 × 10', 'Ellbogen breit führen, Schulterblätter am Ende zusammen.', 'kg', 1, ['lat', 'bizeps']]
+      ['Tischrudern (breit)', '3 × 10', 'Ellbogen breit führen, Schulterblätter am Ende zusammen.', 'kg', 1, ['lat', 'bizeps']],
+      ['Rudern mit Band (sitzend)', '3 × 12–15', 'Beine gestreckt, Band um die Füße. Ellbogen nach hinten ziehen und die Schulterblätter zusammendrücken.', 'kg', 1, ['lat', 'bizeps']],
+      ['Rudermaschine mit Brustpolster', '3 × 10–12', 'Brust ans Polster, Griffe zu dir ziehen und die Schulterblätter kurz zusammenhalten.', 'm', 1, ['lat', 'bizeps']],
+      ['Schulterblätter zusammenziehen', '3 × 12', 'Aufrecht sitzen oder stehen, die Schulterblätter nach hinten unten ziehen und jeweils 3 Sekunden halten.', 'kg', 1, ['trapez']]
     ] },
   { id: 'rotator', name: 'Rotatorenmanschette', latin: 'Mm. supraspinatus, infraspinatus et teres minor', side: 'back', region: 'Schulterblatt und Schultergelenk',
     origin: 'Obergrätengrube (Supraspinatus) und Untergrätengrube (Infraspinatus) des Schulterblatts. Teres minor: Außenrand des Schulterblatts.',
@@ -684,7 +713,10 @@ const MUSCLES = [
       ['Außenrotation mit Band', '3 × 15 je Seite', 'Wie am Kabel, nur mit Theraband. Ideal zum Aufwärmen vor dem Oberkörpertraining.', 'kg', 1, []],
       ['Außenrotation liegend (Kurzhantel)', '3 × 12 je Seite', 'Seitlage, Ellbogen im 90°-Winkel am Körper, leichte Hantel nach oben drehen.', 'h', 1, ['delta']],
       ['Scaption (Y-Heben im Stand)', '3 × 12', 'Leichte Hanteln schräg vor dem Körper bis Schulterhöhe heben, Daumen zeigen nach oben.', 'h', 1, ['delta', 'trapez']],
-      ['Cuban Press', '3 × 10', 'Ellbogen auf Schulterhöhe, Unterarme nach oben drehen, dann über Kopf drücken. Sehr leichtes Gewicht.', 'h', 2, ['delta', 'trapez']]
+      ['Cuban Press', '3 × 10', 'Ellbogen auf Schulterhöhe, Unterarme nach oben drehen, dann über Kopf drücken. Sehr leichtes Gewicht.', 'h', 2, ['delta', 'trapez']],
+      ['Innenrotation mit Band', '3 × 12–15 je Seite', 'Ellbogen am Körper und 90° gebeugt. Die Hand gegen den Zug des Bandes zum Bauch drehen.', 'kg', 1, []],
+      ['Innenrotation am Kabel', '3 × 12–15 je Seite', 'Seitlich zum Kabel stehen, Ellbogen am Körper und den Griff ruhig zum Bauch drehen.', 'm', 1, []],
+      ['Band-Durchzüge (Schulter-Mobilität)', '2 × 10', 'Band breit greifen und mit gestreckten Armen langsam über den Kopf nach hinten führen. Nur so weit, wie es ohne Schmerz geht.', 'kg', 1, ['delta']]
     ] },
   { id: 'ruecken', name: 'Unterer Rücken', latin: 'M. erector spinae (Rückenstrecker)', side: 'back', region: 'Entlang der Wirbelsäule',
     origin: 'Kreuzbein, Darmbeinkamm, Dornfortsätze der Lendenwirbel und Fascia thoracolumbalis.',
@@ -696,7 +728,10 @@ const MUSCLES = [
       ['Superman', '3 × 12', 'Bauchlage, Arme und Beine gleichzeitig leicht anheben und 2 s halten.', 'kg', 1, ['glute']],
       ['Bird Dog', '3 × 10 je Seite', 'Vierfüßlerstand, Arm und gegenüberliegendes Bein strecken, Becken bleibt ruhig.', 'kg', 1, ['glute', 'bauch']],
       ['Kreuzheben (Langhantel)', '4 × 5–8', 'Rücken neutral, Stange nah am Körper, aus den Beinen hochdrücken.', 'h', 3, ['glute', 'ham', 'quad', 'trapez']],
-      ['Kettlebell Swings', '3 × 15', 'Der Schwung kommt aus der Hüfte, nicht aus den Armen. Rücken bleibt gerade.', 'h', 2, ['glute', 'ham']]
+      ['Kettlebell Swings', '3 × 15', 'Der Schwung kommt aus der Hüfte, nicht aus den Armen. Rücken bleibt gerade.', 'h', 2, ['glute', 'ham']],
+      ['Hüftbeugen mit Stab (Hip Hinge)', '3 × 10', 'Einen Stab am Rücken halten, er berührt Kopf, Brustwirbelsäule und Steiß. Hüfte nach hinten schieben, der Rücken bleibt gerade. So übst du das richtige Heben.', 'kg', 1, ['ham', 'glute']],
+      ['Rückenstrecker-Maschine', '3 × 12', 'Polster am oberen Rücken, langsam nach hinten strecken und nicht überstrecken.', 'm', 1, []],
+      ['Kreuzheben mit Kettlebell', '3 × 10', 'Kettlebell zwischen den Füßen, Hüfte nach hinten, Rücken gerade. Aufstehen, indem du die Hüfte nach vorn schiebst.', 'h', 1, ['glute', 'ham']]
     ] },
   { id: 'glute', name: 'Gesäß', latin: 'Mm. glutei maximus, medius et minimus', side: 'back', region: 'Gesäß und Hüfte',
     origin: 'Maximus: hintere Darmbeinschaufel, Kreuz- und Steißbein, Fascia thoracolumbalis. Medius und minimus: Außenfläche der Darmbeinschaufel.',
@@ -708,7 +743,10 @@ const MUSCLES = [
       ['Glute Bridge', '3 × 15', 'Rückenlage, Fersen nah am Po, Becken bis zur Linie Knie–Schulter heben.', 'kg', 1, ['ham']],
       ['Bulgarian Split Squats (vorgebeugt)', '3 × 10 je Bein', 'Oberkörper leicht nach vorn neigen, so arbeitet das Gesäß mehr als der Oberschenkel.', 'h', 2, ['quad', 'adduk']],
       ['Kabel-Kickbacks', '3 × 12–15 je Bein', 'Fußschlaufe am Kabel, Bein gestreckt nach hinten führen, Rücken bleibt gerade.', 'm', 1, ['ham']],
-      ['Seitliches Gehen mit Miniband', '3 × 15 Schritte je Seite', 'Band über den Knien, leicht in die Hocke, Füße bleiben parallel. Trifft den Gluteus medius.', 'kg', 1, []]
+      ['Seitliches Gehen mit Miniband', '3 × 15 Schritte je Seite', 'Band über den Knien, leicht in die Hocke, Füße bleiben parallel. Trifft den Gluteus medius.', 'kg', 1, []],
+      ['Donkey Kicks (Vierfüßlerstand)', '3 × 12 je Seite', 'Im Vierfüßlerstand ein angewinkeltes Bein nach oben drücken, der Rücken bleibt gerade.', 'kg', 1, ['ham']],
+      ['Abduktorenmaschine', '3 × 12–15', 'Aufrecht sitzen, die Knie langsam nach außen drücken und kontrolliert zurück.', 'm', 1, []],
+      ['Step-ups auf eine Stufe', '3 × 10 je Bein', 'Den ganzen Fuß auf eine stabile Stufe oder Bank stellen und über die Ferse nach oben drücken.', 'kg', 1, ['quad', 'ham']]
     ] },
   { id: 'quad', name: 'Quadrizeps', latin: 'M. quadriceps femoris', side: 'front', region: 'Oberschenkel vorne',
     origin: 'Rectus femoris: Spina iliaca anterior inferior. Vasti: Schaft des Oberschenkelknochens.',
@@ -720,7 +758,10 @@ const MUSCLES = [
       ['Beinpresse', '3 × 10–12', 'Füße hüftbreit, Knie nicht ganz durchstrecken.', 'm', 1, []],
       ['Bulgarian Split Squats', '3 × 8–10 je Bein', 'Hinterer Fuß auf der Bank, vorderes Knie über dem Fuß.', 'h', 2, ['glute', 'ham']],
       ['Ausfallschritte', '3 × 10 je Bein', 'Großer Schritt, hinteres Knie fast zum Boden.', 'kg', 1, ['glute', 'ham']],
-      ['Beinstrecker', '3 × 12–15', 'Oben kurz halten, langsam ablassen.', 'm', 1, []]
+      ['Beinstrecker', '3 × 12–15', 'Oben kurz halten, langsam ablassen.', 'm', 1, []],
+      ['Kniebeuge zum Stuhl', '3 × 10–12', 'Füße schulterbreit vor einem Stuhl. Po nach hinten absenken, kurz antippen und wieder aufstehen.', 'kg', 1, ['glute', 'adduk']],
+      ['Goblet Squat (Kurzhantel)', '3 × 10–12', 'Hantel vor der Brust halten, Brust aufrecht, die Knie zeigen in Richtung der Zehen.', 'h', 1, ['glute', 'adduk']],
+      ['Wandsitzen (Wall Sit)', '3 × 20–40 s', 'Rücken an der Wand, Knie etwa 90° gebeugt, Füße stehen unter den Knien.', 'kg', 1, ['glute']]
     ] },
   { id: 'adduk', name: 'Adduktoren', latin: 'Mm. adductor longus et magnus, M. gracilis', side: 'front', region: 'Oberschenkel innen',
     origin: 'Schambein und Sitzbein (Ramus ossis pubis, Tuber ischiadicum).',
@@ -732,7 +773,10 @@ const MUSCLES = [
       ['Adduktorenmaschine', '3 × 12–15', 'Langsam schließen, kontrolliert öffnen.', 'm', 1, []],
       ['Copenhagen Plank', '3 × 15–30 s je Seite', 'Oberes Bein auf einer Bank ablegen, Hüfte heben, Körper bleibt gerade.', 'kg', 3, ['bauch']],
       ['Seitliche Ausfallschritte', '3 × 10 je Seite', 'Weit zur Seite treten, Gewicht auf die Ferse, das andere Bein bleibt gestreckt.', 'kg', 1, ['glute', 'quad']],
-      ['Adduktion am Kabel', '3 × 12 je Bein', 'Fußschlaufe am inneren Bein, Bein vor dem Standbein vorbeiführen.', 'm', 1, []]
+      ['Adduktion am Kabel', '3 × 12 je Bein', 'Fußschlaufe am inneren Bein, Bein vor dem Standbein vorbeiführen.', 'm', 1, []],
+      ['Beinheben innen (seitlich liegend)', '3 × 12–15 je Seite', 'Auf der Seite liegen, das obere Bein vor dem Körper aufstellen und das untere gestreckte Bein anheben.', 'kg', 1, []],
+      ['Kissen zwischen den Knien drücken', '3 × 10', 'Im Sitzen oder in Rückenlage ein Kissen oder einen Ball zwischen den Knien zusammendrücken, jeweils 5 Sekunden halten.', 'kg', 1, []],
+      ['Sumo-Kniebeuge ohne Gewicht', '3 × 12–15', 'Breiter Stand, Fußspitzen nach außen, die Knie zeigen in Richtung der Zehen.', 'kg', 1, ['quad', 'glute']]
     ] },
   { id: 'ham', name: 'Hamstrings', latin: 'Ischiocrurale Muskulatur', side: 'back', region: 'Oberschenkel hinten',
     origin: 'Sitzbeinhöcker (Tuber ischiadicum). Kurzer Kopf des Biceps femoris: Linea aspera.',
@@ -744,7 +788,10 @@ const MUSCLES = [
       ['Beinbeuger liegend', '3 × 10–12', 'Hüfte bleibt auf dem Polster.', 'm', 1, ['wade']],
       ['Nordic Curls', '3 × 5–8', 'Füße fixiert, langsam nach vorn ablassen.', 'kg', 3, []],
       ['Slider Leg Curls', '3 × 10', 'Rückenlage, Fersen auf einem Handtuch, Hüfte hoch, Fersen zum Po ziehen.', 'kg', 2, []],
-      ['Good Mornings', '3 × 10', 'Leichtes Gewicht, Rücken neutral.', 'h', 2, ['ruecken', 'glute']]
+      ['Good Mornings', '3 × 10', 'Leichtes Gewicht, Rücken neutral.', 'h', 2, ['ruecken', 'glute']],
+      ['Beinbeuger sitzend (Maschine)', '3 × 10–12', 'Das Polster liegt knapp über den Fersen. Beine ruhig beugen und langsam zurück.', 'm', 1, []],
+      ['Brücke mit Füßen weit vorn', '3 × 12', 'Wie die Glute Bridge, nur mit den Füßen weiter weg. So arbeitet die Oberschenkelrückseite mehr.', 'kg', 1, ['glute']],
+      ['Rumänisches Kreuzheben (leichte Kurzhanteln)', '3 × 10–12', 'Hanteln eng an den Beinen nach unten führen, Knie leicht gebeugt, Rücken gerade, bis es hinten im Oberschenkel zieht.', 'h', 1, ['glute', 'ruecken']]
     ] },
   { id: 'wade', name: 'Waden', latin: 'M. triceps surae', side: 'back', region: 'Unterschenkel hinten',
     origin: 'Gastrocnemius: Femurkondylen. Soleus: Rückseite von Schienbein und Wadenbein.',
@@ -756,7 +803,10 @@ const MUSCLES = [
       ['Wadenheben sitzend', '3 × 15–20', 'Mit gebeugtem Knie arbeitet vor allem der Soleus.', 'm', 1, []],
       ['Einbeiniges Wadenheben (Stufe)', '3 × 12 je Bein', 'Ferse unter Stufenniveau absenken.', 'kg', 1, []],
       ['Seilspringen', '3 × 60 s', 'Locker auf den Fußballen federn.', 'kg', 1, []],
-      ['Wadenheben an der Beinpresse', '3 × 15', 'Nur die Fußballen auf der Platte.', 'm', 1, []]
+      ['Wadenheben an der Beinpresse', '3 × 15', 'Nur die Fußballen auf der Platte.', 'm', 1, []],
+      ['Wadenheben an der Wand', '3 × 15–20', 'Hände an der Wand, langsam auf die Zehenspitzen und kontrolliert zurück.', 'kg', 1, []],
+      ['Wadenheben sitzend (Kurzhantel)', '3 × 15', 'Hantel auf den Knien, Fußballen auf einer Erhöhung. Fersen langsam heben und senken.', 'h', 1, []],
+      ['Gehen auf den Zehenspitzen', '3 × 30 s', 'Aufrecht auf den Zehenspitzen gehen, die Fersen nicht absetzen.', 'kg', 1, []]
     ] }
 ];
 const BY_ID = Object.fromEntries(MUSCLES.map(m => [m.id, m]));
@@ -1084,7 +1134,7 @@ function renderHead() {
   if (!selected && modelLoads) {
     const vol = muscMode === 'vol';
     h.textContent = vol ? 'Deine Verteilung am Modell' : 'Deine Erholung am Modell'; h.classList.remove('is-sel');
-    p.textContent = (vol ? 'Je kräftiger ein Muskel lila leuchtet, desto mehr hast du ihn in den letzten 7 Tagen trainiert.' : 'Lila leuchten die Muskeln, die du zuletzt trainiert hast.') + ' Tippe auf einen Muskel für passende Übungen.';
+    p.textContent = (vol ? 'Orange leuchten die Muskeln, die du in den letzten 7 Tagen viel trainiert hast, lila die mit weniger Sätzen.' : 'Orange leuchten ermüdete Muskeln, lila die, die sich gerade erholen.') + ' Tippe auf einen Muskel für passende Übungen.';
   } else if (!selected) {
     h.textContent = 'Welchen Muskel willst du trainieren?'; h.classList.remove('is-sel');
     p.textContent = 'Tippe auf das Modell oder wähle unten eine Gruppe.';
@@ -1120,7 +1170,7 @@ function renderDetail() {
     (items.length ? '<ul class="list">' + items.map(({ e, i }) => {
       const on = inMine(m.id, i), open = openRow === i, k = m.id + '.' + i;
       return '<li class="row">' +
-        '<button type="button" class="row-main" data-open="' + i + '" aria-expanded="' + open + '"><span class="row-name">' + esc(e[0]) + '</span><span class="row-sub">' + esc(e[1]) + ' · ' + (e[3] === 'kg' ? 'Zuhause' : 'Studio') + (inCoachPlan(k) ? ' <span class="tag">In deinem Plan</span>' : '') + '</span></button>' +
+        '<button type="button" class="row-main" data-open="' + i + '" aria-expanded="' + open + '"><span class="row-name">' + esc(e[0]) + '</span><span class="row-sub">' + esc(e[1]) + ' · ' + (e[3] === 'kg' ? 'Zuhause' : 'Studio') + (e[4] === 1 ? ' <span class="tag holo">Einsteiger</span>' : '') + (inCoachPlan(k) ? ' <span class="tag">In deinem Plan</span>' : '') + '</span></button>' +
         '<button type="button" class="add" data-add="' + i + '" aria-pressed="' + on + '" aria-label="' + esc(e[0]) + (on ? ' aus Meine Übungen entfernen' : ' zu Meine Übungen hinzufügen') + '">' + (on ? ICON_CHECK : ICON_PLUS) + '</button>' +
         (open ? '<div class="row-more"><p>' + esc(e[2]) + '</p>' +
           (e[5].length ? '<p class="also">Trainiert auch: ' + e[5].map(s => '<button type="button" class="link" data-go="' + s + '">' + esc(BY_ID[s].name) + '</button>').join(', ') + '</p>' : '') +
@@ -1757,7 +1807,7 @@ function picker(box, onPick, onClose) {
   function draw() {
     box.innerHTML = '<div class="card picker"><b>Übung hinzufügen</b><div class="pills">' +
       MUSCLES.map(m => '<button type="button" class="pill" data-pg="' + m.id + '" aria-pressed="' + (m.id === g) + '">' + esc(m.name) + '</button>').join('') + '</div>' +
-      '<ul class="list">' + BY_ID[g].ex.map((e, i) => '<li class="pick-row"><div style="min-width:0;display:grid;gap:2px"><span class="row-name">' + esc(e[0]) + '</span><span class="row-sub">' + esc(e[1]) + ' · ' + (e[3] === 'kg' ? 'Zuhause' : 'Studio') + '</span></div>' +
+      '<ul class="list">' + BY_ID[g].ex.map((e, i) => '<li class="pick-row"><div style="min-width:0;display:grid;gap:2px"><span class="row-name">' + esc(e[0]) + '</span><span class="row-sub">' + esc(e[1]) + ' · ' + (e[3] === 'kg' ? 'Zuhause' : 'Studio') + (e[4] === 1 ? ' <span class="tag holo">Einsteiger</span>' : '') + '</span></div>' +
         '<button type="button" class="add" data-pick="' + i + '" aria-label="' + esc(e[0]) + ' hinzufügen">' + ICON_PLUS + '</button></li>').join('') + '</ul>' +
       '<div class="field"><span>Eigene Übung (zählt zu ' + esc(BY_ID[g].name) + ')</span><div class="custom-row"><input class="input" data-pk-name placeholder="z. B. Hip Thrust" maxlength="80"><button type="button" class="btn secondary" data-pk-add>Hinzufügen</button></div></div>' +
       '<button type="button" class="text-btn" data-pk-close style="justify-self:center">Schließen</button></div>';
@@ -1904,7 +1954,7 @@ function progressTint() {
   return t;
 }
 function setLegend() {
-  $('legend').innerHTML = muscMode === 'vol' ? '<span>wenig</span><i></i><span>viel trainiert (7 Tage)</span>' : '<span>erholt</span><i></i><span>frisch trainiert</span>';
+  $('legend').innerHTML = muscMode === 'vol' ? '<span>wenig</span><i></i><span>viel trainiert (7 Tage)</span>' : '<span>erholt</span><i></i><span>ermüdet</span>';
 }
 
 /* ---------- Abzeichen ---------- */
@@ -2066,9 +2116,9 @@ function renderProgress() {
     const rec = recovery(), rk = Object.keys(rec.per).sort((a, b) => rec.per[b].last - rec.per[a].last);
     h += rk.length ? '<ul class="list">' + rk.map(g => {
       const o = rec.per[g], age = (now - o.last) / 36e5;
-      const s = age < 48 ? ['Braucht noch Pause', 1] : age < 72 ? ['Fast erholt', 0.55] : ['Erholt', 0.25];
-      return '<li class="rec-row"><i class="dot" style="opacity:' + s[1] + '"></i><div style="min-width:0;display:grid;gap:1px"><span class="row-name">' + esc(BY_ID[g].name) + '</span><span class="muted">' + ago(o.last) + ' · ' + o.sets + ' Sätze</span></div><span class="muted">' + s[0] + '</span></li>';
-    }).join('') + '</ul><p class="credit">Am Modell leuchten frisch trainierte Muskeln lila. Je kräftiger, desto frischer die Belastung.</p>'
+      const s = age < 48 ? ['Braucht noch Pause', 1, ' tired'] : age < 72 ? ['Fast erholt', 0.8, ''] : ['Erholt', 0.3, ''];
+      return '<li class="rec-row"><i class="dot' + s[2] + '" style="opacity:' + s[1] + '"></i><div style="min-width:0;display:grid;gap:1px"><span class="row-name">' + esc(BY_ID[g].name) + '</span><span class="muted">' + ago(o.last) + ' · ' + o.sets + ' Sätze</span></div><span class="muted">' + s[0] + '</span></li>';
+    }).join('') + '</ul><p class="credit">Am Modell leuchten ermüdete Muskeln orange und Muskeln, die sich gerade erholen, lila.</p>'
       : '<p class="empty">In den letzten 4 Tagen hast du keine Muskelgruppe trainiert.</p>';
   }
   // Am Handy liegt das Modell im Tab Muskeln: von hier aus mit derselben Färbung öffnen
@@ -2741,9 +2791,11 @@ const MUSCLE_FS = `
     vec3 base = mix(uBase, hov, uHover * 0.45);
     float pulse = 0.8 + 0.2 * sin(uTime * 3.5);
     base = mix(base, lila * (0.75 + 0.25 * pulse), uSel);
-    // Erholungsansicht: frisch trainierte Muskeln ruhig lila
-    base = mix(base, lila * 0.8, uLoad * 0.85 * (1.0 - uSel));
-    vec3 rim = mix(uRim, vec3(0.85, 0.65, 1.0), max(uSel, uLoad * 0.7));
+    // Erholungsansicht: ermüdete Muskeln orange, Muskeln in der Erholung lila
+    float hot = smoothstep(0.45, 0.85, uLoad);
+    vec3 loadCol = mix(lila * 0.8, vec3(1.0, 0.42, 0.06), hot);
+    base = mix(base, loadCol, uLoad * 0.9 * (1.0 - uSel));
+    vec3 rim = mix(uRim, mix(vec3(0.85, 0.65, 1.0), vec3(1.0, 0.58, 0.22), hot * (1.0 - uSel)), max(uSel, uLoad * 0.7));
     vec3 c = base * (0.28 + 0.72 * diff) * (0.93 + 0.07 * fib);
     c += vec3(0.9, 0.95, 1.0) * spec * (0.12 + 0.2 * uActive);
     c += rim * f * (0.35 + 0.35 * uActive + 0.5 * uSel + 0.3 * uHover + 0.4 * uLoad);
