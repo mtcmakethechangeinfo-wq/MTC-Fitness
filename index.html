@@ -42,7 +42,7 @@
   --r-lg: 22px;
   --r-md: 14px;
   --peek: 192px;
-  --tabbar-h: calc(58px + env(safe-area-inset-bottom, 0px));
+  --tabbar-h: calc(64px + env(safe-area-inset-bottom, 0px));
   color-scheme: dark;
 }
 html, body { height: 100%; }
@@ -156,7 +156,8 @@ details.more .more-body { padding: 0 16px 16px; display: grid; gap: 12px; font-s
 @media (min-width: 900px) { .pills { flex-wrap: wrap; overflow: visible; margin: 0; padding: 0; } }
 @media (max-width: 899px) {
   .app { grid-template-columns: minmax(0, 1fr); }
-  .tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; height: var(--tabbar-h); border-left: 0; }
+  /* border-box: Polster und Home-Balken zählen zur Höhe, sonst wird die Leiste am iPhone höher als der Platz, den die Seite für sie frei lässt */
+  .tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; height: var(--tabbar-h); box-sizing: border-box; border-left: 0; transform: translateZ(0); }
   .brand span { display: grid; font-size: 10px; letter-spacing: 0.14em; line-height: 1.2; }
   .brand span b { font-size: 16px; letter-spacing: 0.1em; }
   .stage { position: fixed; inset: 0; }
@@ -185,7 +186,7 @@ details.more .more-body { padding: 0 16px 16px; display: grid; gap: 12px; font-s
   body.page .sheet { top: 0; height: auto; transform: none; transition: none; border-radius: 0; box-shadow: none; grid-template-rows: auto minmax(0, 1fr); }
   body.page .grabber { display: none; }
   body.page .page-bar { display: flex; align-items: center; padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 6px; }
-  body.page .sheet-scroll { overflow-y: auto; padding-top: 8px; }
+  body.page .sheet-scroll { overflow-y: auto; padding-top: 8px; padding-bottom: 28px; }
 }
 @media (min-width: 900px) { .m-only { display: none !important; } }
 /* Sehr schmale Handys: im Modell nur das Logo, damit Vorne/Hinten nicht den Namen überdeckt */
@@ -434,7 +435,7 @@ div.ex-line { cursor: default; grid-template-columns: 76px minmax(0, 1fr); paddi
 @media (max-width: 420px) { .send-box { grid-template-columns: minmax(0, 1fr); } .dist-row, .dist-head { grid-template-columns: 108px minmax(0, 1fr) 50px; gap: 8px; } }
 
 /* ---------- App: Willkommen, Installation, Coach-Tab, sichere Ränder ---------- */
-body { overscroll-behavior: none; }
+html, body { overscroll-behavior: none; }
 button, .btn, .tab, .pill, .wd, .opt, .nav-row { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .tabbar.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .welcome { position: fixed; inset: 0; z-index: 25; display: grid; overflow-y: auto; overscroll-behavior: contain; background: radial-gradient(ellipse 90% 55% at 50% 22%, #1b1638 0%, var(--stage) 72%); padding: calc(24px + env(safe-area-inset-top, 0px)) 20px calc(24px + env(safe-area-inset-bottom, 0px)); box-sizing: border-box; }

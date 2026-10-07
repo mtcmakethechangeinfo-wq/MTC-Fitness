@@ -27,4 +27,4 @@ Updates
 Neue Dateien hochladen. Die App meldet sich beim nächsten Öffnen mit
 "Neue Version von MTC" und lädt nach einem Tipp neu. Daten bleiben erhalten.
 
-Version: 22466dfb9f
+Version: 14770a3c59
