@@ -2116,8 +2116,9 @@ function renderProgress() {
     const rec = recovery(), rk = Object.keys(rec.per).sort((a, b) => rec.per[b].last - rec.per[a].last);
     h += rk.length ? '<ul class="list">' + rk.map(g => {
       const o = rec.per[g], age = (now - o.last) / 36e5;
-      const s = age < 48 ? ['Braucht noch Pause', 1, ' tired'] : age < 72 ? ['Fast erholt', 0.8, ''] : ['Erholt', 0.3, ''];
-      return '<li class="rec-row"><i class="dot' + s[2] + '" style="opacity:' + s[1] + '"></i><div style="min-width:0;display:grid;gap:1px"><span class="row-name">' + esc(BY_ID[g].name) + '</span><span class="muted">' + ago(o.last) + ' · ' + o.sets + ' Sätze</span></div><span class="muted">' + s[0] + '</span></li>';
+      const s = age < 48 ? ['Braucht noch Pause', 1] : age < 72 ? ['Fast erholt', 0.8] : ['Erholt', 0.3];
+      // Punktfarbe wie am Modell: stark ermüdet orange, in der Erholung lila
+      return '<li class="rec-row"><i class="dot' + (rec.tint[g] >= 0.6 ? ' tired' : '') + '" style="opacity:' + s[1] + '"></i><div style="min-width:0;display:grid;gap:1px"><span class="row-name">' + esc(BY_ID[g].name) + '</span><span class="muted">' + ago(o.last) + ' · ' + o.sets + ' Sätze</span></div><span class="muted">' + s[0] + '</span></li>';
     }).join('') + '</ul><p class="credit">Am Modell leuchten ermüdete Muskeln orange und Muskeln, die sich gerade erholen, lila.</p>'
       : '<p class="empty">In den letzten 4 Tagen hast du keine Muskelgruppe trainiert.</p>';
   }
