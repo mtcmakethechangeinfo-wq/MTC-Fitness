@@ -1013,8 +1013,8 @@ const b64u = {
 };
 async function packToken(kind, obj) {
   const json = new TextEncoder().encode(JSON.stringify(obj));
-  // kurze Pläne unkomprimiert, damit sie auch auf älteren Handys lesbar sind
-  if (json.length > 1500 && typeof CompressionStream === 'function') {
+  // kurze Pläne unkomprimiert, damit sie auch auf älteren Handys lesbar sind; Check-ins immer komprimiert, damit der Link kurz bleibt
+  if ((kind === 'C' || json.length > 1500) && typeof CompressionStream === 'function') {
     try {
       const zs = new Blob([json]).stream().pipeThrough(new CompressionStream('deflate-raw'));
       return kind + 'z' + b64u.enc(new Uint8Array(await new Response(zs).arrayBuffer()));
@@ -1053,16 +1053,38 @@ function cleanPlan(p) {
 }
 const cleanCardio = c => c && typeof c === 'object' ? { t: CARDIO[c.t] ? c.t : 'sonst', km: cNum(c.km, 0, 1000, 0) } : null;
 function cleanSets(a) { return (Array.isArray(a) ? a : []).slice(0, 20).map(s => [cNum(s && s[0], 0, 1000, 0), Math.round(cNum(s && s[1], 0, 1000, 0))]); }
+// Check-in v3 (kurzer Link): Training = [Startminute seit 1970, Titel, Dauer in Minuten, Übungen, Cardio]
+// Übung = [Bibliotheksschlüssel, kg, Wdh., kg, Wdh. …], mit eigenem Namen [Schlüssel, Name, …], ohne Bibliothek [Name, Muskel, …]
+function packEx(x) {
+  const flat = [].concat(...x.sets.map(st => [st[0], st[1]])), L = libEx(x.k), g = exGroup(x);
+  if (L && x.k.split('.')[0] === g) return x.n === L[0] ? [x.k].concat(flat) : [x.k, x.n].concat(flat);
+  return [x.n, g].concat(flat);
+}
+function unpackEx(e) {
+  if (!Array.isArray(e)) return null;
+  const k = libEx(e[0]) ? cStr(e[0], 12) : '', named = typeof e[1] === 'string';
+  const flat = e.slice(k && !named ? 1 : 2), sets = [];
+  for (let i = 0; i + 1 < flat.length; i += 2) sets.push([flat[i], flat[i + 1]]);
+  const g = k ? k.split('.')[0] : e[1];
+  return [cStr(k ? (named ? e[1] : libEx(k)[0]) : e[0], 80), BY_ID[g] ? g : '', cleanSets(sets), k];
+}
+function cleanSession(s) {
+  if (Array.isArray(s)) {
+    const d = cNum(s[0], 0, 2e8, 0) * 60000;
+    return { id: 'm' + Math.round(d / 60000), d, n: cStr(s[1], 80) || 'Training', du: cNum(s[2], 0, 1440, 0) * 60, x: (Array.isArray(s[3]) ? s[3] : []).slice(0, 25).map(unpackEx).filter(Boolean), c: cleanCardio(s[4]) };
+  }
+  return {
+    id: cStr(s && s.id, 40), d: cNum(s && s.d, 0, 9e15, 0), n: cStr(s && s.n, 80) || 'Training', du: cNum(s && s.du, 0, 86400, 0),
+    x: (s && Array.isArray(s.x) ? s.x : []).slice(0, 25).map(x => [cStr(x && x[0], 80), BY_ID[x && x[1]] ? x[1] : '', cleanSets(x && x[2]), libEx(x && x[3]) ? cStr(x[3], 12) : '']),
+    c: cleanCardio(s && s.c)
+  };
+}
 function cleanCheckin(c) {
   if (!c || typeof c !== 'object') return null;
   return {
     id: cStr(c.id, 40) || uid(), cl: cStr(c.cl, 60), pid: cStr(c.pid, 40), at: cNum(c.at, 0, 9e15, Date.now()),
     w: cNum(c.w, 20, 400, null), e: Math.round(cNum(c.e, 1, 5, 0)) || null, t: cStr(c.t, 600),
-    s: (Array.isArray(c.s) ? c.s : []).slice(0, 40).map(s => ({
-      id: cStr(s && s.id, 40), d: cNum(s && s.d, 0, 9e15, 0), n: cStr(s && s.n, 80) || 'Training', du: cNum(s && s.du, 0, 86400, 0),
-      x: (s && Array.isArray(s.x) ? s.x : []).slice(0, 25).map(x => [cStr(x && x[0], 80), BY_ID[x && x[1]] ? x[1] : '', cleanSets(x && x[2]), libEx(x && x[3]) ? cStr(x[3], 12) : '']),
-      c: cleanCardio(s && s.c)
-    }))
+    s: (Array.isArray(c.s) ? c.s : []).slice(0, 40).map(cleanSession)
   };
 }
 
@@ -2182,11 +2204,13 @@ function renderProgress() {
 
 async function makeCheckin() {
   const now = Date.now();
-  const list = sessions.filter(s => s.end > now - 14 * DAY).slice(-24);
+  // Trainings seit dem letzten Check-in (mindestens 7, höchstens 14 Tage), doppelte erkennt die App des Coaches
+  const since = Math.min(now - 7 * DAY, Math.max(now - 14 * DAY, (profile.ciAt || 0) - 2 * DAY));
+  const list = sessions.filter(s => s.end > since).slice(-24);
   const w = num(ciDraft.w), target = weekTarget(), wkDone = countIn(sessions, weekStart(now), now + DAY);
   const data = {
-    v: 2, id: uid(), cl: profile.name || '', pid: coachPlan ? coachPlan.id : '', at: now, w: w && w > 20 && w < 400 ? w : null, e: ciDraft.e || null, t: ciDraft.t.trim().slice(0, 600),
-    s: list.map(s => Object.assign({ id: s.id, d: s.at, n: s.title, du: Math.round((s.end - s.at) / 1000), x: s.x.map(x => [x.n, x.g, x.sets, x.k || '']) }, s.c ? { c: s.c } : {}))
+    v: 3, id: uid(), cl: profile.name || '', pid: coachPlan ? coachPlan.id : '', at: now, w: w && w > 20 && w < 400 ? w : null, e: ciDraft.e || null, t: ciDraft.t.trim().slice(0, 600),
+    s: list.map(s => { const a = [Math.round(s.at / 60000), s.title, Math.round((s.end - s.at) / 60000), s.c ? [] : s.x.map(packEx)]; if (s.c) a.push(s.c); return a; })
   };
   const week = list.filter(s => s.end > now - 7 * DAY);
   const lines = ['MTC Check-in' + (profile.name ? ' von ' + profile.name : '') + ' · ' + fmtDay(now)];
@@ -2200,7 +2224,7 @@ async function makeCheckin() {
   if (data.t) lines.push('Notiz: ' + data.t);
   let tok;
   try { tok = await packToken('C', data); } catch (e) { toast('Check-in konnte nicht erstellt werden'); return; }
-  const text = lines.join('\n') + '\n\nCode für die MTC-App:\nMTC:' + tok;
+  const text = lines.join('\n') + '\n\nFür deinen Coach, zum Öffnen in der MTC-App antippen:\n' + APP_URL + '#' + tok;
   if (data.w) {
     weights = weights.filter(x => dayStart(x.at) !== dayStart(now)); weights.push({ at: now, w: data.w });
     weights.sort((a, b) => a.at - b.at); store.set('weights', weights);
@@ -2281,8 +2305,31 @@ async function handleIncoming(text, fromLink) {
   if (welcomeOpen()) closeWelcome();
   if (tok.kind === 'P') { const p = cleanPlan(tok.data); if (!p) return false; const m = /[PCB][zj][A-Za-z0-9_-]{8,}/.exec(String(text).replace(/\s+/g, '')); offerPlan(p, fromLink, m ? 'MTC:' + m[0] : ''); return true; }
   if (tok.kind === 'B') { offerBackup(tok.data); return true; }
-  if (tok.kind === 'C') { toast('Das ist ein Check-in. Füge ihn im Coach-Bereich ein.'); return true; }
+  if (tok.kind === 'C') { openCheckinLink(text, tok.data); return true; }
   return false;
+}
+// Check-in-Link beim Coach: Sind hier Kunden gespeichert, sofort einlesen. Sonst erklären, wie er in die App kommt.
+function openCheckinLink(text, data) {
+  clearHash();
+  if (coach && coach.clients.length) { importCheckin(text, null); return; }
+  const d = cleanCheckin(data);
+  if (!d) return;
+  const m = /C[zj][A-Za-z0-9_-]{8,}/.exec(String(text).replace(/\s+/g, '').replace(/^.*?(?:MTC:|#)(?=C[zj])/, ''));
+  const link = m ? APP_URL + '#' + m[0] : '';
+  // iPhone: Links öffnen in Safari, die Kunden liegen aber in der App vom Home-Bildschirm
+  const iosApp = HOSTED && IOS && !STANDALONE && link;
+  const wk = d.s.filter(s => !s.c && s.d > d.at - 7 * DAY).length;
+  const facts = [d.w ? 'Gewicht ' + fmtNum(d.w) + ' kg' : '', d.e ? 'Energie ' + d.e + '/5' : '', wk + ' Training' + (wk === 1 ? '' : 's') + ' in 7 Tagen'].filter(Boolean).join(' · ');
+  modal('<img src="logo.png" alt="" onerror="this.hidden=true"><h3>Check-in' + (d.cl ? ' von ' + esc(d.cl) : '') + '</h3><p>' + esc(fmtDate(d.at)) + ' · ' + esc(facts) + '</p>' +
+    (d.t ? '<p class="coach-note" style="white-space:pre-line;text-align:left">' + esc(d.t) + '</p>' : '') +
+    (iosApp ? '<div class="app-hint"><b>Deine Kunden sind in der MTC-App?</b><p>Links öffnen am iPhone immer in Safari. Kopiere den Check-in, öffne die App und tippe im Tab Kunden auf „Aus Zwischenablage einfügen“.</p><input class="input" id="md-code" readonly value="' + esc(link) + '" aria-label="Check-in-Link"><button type="button" class="btn wide" id="md-copy">Check-in kopieren</button></div>' : '') +
+    '<button type="button" class="btn ' + (iosApp ? 'secondary ' : '') + 'wide" id="md-ok">' + (iosApp ? 'Hier in Safari einlesen' : 'Im Coach-Bereich einlesen') + '</button>' +
+    '<button type="button" class="text-btn" id="md-later">Schließen</button>',
+    (mm, close) => {
+      mm.querySelector('#md-ok').addEventListener('click', () => { close(); importCheckin(text, null); });
+      mm.querySelector('#md-later').addEventListener('click', close);
+      const cp = mm.querySelector('#md-copy'); if (cp) cp.addEventListener('click', () => copyFrom(mm.querySelector('#md-code'), link));
+    });
 }
 function clearHash() { try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
 function offerPlan(p, fromLink, code) {
@@ -2396,7 +2443,7 @@ function renderCoach() {
   const need = rows.filter(r => r.st.lvl !== 'ok').length;
   let h = '<div class="sheet-head"><h2>Kunden</h2><p>' + (!C.clients.length ? 'Lege deinen ersten Kunden an. Der Assistent baut den Plan, du schickst ihn per WhatsApp.'
       : need ? (need === 1 ? 'Ein Kunde braucht' : need + ' Kunden brauchen') + ' gerade deine Aufmerksamkeit.' : 'Alles im grünen Bereich.') + '</p></div>';
-  h += '<div class="card"><label class="field"><span>Check-in einfügen</span>' + clipBtn('co-clip') + '<textarea class="textarea code" id="co-ci" rows="2" placeholder="WhatsApp-Nachricht eines Kunden hier einfügen"></textarea></label><p class="muted" style="font-size:13px">Wird sofort dem richtigen Kunden zugeordnet.</p></div>';
+  h += '<div class="card"><label class="field"><span>Check-in einfügen</span>' + clipBtn('co-clip') + '<textarea class="textarea code" id="co-ci" rows="2" placeholder="WhatsApp-Nachricht eines Kunden hier einfügen"></textarea></label><p class="muted" style="font-size:13px">Tippe in WhatsApp auf den Link im Check-in oder füge die Nachricht hier ein. Sie wird sofort dem richtigen Kunden zugeordnet.</p></div>';
   h += '<div><p class="group-title">Kunden</p>' + (rows.length ? '<div class="list">' + rows.map(({ x, st }) => {
     const sub = st.flags.length ? st.flags[0][1] : st.ci ? 'Woche vor Check-in: ' + st.wk + ' von ' + st.target + ' · Check-in ' + ago(st.ci.at) : x.plan.w.filter(isTrain).length + ' Trainings pro Woche';
     return '<button type="button" class="nav-row client" data-client="' + esc(x.id) + '"><i class="dot ' + st.lvl + '" aria-hidden="true"></i><span style="display:grid;gap:2px;min-width:0"><span class="row-name">' + esc(x.name) + '</span><span class="muted">' + esc(sub) + '</span></span><span class="chev"></span></button>';
@@ -2423,7 +2470,7 @@ function renderCoach() {
 // Check-in wird beim Einfügen gelesen, ein Knopf ist nicht nötig
 function bindCiPaste(ta, client, clip) {
   if (clip) bindClip(clip, ta, t => importCheckin(t, client));
-  const go = () => { clearTimeout(ciTimer); ciTimer = setTimeout(() => { if (/MTC:C[zj][A-Za-z0-9_-]{8,}/.test(ta.value.replace(/\s+/g, ''))) importCheckin(ta.value, client); }, 250); };
+  const go = () => { clearTimeout(ciTimer); ciTimer = setTimeout(() => { if (/(?:MTC:|#)C[zj][A-Za-z0-9_-]{8,}/.test(ta.value.replace(/\s+/g, ''))) importCheckin(ta.value, client); }, 250); };
   ta.addEventListener('input', go);
   ta.addEventListener('paste', go);
 }
@@ -2554,13 +2601,36 @@ async function importCheckin(text, client) {
   if (!tok || tok.kind !== 'C') { toast('Kein gültiger Check-in gefunden'); return; }
   const d = cleanCheckin(tok.data), C = coachData();
   const c = client || C.clients.find(x => d.pid && x.plan.id === d.pid) || C.clients.find(x => d.cl && x.name.toLowerCase() === d.cl.toLowerCase());
-  if (!c) { toast('Kein passender Kunde. Öffne den Kunden und füge den Check-in dort ein.'); return; }
+  if (!c) { pickClient(d, text); return; }
   const dup = c.checkins.some(x => x.id === d.id);
   if (!dup) { c.checkins.push({ id: d.id, at: d.at, w: d.w, e: d.e, t: d.t }); c.checkins.sort((a, b) => a.at - b.at); }
-  d.s.forEach(s => { if (s.d) c.sessions[s.id || String(s.d)] = s; });
+  // dasselbe Training kann in mehreren Check-ins stecken: gleiche Startzeit (±90 s) ersetzt den alten Eintrag
+  d.s.forEach(s => {
+    if (!s.d) return;
+    const key = s.id || String(s.d);
+    Object.keys(c.sessions).forEach(k => { if (k !== key && Math.abs((c.sessions[k].d || 0) - s.d) < 90000) delete c.sessions[k]; });
+    c.sessions[key] = s;
+  });
   saveCoach(); coachSel = c.id; coachTab = 'over'; setCoachMode(true);
   $('scroller').scrollTop = 0; if (tab === 'coach') renderCoach(); else showTab('coach');
   toast(dup ? 'Diesen Check-in hattest du schon' : 'Check-in von ' + c.name + ' eingelesen');
+}
+
+// Check-in passt zu keinem Kunden (anderer Name, Plan nicht aus dem Coach-Bereich): Coach wählt oder legt neu an
+function pickClient(d, text) {
+  const C = coachData(), name = d.cl || 'Neuer Kunde';
+  modal('<h3>Zu welchem Kunden gehört der Check-in?</h3><p>' + (d.cl ? esc(d.cl) + ' hat' : 'Jemand hat') + ' am ' + esc(fmtDay(d.at)) + ' einen Check-in geschickt.</p>' +
+    (C.clients.length ? '<div class="list">' + C.clients.map(x => '<button type="button" class="nav-row" data-pick-client="' + esc(x.id) + '"><span class="row-name">' + esc(x.name) + '</span><span class="chev"></span></button>').join('') + '</div>' : '') +
+    '<button type="button" class="btn wide" id="md-new">„' + esc(name) + '“ als neuen Kunden anlegen</button>' +
+    '<button type="button" class="text-btn" id="md-later" style="justify-self:center">Abbrechen</button>', (m, close) => {
+    m.querySelectorAll('[data-pick-client]').forEach(b => b.addEventListener('click', () => { close(); importCheckin(text, C.clients.find(x => x.id === b.dataset.pickClient)); }));
+    m.querySelector('#md-new').addEventListener('click', () => {
+      // mit der Plan-Kennung des Kunden: künftige Check-ins und Pläne passen dann von selbst
+      const c = newClient(name.slice(0, 60)); if (d.pid && !C.clients.some(x => x.plan.id === d.pid)) c.plan.id = d.pid;
+      C.clients.push(c); saveCoach(); close(); importCheckin(text, c);
+    });
+    m.querySelector('#md-later').addEventListener('click', close);
+  }, { left: true });
 }
 
 function fail(msg) { const f = $('fail'); f.textContent = msg; f.hidden = false; $('loader').hidden = true; }
