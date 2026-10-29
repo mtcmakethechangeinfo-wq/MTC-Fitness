@@ -1,8 +1,8 @@
 /* MTC Fitness Coaching: Offline-Speicher. Wird beim Bauen erzeugt, nicht von Hand ändern. */
-const VERSION = '3b7b3875dc';
+const VERSION = 'bde247b60d';
 const CACHE = 'mtc-' + VERSION;
 const FILES = {
-  "./": "c26d8ef97974",
+  "./": "c51bce8095ed",
   "data/body.b64.txt": "1cb0dca44316",
   "data/body.json": "4a6d57d0f546",
   "fonts/chakra-petch-600.woff2": "4d6d5f0b31b3",

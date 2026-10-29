@@ -2459,7 +2459,9 @@ async function shareSession(s, btn) {
   const name = 'MTC-Training-' + new Date(s.at).toISOString().slice(0, 10) + '.png', url = URL.createObjectURL(blob);
   const file = typeof File === 'function' ? new File([blob], name, { type: 'image/png' }) : null;
   const canShare = !!(file && navigator.canShare && navigator.share && navigator.canShare({ files: [file] }));
-  const saveHTML = '<a class="btn wide" id="sh-dl" href="' + url + '" download="' + name + '">Bild speichern</a><p class="small muted">Oder halte das Bild gedrückt und wähle „Sichern“.</p>';
+  // Im Artifact gibt es keine Downloads: dort nur gedrückt halten bzw. Rechtsklick
+  const saveHTML = HOSTED ? '<a class="btn wide" id="sh-dl" href="' + url + '" download="' + name + '">Bild speichern</a><p class="small muted">Oder halte das Bild gedrückt und wähle „Sichern“.</p>'
+    : '<p class="small muted">' + (touchUI ? 'Halte das Bild gedrückt und wähle „Sichern“.' : 'Rechtsklick auf das Bild und „Bild speichern unter“ wählen.') + '</p>';
   modal('<h3>Dein Training als Bild</h3><img class="share-img" src="' + url + '" alt="Trainingsbild mit dem 3D-Modell und deinen Werten">' +
     '<div class="share-acts">' + (canShare ? '<button type="button" class="btn wide" id="sh-go">' + ICON_SHARE + 'Teilen</button>' : saveHTML) + '</div>' +
     '<button type="button" class="text-btn" id="sh-close">Schließen</button>', (m, close) => {
