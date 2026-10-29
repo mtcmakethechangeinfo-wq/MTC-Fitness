@@ -103,6 +103,27 @@ button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent
 .row-more { grid-column: 1 / -1; display: grid; gap: 8px; font-size: 14.5px; color: var(--ink); padding-top: 2px; }
 .row-more p { margin: 0; }
 .also { color: var(--ink-2); font-size: 14px; }
+/* Calisthenics-Stufen */
+.ladder { display: grid; gap: 8px; padding: 12px; border-radius: var(--r-md); background: rgba(95, 225, 255, 0.05); box-shadow: inset 0 0 0 1px rgba(95, 225, 255, 0.14); }
+.ladder-h { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 14px; }
+.ladder-h span { color: var(--ink-2); font-size: 13px; white-space: nowrap; }
+.ladder-bar { display: flex; gap: 4px; }
+.ladder-bar i { flex: 1; height: 4px; border-radius: 2px; background: #22344a; }
+.ladder-bar i.done { background: rgba(95, 225, 255, 0.45); }
+.ladder-bar i.on { background: var(--holo); box-shadow: 0 0 10px rgba(95, 225, 255, 0.6); }
+.ladder-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ladder-btn { display: grid; gap: 2px; align-content: start; text-align: left; border: 0; border-radius: 12px; padding: 9px 11px; background: var(--fill); cursor: pointer; min-width: 0; }
+.ladder-btn.next { text-align: right; background: var(--accent-soft); }
+.ladder-btn small { display: flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 600; color: var(--ink-2); }
+.ladder-btn.next small { justify-content: flex-end; color: var(--accent); }
+.ladder-btn small svg { width: 13px; height: 13px; flex: none; }
+.ladder-btn span { font-size: 14px; font-weight: 600; line-height: 1.25; }
+.ladder-top { margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 6px; font-size: 13px; color: var(--holo); text-align: right; }
+.ladder-top svg { width: 16px; height: 16px; flex: none; }
+.swap-lad { display: flex; flex-wrap: wrap; gap: 6px; }
+.swap-chip { display: inline-flex; align-items: center; gap: 4px; max-width: 100%; border: 0; border-radius: 999px; padding: 6px 12px 6px 9px; background: var(--fill); color: var(--ink-2); font-size: 13px; cursor: pointer; }
+.swap-chip svg { width: 13px; height: 13px; flex: none; }
+.swap-chip b { color: var(--ink); font-weight: 600; margin-left: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .link { border: 0; background: none; padding: 0; color: var(--accent); font-weight: 600; cursor: pointer; font-size: 14px; }
 .add { width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--fill); color: var(--accent); display: grid; place-items: center; cursor: pointer; transition: background 0.2s, color 0.2s, transform 0.15s; }
 .add:active { transform: scale(0.92); }
@@ -461,6 +482,39 @@ button, .btn, .tab, .pill, .wd, .opt, .nav-row { -webkit-user-select: none; user
 .update-bar button { border: 0; border-radius: 999px; padding: 7px 14px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 14px; cursor: pointer; }
 body.resting .update-bar { display: none; }
 @media (min-width: 900px) { .update-bar { left: auto; right: 210px; transform: translateX(50%); bottom: 82px; } }
+/* Teilen-Bild */
+.modal-card.share { gap: 12px; padding: 18px 16px 10px; }
+.modal-card img.share-img { height: auto; width: auto; max-width: 100%; max-height: calc(100vh - 300px); max-height: calc(100dvh - 300px); object-fit: contain; border-radius: 16px; box-shadow: 0 0 0 1px var(--hair); background: #04070c; }
+.share-acts { display: grid; gap: 8px; }
+.share-acts .small { font-size: 13px; }
+a.btn.wide { box-sizing: border-box; }
+.hist-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; }
+.hist-actions .text-btn { display: inline-flex; align-items: center; gap: 6px; padding-left: 0; }
+.hist-actions .text-btn svg { width: 17px; height: 17px; }
+/* Einführung am 3D-Modell */
+.tour { position: fixed; inset: 0; z-index: 24; pointer-events: none; }
+.tour-card { pointer-events: auto; position: absolute; left: 12px; right: 12px; bottom: calc(var(--tabbar-h) + 12px); max-width: 440px; margin: 0 auto; box-sizing: border-box; display: grid; gap: 8px; padding: 18px 20px 14px; border-radius: 24px; background: rgba(10, 17, 27, 0.86); -webkit-backdrop-filter: blur(18px) saturate(1.3); backdrop-filter: blur(18px) saturate(1.3); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 24px 60px rgba(0, 0, 0, 0.55); animation: tour-in 0.35s ease both; }
+@keyframes tour-in { from { opacity: 0; transform: translateY(14px); } }
+.tour-k { margin: 0; display: flex; align-items: center; gap: 10px; font-family: var(--font-brand); font-weight: 700; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--holo); }
+.tour-k i { font-style: normal; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: rgba(95, 225, 255, 0.12); box-shadow: inset 0 0 0 1.5px rgba(95, 225, 255, 0.5); letter-spacing: 0; font-size: 13px; }
+.tour-card h2 { margin: 0; font-size: 23px; line-height: 1.2; letter-spacing: -0.01em; }
+.tour-p { margin: 0; color: var(--ink-2); font-size: 15px; }
+.tour-foot { display: flex; align-items: center; gap: 4px; margin-top: 6px; }
+.tour-foot .w-dots { margin-right: auto; }
+.tour-foot .btn { padding-left: 24px; padding-right: 24px; }
+.tour-tap { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 4; }
+.tour-tap::before, .tour-tap::after { content: ""; position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; border-radius: 50%; }
+.tour-tap::before { background: rgba(255, 255, 255, 0.18); box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 24px 4px rgba(181, 123, 255, 0.7); animation: tap-press 1.8s ease-in-out infinite; }
+.tour-tap::after { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6); opacity: 0; animation: tap-ring 1.8s ease-out infinite; }
+@keyframes tap-press { 0%, 32%, 100% { transform: scale(1); } 16% { transform: scale(0.8); } }
+@keyframes tap-ring { 0%, 16% { transform: scale(1); opacity: 0; } 22% { opacity: 1; } 80%, 100% { transform: scale(2.3); opacity: 0; } }
+body.touring .tabbar, body.touring .sheet, body.touring .topbar, body.touring .stage-tools { pointer-events: none; }
+.tab.tour-spot { color: var(--holo); }
+.tab.tour-spot::after { content: ""; position: absolute; inset: -2px 6px; border-radius: 14px; box-shadow: inset 0 0 0 2px rgba(95, 225, 255, 0.8), 0 0 22px rgba(95, 225, 255, 0.4); animation: spot 1.6s ease-in-out infinite; pointer-events: none; }
+@keyframes spot { 50% { opacity: 0.35; } }
+@media (max-width: 899px) { body.touring .sheet, body.touring .stage-tools { visibility: hidden; } }
+@media (min-width: 900px) { .tour-card { left: 24px; right: 444px; bottom: 28px; } }
+@media (prefers-reduced-motion: reduce) { .tour-card, .tour-tap::before, .tour-tap::after, .tab.tour-spot::after { animation: none; } }
 /* Vollbild-App: Statusleiste oben und Home-Balken unten freihalten */
 .topbar { top: calc(12px + env(safe-area-inset-top, 0px)); }
 .stage-tools { top: calc(62px + env(safe-area-inset-top, 0px)); }
@@ -496,6 +550,7 @@ body.resting .update-bar { display: none; }
     <div class="hint-chip" id="hint" role="status" aria-live="polite"></div>
     <div class="legend" id="legend" hidden><span>erholt</span><i></i><span>ermüdet</span></div>
     <div class="tip" id="tip" hidden></div>
+    <div class="tour-tap" id="tour-tap" hidden></div>
     <div class="loader" id="loader"><div class="loader-box"><span id="load-text">Modell wird geladen</span><div class="bar"><i id="load-bar"></i></div></div></div>
     <div class="fail" id="fail" hidden></div>
   </section>
@@ -550,6 +605,7 @@ body.resting .update-bar { display: none; }
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div class="modal" id="modal" hidden></div>
+  <div class="tour" id="tour" hidden></div>
   <div class="welcome" id="welcome" hidden></div>
 </div>
 <script src="vendor/three/build/three.min.js"></script>
@@ -833,6 +889,23 @@ const MUSCLES = [
     ] }
 ];
 const BY_ID = Object.fromEntries(MUSCLES.map(m => [m.id, m]));
+// Calisthenics-Stufen: jeder Weg geht von leicht nach schwer (Schlüssel wie in MUSCLES[].ex)
+const LADDERS = [
+  ['Weg zum Klimmzug', ['unterarm.0', 'unterarm.8', 'lat.8', 'lat.4', 'lat.9', 'lat.10', 'lat.0']],
+  ['Weg zum Chin-up', ['bizeps.8', 'bizeps.9', 'bizeps.3']],
+  ['Weg zum Liegestütz', ['brust.5', 'brust.8', 'brust.6', 'brust.9', 'brust.2']],
+  ['Weg zum Diamant-Liegestütz', ['trizeps.8', 'trizeps.1']],
+  ['Weg zum Dip', ['trizeps.5', 'trizeps.9', 'trizeps.0', 'brust.3']],
+  ['Weg zum Pike Push-up', ['delta.8', 'delta.3']],
+  ['Weg zum Hollow Body Hold', ['bauch.0', 'bauch.8']],
+  ['Weg zum Beinheben an der Stange', ['bauch.9', 'bauch.2']],
+  ['Weg zum Pistol Squat', ['quad.5', 'quad.8', 'quad.9', 'quad.3', 'quad.10']],
+  ['Weg zur einbeinigen Brücke', ['glute.1', 'glute.8']],
+  ['Weg zum Nordic Curl', ['ham.8', 'ham.2']],
+  ['Weg zur Copenhagen Plank', ['adduk.8', 'adduk.2']],
+  ['Weg zum Rudern mit Pause', ['rhomb.4', 'rhomb.8']],
+  ['Weg zum einbeinigen Wadenheben', ['wade.5', 'wade.2']]
+];
 const EQUIP = [['all', 'Alle'], ['kg', 'Körpergewicht & Band'], ['h', 'Hanteln'], ['m', 'Kabel & Maschine']];
 const EQUIP_LABEL = { kg: 'Körpergewicht', h: 'Hanteln', m: 'Kabel/Maschine' };
 
@@ -943,6 +1016,10 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 const placeTxt = e => e[6] === 'c' ? 'Calisthenics' : e[3] === 'kg' ? 'Zuhause' : 'Studio';
+// Calisthenics-Stufe einer Übung: Weg, Position, leichter und schwerer
+const LADDER_OF = {};
+LADDERS.forEach(([t, ks]) => ks.forEach((k, i) => { if (!LADDER_OF[k]) LADDER_OF[k] = { t, ks, i, prev: ks[i - 1] || '', next: ks[i + 1] || '' }; }));
+const ladderOf = k => (k && LADDER_OF[k]) || null;
 const libEx = k => { const p = String(k || '').split('.'); return BY_ID[p[0]] && BY_ID[p[0]].ex[+p[1]] || null; };
 let myList = store.get('plan', []).filter(p => p && BY_ID[p.m] && BY_ID[p.m].ex[p.i]).map(p => ({ m: p.m, i: p.i }));   // "Meine Übungen"
 let filter = store.get('filter', 'all');
@@ -959,7 +1036,7 @@ let modelLoads = false;
 let viewOff = 0, viewOffTarget = 0;
 const groupParts = {};
 // Schnittstelle zum 3D-Teil; bleibt ohne WebGL wirkungslos
-const hooks = { highlight() {}, fly() {}, setDeep() {}, setLoads() {} };
+const hooks = { highlight() {}, fly() {}, setDeep() {}, setLoads() {}, view() {}, spin() {}, track() {}, snapshot: async () => null };
 
 /* ---------- kleine Helfer ---------- */
 const exKey = x => x.k || 'n:' + String(x.n).trim().toLowerCase();
@@ -1221,6 +1298,7 @@ function renderDetail() {
         '<button type="button" class="add" data-add="' + i + '" aria-pressed="' + on + '" aria-label="' + esc(e[0]) + (on ? ' aus Meine Übungen entfernen' : ' zu Meine Übungen hinzufügen') + '">' + (on ? ICON_CHECK : ICON_PLUS) + '</button>' +
         (open ? '<div class="row-more"><p>' + esc(e[2]) + '</p>' +
           (e[5].length ? '<p class="also">Trainiert auch: ' + e[5].map(s => '<button type="button" class="link" data-go="' + s + '">' + esc(BY_ID[s].name) + '</button>').join(', ') + '</p>' : '') +
+          ladderHTML(k) +
           '<div><a class="mini" href="' + esc(videoUrl({ n: e[0], k })) + '" target="_blank" rel="noopener">' + ICON_PLAY + 'Video ansehen</a></div></div>' : '') +
         '</li>';
     }).join('') + '</ul>'
@@ -1238,7 +1316,28 @@ function renderDetail() {
   el.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => { const i = +b.dataset.open; openRow = openRow === i ? -1 : i; renderDetail(); }));
   el.querySelectorAll('[data-add]').forEach(b => b.addEventListener('click', () => toggleMine(m.id, +b.dataset.add)));
   el.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => select(b.dataset.go, { fly: true })));
+  el.querySelectorAll('[data-lad]').forEach(b => b.addEventListener('click', () => goLadder(b.dataset.lad)));
   $('more').addEventListener('toggle', e => store.set('moreOpen', e.target.open));
+}
+
+// Stufen-Leiste: Fortschrittsbalken plus Wechsel zur leichteren oder nächsten Stufe
+function ladderHTML(k) {
+  const L = ladderOf(k);
+  if (!L) return '';
+  const step = (key, cls, label) => '<button type="button" class="ladder-btn' + cls + '" data-lad="' + key + '"><small>' + label + '</small><span>' + esc(libEx(key)[0]) + '</span></button>';
+  return '<div class="ladder"><div class="ladder-h"><b>' + esc(L.t) + '</b><span>Stufe ' + (L.i + 1) + ' von ' + L.ks.length + '</span></div>' +
+    '<div class="ladder-bar" aria-hidden="true">' + L.ks.map((_, i) => '<i' + (i < L.i ? ' class="done"' : i === L.i ? ' class="on"' : '') + '></i>').join('') + '</div>' +
+    '<div class="ladder-nav">' + (L.prev ? step(L.prev, '', ICON_DOWN + 'Leichter') : '<span></span>') +
+    (L.next ? step(L.next, ' next', 'Nächste Stufe' + ICON_UP) : '<p class="ladder-top">' + ICON_TROPHY + 'Das ist das Ziel dieses Wegs</p>') + '</div></div>';
+}
+function goLadder(k) {
+  const [g, i] = k.split('.'), e = libEx(k);
+  if (!e) return;
+  if (!matchFilter(filter, e[3])) { filter = 'all'; store.set('filter', filter); }
+  if (g !== selected) select(g, { fly: true });
+  openRow = +i; renderDetail();
+  const row = document.querySelector('#detail [data-open="' + i + '"]');
+  if (row) row.closest('.row').scrollIntoView({ block: 'start', behavior: 'smooth' });
 }
 
 function select(id, opts) {
@@ -1744,6 +1843,13 @@ function workoutCount() {
   active.x.forEach(x => x.sets.forEach(s => { all++; if (s[2]) done++; }));
   return { done, all };
 }
+// Calisthenics-Stufe im laufenden Training wechseln (ändert nur dieses Training, nicht den Plan)
+function ladderSwapHTML(x, j) {
+  const L = ladderOf(x.k);
+  if (!L || x.sets.some(s => s[2])) return '';
+  const b = (k, label) => '<button type="button" class="swap-chip" data-swap-lad="' + j + ':' + k + '">' + label + '<b>' + esc(libEx(k)[0]) + '</b></button>';
+  return '<div class="swap-lad">' + (L.prev ? b(L.prev, ICON_DOWN + 'Zu schwer?') : '') + (L.next ? b(L.next, ICON_UP + 'Zu leicht?') : '') + '</div>';
+}
 function renderWorkout(el) {
   const cnt = workoutCount();
   let h = '<div class="sheet-head"><h2>' + esc(active.title) + '</h2><p><span class="wk-time" id="wk-time">' + clockTxt((Date.now() - active.at) / 1000) + '</span> · <span id="wk-count">' + cnt.done + ' von ' + cnt.all + ' Sätzen</span></p></div>';
@@ -1755,6 +1861,7 @@ function renderWorkout(el) {
         '<a class="mini" href="' + esc(videoUrl(x)) + '" target="_blank" rel="noopener">' + ICON_PLAY + 'Video</a></div>' +
       (x.t ? '<p class="coach-note">' + esc(x.t) + '</p>' : '') +
       (last ? '<p class="last">Letztes Mal: ' + last.map(setShort).join(' · ') + '</p>' : lib ? '<p class="last">' + esc(lib[2]) + '</p>' : '') +
+      ladderSwapHTML(x, j) +
       '<div class="sets"><div class="set-row head"><span class="n">Satz</span><span style="text-align:center">kg</span><span style="text-align:center">Wdh.</span><span></span></div>' +
       x.sets.map((s, k) => {
         const ph = last ? (last[k] || last[last.length - 1]) : null;
@@ -1782,6 +1889,7 @@ function renderWorkout(el) {
       if (s[0] === '') s[0] = num(kgI.placeholder) != null ? kgI.placeholder : '0';
       if (s[1] === '') { if (num(rI.placeholder) == null) { rI.focus(); toast('Trag deine Wiederholungen ein'); return; } s[1] = rI.placeholder; }
       s[2] = 1;
+      const sw = b.closest('.ex-card').querySelector('.swap-lad'); if (sw) sw.remove();   // Stufe nur vor dem ersten Satz tauschen
       // nächsten Satz ohne Vorschlag mit diesen Werten vorbelegen
       const nx = row.nextElementSibling;
       if (nx) { const a = nx.querySelector('[data-kg]'), r = nx.querySelector('[data-reps]'); if (a.placeholder === '–') a.placeholder = s[0]; if (!r.placeholder || r.placeholder === String(parseInt(x.r, 10))) r.placeholder = s[1]; }
@@ -1793,6 +1901,12 @@ function renderWorkout(el) {
     const c = workoutCount();
     $('wk-count').textContent = c.done + ' von ' + c.all + ' Sätzen';
     if (s[2] && c.done === c.all) { stopRest(); toast('Alle Sätze geschafft! Tippe auf „Training beenden“.'); }
+  }));
+  el.querySelectorAll('[data-swap-lad]').forEach(b => b.addEventListener('click', () => {
+    const [j, k] = b.dataset.swapLad.split(':'), x = active.x[+j], n = fromLib(k);
+    if (x.sets.some(s => s[2])) return;
+    active.x[+j] = Object.assign(n, { s: x.s, p: x.p || n.p, t: x.t, sets: x.sets.map(() => ['', '', 0]) });
+    saveActive(); keepScroll(renderTrain); toast('Für heute getauscht: ' + n.n);
   }));
   el.querySelectorAll('[data-add-set]').forEach(b => b.addEventListener('click', () => { active.x[+b.dataset.addSet].sets.push(['', '', 0]); saveActive(); keepScroll(renderTrain); }));
   el.querySelectorAll('[data-rm-ex]').forEach(b => {
@@ -1842,8 +1956,10 @@ function renderFinished(el) {
     (prs.length ? '<div class="card"><b>Neue Bestleistung' + (prs.length > 1 ? 'en' : '') + '</b>' + prs.map(p => '<div class="pr">' + ICON_TROPHY + '<span>' + esc(p.n) + ' · ' + setTxt(p.st) + '</span></div>').join('') + '</div>' : '') +
     (nb && nb.length ? '<div class="card"><b>Neues Abzeichen</b>' + nb.map(id => { const b = BADGE_BY[id]; return '<div class="bdg-new">' + badgeSvg(b, true) + '<span style="display:grid;gap:1px"><b>' + esc(b[1]) + '</b><span class="muted">' + esc(b[2]) + '</span></span></div>'; }).join('') + '</div>' : '') +
     (coachPlan && coachPlan.c ? '<div class="card"><b>' + esc(coachPlan.c) + ' Bescheid geben?</b><p class="muted">Mit einem Check-in siehst du gemeinsam mit deinem Coach, wie es läuft.</p><button type="button" class="btn secondary" id="fin-ci">Zum Check-in</button></div>' : '') +
+    '<button type="button" class="btn secondary wide" id="fin-share">' + ICON_SHARE + 'Als Bild teilen</button>' +
     '<button type="button" class="btn wide" id="fin-ok">Fertig</button>';
   $('fin-ok').addEventListener('click', () => { finished = null; trainSel = null; renderTrain(); });
+  $('fin-share').addEventListener('click', e => shareSession(s, e.currentTarget));
   const fc = $('fin-ci'); if (fc) fc.addEventListener('click', goCheckin);
 }
 
@@ -2139,7 +2255,7 @@ function histRows(list, attr) {
     return '<li class="hist-row"><button type="button" class="row-main" data-' + attr + '="' + esc(s.id) + '" aria-expanded="' + open + '"><span style="display:grid;gap:2px;min-width:0"><span class="row-name">' + esc(s.title) + (s.c ? ' <span class="tag holo">Cardio</span>' : '') + '</span>' +
       '<span class="muted">' + fmtDate(s.at) + ' · ' + (s.c ? cardioTxt(s) : durMin(s) + ' min · ' + s.x.length + ' Übung' + (s.x.length === 1 ? '' : 'en')) + '</span></span><span class="chev" style="transform:rotate(' + (open ? 135 : 45) + 'deg)"></span></button>' +
       (open ? (s.c ? (paceTxt(s.c.t, durMin(s), s.c.km) ? '<div class="hist-ex"><span>' + paceTxt(s.c.t, durMin(s), s.c.km) + '</span></div>' : '') : s.x.map(x => '<div class="hist-ex"><b>' + esc(x.n) + '</b><span>' + x.sets.map(setShort).join(' · ') + '</span></div>').join('')) +
-        (attr === 'hist' ? '<button type="button" class="text-btn danger" data-hist-del="' + esc(s.id) + '" style="justify-self:start;padding-left:0">Eintrag löschen</button>' : '') : '') + '</li>';
+        (attr === 'hist' ? '<div class="hist-actions">' + (s.c ? '' : '<button type="button" class="text-btn" data-hist-share="' + esc(s.id) + '">' + ICON_SHARE + 'Als Bild teilen</button>') + '<button type="button" class="text-btn danger" data-hist-del="' + esc(s.id) + '">Eintrag löschen</button></div>' : '') : '') + '</li>';
   }).join('');
 }
 
@@ -2218,12 +2334,144 @@ function renderProgress() {
   el.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => select(b.dataset.go, { fly: true })));
   el.querySelectorAll('[data-cardio]').forEach(b => b.addEventListener('click', cardioModal));
   el.querySelectorAll('[data-hist]').forEach(b => b.addEventListener('click', () => { histOpen = histOpen === b.dataset.hist ? null : b.dataset.hist; keepScroll(renderProgress); }));
+  el.querySelectorAll('[data-hist-share]').forEach(b => b.addEventListener('click', () => shareSession(sessions.find(s => s.id === b.dataset.histShare), b)));
   el.querySelectorAll('[data-hist-del]').forEach(b => arm(b, 'Wirklich löschen?', () => {
     sessions = sessions.filter(s => s.id !== b.dataset.histDel); store.set('sessions', sessions);
     hooks.setLoads(progressTint()); keepScroll(renderProgress);
   }));
   const hm = $('hist-more'); if (hm) hm.addEventListener('click', () => { histAll = true; keepScroll(renderProgress); });
   const ba = $('bdg-all'); if (ba) ba.addEventListener('click', () => { badgesAll = !badgesAll; keepScroll(renderProgress); });
+}
+
+/* ---------- Training als Bild teilen (Story-Format 1080 × 1920) ---------- */
+// Trainierte Muskeln: Hauptmuskeln leuchten orange, mittrainierte lila
+function sessionLoads(s) {
+  const main = {}, sec = {}, t = {};
+  s.x.forEach(x => {
+    const g = exGroup(x), lib = libEx(x.k), n = x.sets.length;
+    if (BY_ID[g]) main[g] = (main[g] || 0) + n;
+    if (lib) lib[5].forEach(sg => { if (sg !== g && BY_ID[sg]) sec[sg] = (sec[sg] || 0) + n; });
+  });
+  for (const g in sec) t[g] = Math.min(0.6, 0.42 + sec[g] * 0.03);
+  for (const g in main) t[g] = Math.min(1, 0.7 + main[g] * 0.05);
+  return t;
+}
+const isTimed = x => { const L = libEx(x.k); return !!(L && /\d\s*s\b/.test(L[1])); };   // Halteübungen: Wert = Sekunden
+const loadImg = src => new Promise(res => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+function rrect(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+function fitText(c, t, maxW) { if (c.measureText(t).width <= maxW) return t; while (t.length > 1 && c.measureText(t + '…').width > maxW) t = t.slice(0, -1); return t.trimEnd() + '…'; }
+async function sessionImage(s, withLogo) {
+  const W = 1080, H = 1920, cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const c = cv.getContext('2d'), SANS = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif', BRAND = '"Chakra Petch", ' + SANS;
+  try { await Promise.all([document.fonts.load('700 30px "Chakra Petch"'), document.fonts.load('600 30px "Chakra Petch"')]); } catch (e) {}
+  // Hintergrund: dunkel mit Cyan- und Lila-Schimmer wie in der App
+  c.fillStyle = '#04070c'; c.fillRect(0, 0, W, H);
+  const glow = (x, y, r, col) => { const g = c.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(4,7,12,0)'); c.fillStyle = g; c.fillRect(0, 0, W, H); };
+  glow(180, 260, 760, 'rgba(95,225,255,0.16)'); glow(940, 1250, 900, 'rgba(181,123,255,0.20)');
+  // Kopf: Logo und Marke
+  const logo = withLogo ? await loadImg('logo.png') : null;
+  let bx = 72;
+  if (logo) { const lh = 84, lw = logo.width / logo.height * lh; c.drawImage(logo, 72, 74, lw, lh); bx = 72 + lw + 22; }
+  c.fillStyle = '#e9f2fb'; c.textBaseline = 'alphabetic';
+  c.font = '700 44px ' + BRAND; c.letterSpacing = '6px'; c.fillText('MTC', bx, 114);
+  c.font = '700 24px ' + BRAND; c.letterSpacing = '5px'; c.fillText('FITNESS COACHING', bx, 150);
+  c.letterSpacing = '0px';
+  // Kicker und Titel
+  const date = new Date(s.at).toLocaleDateString('de-DE', { weekday: 'short', day: 'numeric', month: 'long' });
+  c.fillStyle = '#5fe1ff'; c.font = '700 30px ' + BRAND; c.letterSpacing = '5px';
+  c.fillText(((profile.name ? profile.name + ' · ' : '') + date).toUpperCase(), 72, 262);
+  c.letterSpacing = '0px';
+  const title = s.title || 'Training';
+  let fs = 76;
+  c.font = '800 ' + fs + 'px ' + SANS;
+  while (fs > 52 && c.measureText(title).width > W - 144) { fs -= 4; c.font = '800 ' + fs + 'px ' + SANS; }
+  c.fillStyle = '#ffffff'; c.fillText(fitText(c, title, W - 144), 72, 350);
+  // Der 3D-Mann vorne und hinten, trainierte Muskeln leuchten
+  const loads = sessionLoads(s), FY = 386, FH = 940, FW = 520;
+  const front = await hooks.snapshot(loads, 'front', FW, FH), back = front ? await hooks.snapshot(loads, 'back', FW, FH) : null;
+  // Ränder ausblenden, damit kein Kasten um den 3D-Mann sichtbar ist
+  const soft = img => {
+    const t = document.createElement('canvas'); t.width = FW; t.height = FH;
+    const x = t.getContext('2d'); x.drawImage(img, 0, 0); x.globalCompositeOperation = 'destination-in';
+    let g = x.createLinearGradient(0, 0, 0, FH); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.08, '#000'); g.addColorStop(0.84, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    x.fillStyle = g; x.fillRect(0, 0, FW, FH);
+    g = x.createLinearGradient(0, 0, FW, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.12, '#000'); g.addColorStop(0.88, '#000'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    x.fillStyle = g; x.fillRect(0, 0, FW, FH);
+    return t;
+  };
+  if (front && back) {
+    c.save(); c.globalCompositeOperation = 'screen';
+    c.drawImage(soft(front), 30, FY); c.drawImage(soft(back), W - 30 - FW, FY);
+    c.restore();
+    c.fillStyle = 'rgba(168,183,200,0.75)'; c.font = '600 24px ' + BRAND; c.letterSpacing = '6px'; c.textAlign = 'center';
+    c.fillText('VORNE', 30 + FW / 2, FY + FH - 6); c.fillText('HINTEN', W - 30 - FW / 2, FY + FH - 6);
+    c.textAlign = 'left'; c.letterSpacing = '0px';
+  } else {
+    // ohne 3D: trainierte Muskelgruppen als Liste
+    const names = Object.keys(loads).sort((a, b) => loads[b] - loads[a]).map(g => BY_ID[g].name);
+    c.fillStyle = '#a8b7c8'; c.font = '600 34px ' + SANS; c.fillText('Trainiert', 72, FY + 80);
+    c.fillStyle = '#ffffff'; c.font = '800 56px ' + SANS;
+    names.slice(0, 8).forEach((n, i) => c.fillText(n, 72, FY + 160 + i * 84));
+  }
+  // Kennzahlen
+  const sets = s.x.reduce((a, x) => a + x.sets.length, 0), vol = s.x.reduce((a, x) => a + x.sets.reduce((b, st) => b + st[0] * st[1], 0), 0);
+  const reps = s.x.reduce((a, x) => a + (isTimed(x) ? 0 : x.sets.reduce((b, st) => b + st[1], 0)), 0);
+  const prs = finished && finished.s === s ? finished.prs.length : 0;
+  const stats = [[durMin(s) + '', 'Minuten'], [sets + '', 'Sätze'], vol > 0 ? [fmtNum(Math.round(vol)), 'kg bewegt'] : [reps + '', 'Wdh.'], prs ? [prs + '', prs === 1 ? 'Bestleistung' : 'Bestleistungen'] : [s.x.length + '', s.x.length === 1 ? 'Übung' : 'Übungen']];
+  const SY = 1390, gap = 16, tw = (W - 144 - gap * 3) / 4;
+  stats.forEach(([v, l], i) => {
+    const x = 72 + i * (tw + gap);
+    rrect(c, x, SY, tw, 150, 26); c.fillStyle = 'rgba(15,25,38,0.82)'; c.fill();
+    c.strokeStyle = 'rgba(255,255,255,0.08)'; c.lineWidth = 2; c.stroke();
+    c.fillStyle = i === 3 && prs ? '#5fe1ff' : '#ffffff'; c.font = '800 ' + (v.length > 5 ? 46 : 56) + 'px ' + SANS; c.fillText(v, x + 24, SY + 76);
+    c.fillStyle = '#8199b1'; c.font = '600 24px ' + SANS; c.fillText(fitText(c, l, tw - 40), x + 24, SY + 118);
+  });
+  // Übungen mit bestem Satz
+  const EY = 1606, rows = s.x.slice(0, s.x.length > 4 ? 3 : 4);
+  rows.forEach((x, i) => {
+    const y = EY + i * 64, best = topSet(x.sets);
+    c.fillStyle = '#dbe8f5'; c.font = '600 32px ' + SANS;
+    const right = best ? (best[0] > 0 ? fmtNum(best[0]) + ' kg × ' + best[1] : best[1] + (isTimed(x) ? ' s' : ' Wdh.')) : '';
+    c.textAlign = 'right'; c.fillStyle = '#5fe1ff'; c.fillText(right, W - 72, y);
+    const rw = c.measureText(right).width;
+    c.textAlign = 'left'; c.fillStyle = '#dbe8f5'; c.fillText(fitText(c, x.n, W - 144 - rw - 30), 72, y);
+    if (i < rows.length - 1) { c.fillStyle = 'rgba(255,255,255,0.07)'; c.fillRect(72, y + 24, W - 144, 2); }
+  });
+  if (s.x.length > rows.length) { c.fillStyle = '#8199b1'; c.font = '600 26px ' + SANS; c.fillText('+ ' + (s.x.length - rows.length) + ' weitere Übung' + (s.x.length - rows.length === 1 ? '' : 'en'), 72, EY + rows.length * 64); }
+  // Fuß
+  c.fillStyle = 'rgba(168,183,200,0.7)'; c.font = '600 24px ' + BRAND; c.letterSpacing = '5px'; c.textAlign = 'center';
+  c.fillText('TRAINIERT MIT DER MTC-APP', W / 2, H - 44);
+  c.textAlign = 'left'; c.letterSpacing = '0px';
+  return cv;
+}
+const canvasBlob = cv => new Promise(res => { try { cv.toBlob(b => res(b), 'image/png'); } catch (e) { res(null); } });
+async function shareSession(s, btn) {
+  if (!s || s.c || !s.x.length || (btn && btn.disabled)) return;
+  const label = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Bild wird erstellt …'; }
+  await new Promise(r => setTimeout(r, 30));
+  let blob = null;
+  try { blob = await canvasBlob(await sessionImage(s, true)); } catch (e) { blob = null; }
+  if (!blob) { try { blob = await canvasBlob(await sessionImage(s, false)); } catch (e) { blob = null; } }   // falls das Logo das Bild sperrt
+  if (btn) { btn.disabled = false; btn.innerHTML = label; }
+  if (!blob) { toast('Das Bild konnte nicht erstellt werden'); return; }
+  const name = 'MTC-Training-' + new Date(s.at).toISOString().slice(0, 10) + '.png', url = URL.createObjectURL(blob);
+  const file = typeof File === 'function' ? new File([blob], name, { type: 'image/png' }) : null;
+  const canShare = !!(file && navigator.canShare && navigator.share && navigator.canShare({ files: [file] }));
+  const saveHTML = '<a class="btn wide" id="sh-dl" href="' + url + '" download="' + name + '">Bild speichern</a><p class="small muted">Oder halte das Bild gedrückt und wähle „Sichern“.</p>';
+  modal('<h3>Dein Training als Bild</h3><img class="share-img" src="' + url + '" alt="Trainingsbild mit dem 3D-Modell und deinen Werten">' +
+    '<div class="share-acts">' + (canShare ? '<button type="button" class="btn wide" id="sh-go">' + ICON_SHARE + 'Teilen</button>' : saveHTML) + '</div>' +
+    '<button type="button" class="text-btn" id="sh-close">Schließen</button>', (m, close) => {
+    m.firstChild.classList.add('share');
+    const done = () => { close(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
+    m.querySelector('#sh-close').addEventListener('click', done);
+    const go = m.querySelector('#sh-go');
+    if (go) go.addEventListener('click', async () => {
+      try { await navigator.share({ files: [file], title: 'Mein Training', text: 'Mein Training mit MTC Fitness Coaching' }); done(); }
+      catch (e) { if (!e || e.name !== 'AbortError') m.querySelector('.share-acts').innerHTML = saveHTML; }   // z. B. im Artifact gesperrt
+    });
+  }, { left: false });
 }
 
 async function makeCheckin() {
@@ -2281,6 +2529,7 @@ function renderProfile() {
   h += '<div><p class="group-title">Sicherung</p><div class="card"><p class="muted">Neues Handy? Erstelle hier eine Sicherung, schick sie dir selbst und spiel sie auf dem neuen Gerät ein.</p>' +
     '<div class="btn-row"><button type="button" class="btn secondary" id="bk-make">Sicherung erstellen</button><button type="button" class="btn secondary" id="bk-load">Einspielen</button></div><div id="bk-out" class="out"></div></div></div>';
   if (HOSTED && !STANDALONE) h += '<div><p class="group-title">App</p><div class="card" id="pf-install"><b>MTC als App installieren</b><p class="muted">Dann startet MTC vom Home-Bildschirm, im Vollbild und auch ohne Internet.</p>' + installHTML() + '</div></div>';
+  h += '<div><p class="group-title">Hilfe</p><div class="list"><button type="button" class="nav-row" id="pf-tour"><span style="display:grid;gap:2px"><span class="row-name">Einführung ansehen</span><span class="muted">Der 3D-Mann zeigt dir in drei Schritten, wie MTC funktioniert</span></span><span class="chev"></span></button></div></div>';
   h += '<div><p class="group-title">Für Trainer</p><div class="list"><button type="button" class="nav-row" id="pf-coach"><span style="display:grid;gap:2px"><span class="row-name">Coach-Bereich</span><span class="muted">' + (coachMode ? 'Ist als Tab „Kunden“ unten eingeblendet' : 'Kunden betreuen, Pläne bauen, Check-ins auswerten') + '</span></span><span class="chev"></span></button></div>' +
     (coachMode ? '<button type="button" class="text-btn" id="pf-coach-off" style="justify-self:start">Tab „Kunden“ ausblenden</button>' : '') + '</div>';
   h += '<div class="actions"><button type="button" class="text-btn danger" id="pf-wipe">Alle Daten löschen</button></div>' +
@@ -2299,11 +2548,12 @@ function renderProfile() {
     if (!CAN_CLIP) $('bk-in').focus();
     $('bk-go').addEventListener('click', async () => { const ok = await handleIncoming($('bk-in').value, false); if (!ok) toast('Kein gültiger Sicherungscode'); });
   });
+  $('pf-tour').addEventListener('click', () => startTour());
   $('pf-coach').addEventListener('click', () => { setCoachMode(true); coachSel = null; showTab('coach'); });
   const off = $('pf-coach-off'); if (off) off.addEventListener('click', () => { setCoachMode(false); keepScroll(renderProfile); });
   arm($('pf-wipe'), 'Alles löschen? Nochmal tippen', () => {
     ['plan', 'profile', 'coachPlan', 'sessions', 'active', 'weights', 'coach', 'ciDraft', 'filter', 'moreOpen'].forEach(k => store.del(k));
-    ['daysOpen', 'mineOpen', 'coachMode', 'welcomed'].forEach(k => store.del(k));
+    ['daysOpen', 'mineOpen', 'coachMode', 'welcomed', 'toured'].forEach(k => store.del(k));
     setCoachMode(false);
     myList = []; profile = { name: '' }; coachPlan = null; sessions = []; active = null; weights = []; coach = null; finished = null; trainSel = null; trainView = 'main';
     ciDraft = { w: '', e: 0, t: '' };
@@ -2730,6 +2980,68 @@ window.addEventListener('beforeinstallprompt', e => {
 });
 window.addEventListener('appinstalled', () => { installEvt = null; toast('MTC ist jetzt auf deinem Home-Bildschirm'); });
 
+/* ---------- Kurze Einführung am 3D-Modell ---------- */
+const TOUR = [
+  { k: 'Muskeln', h: 'Tippe auf deinen Muskel', p: () => 'Dreh den Körper ' + (touchUI ? 'mit dem Finger' : 'mit der Maus') + '. ' + (touchUI ? 'Tippst' : 'Klickst') + ' du einen Muskel an, bekommst du passende Übungen mit Video, für Zuhause, Studio und Calisthenics.' },
+  { k: 'Erholung', h: 'Sieh, was sich erholt', p: () => 'Nach dem Training leuchten müde Muskeln orange, lila heißt: erholt sich gerade. So weißt du, was heute geht.' },
+  { k: 'Training', h: 'Trainiere mit deinem Coach', p: () => 'Unter Training findest du deinen Plan und hakst deine Sätze ab. Per Check-in sieht dein Coach, wie es bei dir läuft.' }
+];
+const TOUR_LOADS = { brust: 0.95, trizeps: 0.85, delta: 0.72, lat: 0.45, bizeps: 0.4, quad: 0.38, bauch: 0.3 };
+let tourStep = -1, tourEnd = null, tourTimers = [];
+const tourOn = () => tourStep >= 0;
+const tourLater = (fn, ms) => { tourTimers.push(setTimeout(fn, ms)); };
+const modelReady = fn => { if ($('loader').hidden) fn(); else tourLater(() => modelReady(fn), 300); };
+function startTour(onEnd) {
+  if (!$('fail').hidden) { if (onEnd) onEnd(); return; }   // ohne 3D-Modell keine Einführung
+  tourEnd = onEnd || null;
+  selected = null; modelLoads = false; openRow = -1; hooks.highlight(null);
+  showTab('muscles'); setSheet(false);
+  document.body.classList.add('touring');
+  tourGo(0);
+}
+function tourReset() {
+  tourTimers.forEach(clearTimeout); tourTimers = [];
+  hooks.track(null); $('tour-tap').hidden = true;
+  $('tab-train').classList.remove('tour-spot');
+  $('legend').hidden = true; hooks.setLoads(null); hooks.highlight(null); hooks.spin(false);
+}
+function tourGo(n) {
+  tourReset();
+  tourStep = n;
+  const t = TOUR[n], el = $('tour'), last = n === TOUR.length - 1;
+  el.innerHTML = '<div class="tour-card" role="dialog" aria-live="polite" aria-label="Einführung, Schritt ' + (n + 1) + ' von ' + TOUR.length + '">' +
+    '<p class="tour-k"><i>' + (n + 1) + '</i>' + t.k + '</p><h2>' + t.h + '</h2><p class="tour-p">' + t.p() + '</p>' +
+    '<div class="tour-foot"><div class="w-dots" aria-hidden="true">' + TOUR.map((_, i) => '<i' + (i === n ? ' class="on"' : '') + '></i>').join('') + '</div>' +
+    (last ? '' : '<button type="button" class="text-btn" data-tour="skip">Überspringen</button>') +
+    '<button type="button" class="btn" data-tour="next">' + (last ? 'Los geht’s' : 'Weiter') + '</button></div></div>';
+  el.hidden = false;
+  el.querySelectorAll('[data-tour]').forEach(b => b.addEventListener('click', () => { if (b.dataset.tour === 'next' && !last) tourGo(n + 1); else endTour(); }));
+  // Was der 3D-Mann in jedem Schritt zeigt
+  modelReady(() => {
+    if (n === 0) {
+      hooks.view(0, 1.12, 2.7);
+      tourLater(() => { hooks.highlight('brust'); hooks.track('brust', $('tour-tap')); }, 1000);
+    } else if (n === 1) {
+      hooks.view(0);
+      tourLater(() => { muscMode = 'rec'; setLegend(); $('legend').hidden = false; hooks.setLoads(TOUR_LOADS); }, 700);
+      tourLater(() => hooks.spin(true, 2.4), 2600);
+    } else {
+      hooks.view(180);
+      tourLater(() => { hooks.highlight('lat'); $('tab-train').classList.add('tour-spot'); }, 900);
+    }
+  });
+}
+function endTour() {
+  tourReset();
+  tourStep = -1;
+  $('tour').hidden = true; $('tour').innerHTML = '';
+  document.body.classList.remove('touring');
+  hooks.view(0);
+  store.set('toured', true);
+  const f = tourEnd; tourEnd = null;
+  if (f) f();
+}
+
 /* ---------- Erster Start ---------- */
 let welcomeStep = null;
 const welcomeOpen = () => !$('welcome').hidden;
@@ -2759,7 +3071,10 @@ function showWelcome(step) {
   w.querySelectorAll('[data-wstep]').forEach(b => b.addEventListener('click', () => showWelcome(b.dataset.wstep)));
   const nameI = $('w-name');
   if (nameI) {
-    const next = () => { const n = nameI.value.trim().slice(0, 40); if (!n) { nameI.focus(); return; } profile.name = n; store.set('profile', profile); showWelcome('start'); };
+    const next = () => { const n = nameI.value.trim().slice(0, 40); if (!n) { nameI.focus(); return; } profile.name = n; store.set('profile', profile);
+      if (store.get('toured', false) || !$('fail').hidden) showWelcome('start');
+      else { welcomeStep = 'tour'; $('welcome').hidden = true; $('welcome').innerHTML = ''; startTour(() => showWelcome('start')); }
+    };
     $('w-next').addEventListener('click', next);
     nameI.addEventListener('keydown', e => { if (e.key === 'Enter') next(); });
   }
@@ -3112,7 +3427,7 @@ window.addEventListener('pointerup', ev => {
   if (!downAt) return;
   const moved = Math.hypot(ev.clientX - downAt.x, ev.clientY - downAt.y);
   downAt = null;
-  if (moved < 8 && ev.target === canvas) {
+  if (moved < 8 && ev.target === canvas && !tourOn()) {
     const obj = pick(ev);
     if (!obj) { if (sheetOpen) setSheet(false); else select(null); return; }
     const id = obj.userData.group;
@@ -3163,7 +3478,7 @@ canvas.addEventListener('keydown', ev => {
   flyTo(sph.theta + (ev.key === 'ArrowLeft' ? -1 : 1) * Math.PI / 4, controls.target.y, sph.radius);
   ev.preventDefault();
 });
-window.addEventListener('keydown', ev => { if (ev.key === 'Escape' && $('modal').hidden && !/INPUT|TEXTAREA/.test(document.activeElement && document.activeElement.tagName)) select(null); });
+window.addEventListener('keydown', ev => { if (ev.key === 'Escape' && tourOn()) { endTour(); return; } if (ev.key === 'Escape' && $('modal').hidden && !/INPUT|TEXTAREA/.test(document.activeElement && document.activeElement.tagName)) select(null); });
 
 hooks.fly = id => {
   controls.autoRotate = false;
@@ -3171,6 +3486,55 @@ hooks.fly = id => {
   const y = box.isEmpty() ? HOME.y : Math.min(Math.max((box.min.y + box.max.y) / 2, 0.45), 1.35);
   markView(m.side === 'front' ? 0 : 180);
   flyTo(m.side === 'front' ? 0 : Math.PI, y, 2.5);
+};
+
+/* ---------- Einführung: Kamera, Drehen und Markierung, die am Muskel klebt ---------- */
+let trackPt = null, trackEl = null;
+const trackV = new THREE.Vector3();
+hooks.view = (deg, y, dist) => { controls.autoRotate = false; controls.autoRotateSpeed = 1.0; markView(deg === 0 || deg === 180 ? deg : null); flyTo(deg * Math.PI / 180, y == null ? HOME.y : y, dist || HOME.dist); };
+hooks.spin = (on, speed) => { controls.autoRotate = !!on && !reduceMotion; controls.autoRotateSpeed = speed || 1.0; };
+hooks.track = (id, el) => {
+  if (trackEl && trackEl !== el) trackEl.hidden = true;
+  trackEl = el || null; trackPt = null;
+  if (!el) return;
+  const g = groups[id];
+  if (!g || g.box.isEmpty()) { el.hidden = true; trackEl = null; return; }
+  const b = g.box, c = b.getCenter(new THREE.Vector3());
+  trackPt = new THREE.Vector3(c.x + (b.max.x - c.x) * 0.45, c.y + (b.max.y - c.y) * 0.15, BY_ID[id].side === 'front' ? b.max.z : b.min.z);
+};
+
+/* ---------- Standbild für das Teilen-Bild ---------- */
+// Rendert den 3D-Mann mit eigener Kamera in w × h Pixel, trainierte Muskeln leuchten. Alles läuft in einem Schritt,
+// darum lässt sich der WebGL-Inhalt direkt abgreifen; danach ist der alte Zustand wieder hergestellt.
+hooks.snapshot = async (loads, side, w, h) => {
+  if (!$('loader').hidden || !$('fail').hidden) return null;
+  const cam = new THREE.PerspectiveCamera(25, w / h, 0.05, 50), th = side === 'back' ? Math.PI : 0;
+  cam.position.set(Math.sin(th) * 4.35, 1.02, Math.cos(th) * 4.35); cam.lookAt(0, 0.9, 0);
+  const saved = {};
+  for (const id in groups) {
+    const u = groups[id].mat.uniforms;
+    saved[id] = [u.uLoad.value, u.uSel.value, u.uDim.value, u.uHover.value];
+    u.uLoad.value = loads[id] || 0; u.uSel.value = 0; u.uDim.value = 0; u.uHover.value = 0;
+    groups[id].xray.forEach(m => { m.visible = false; });
+  }
+  const ctxDim = ctxMat.uniforms.uDim.value; ctxMat.uniforms.uDim.value = 0;
+  for (const m of superficial) { m.material = m.userData.mat; m.renderOrder = 0; }
+  const pr = renderer.getPixelRatio(), size = renderer.getSize(new THREE.Vector2()), pass = composer && composer.passes[0];
+  let out = null;
+  try {
+    renderer.setPixelRatio(1); renderer.setSize(w, h, false);
+    if (composer) { composer.setPixelRatio(1); composer.setSize(w, h); bloom.resolution.set(w / 2, h / 2); pass.camera = cam; composer.render(); }
+    else renderer.render(scene, cam);
+    out = document.createElement('canvas'); out.width = w; out.height = h;
+    out.getContext('2d').drawImage(renderer.domElement, 0, 0);
+  } catch (e) { out = null; }
+  if (pass) pass.camera = camera;
+  renderer.setPixelRatio(pr); renderer.setSize(size.x, size.y, false);
+  if (composer) { composer.setPixelRatio(pr); composer.setSize(size.x, size.y); bloom.resolution.set(size.x / 2, size.y / 2); }
+  for (const id in groups) { const u = groups[id].mat.uniforms; [u.uLoad.value, u.uSel.value, u.uDim.value, u.uHover.value] = saved[id]; groups[id].xray.forEach(m => { m.visible = groups[id].xvis; }); }
+  ctxMat.uniforms.uDim.value = ctxDim;
+  applyLayers();
+  return out;
 };
 
 /* ---------- Loop ---------- */
@@ -3215,6 +3579,11 @@ function tick() {
     if (tween.t >= 1) tween = null;
   }
   controls.update();
+  if (trackEl && trackPt) {
+    trackV.copy(trackPt).project(camera);
+    trackEl.style.transform = 'translate(' + ((trackV.x + 1) / 2 * canvas.clientWidth).toFixed(1) + 'px,' + ((1 - trackV.y) / 2 * canvas.clientHeight).toFixed(1) + 'px)';
+    trackEl.hidden = trackV.z > 1;
+  }
   if (composer) composer.render(); else renderer.render(scene, camera);
   requestAnimationFrame(tick);
 }
