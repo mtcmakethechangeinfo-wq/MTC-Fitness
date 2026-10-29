@@ -567,7 +567,7 @@ body.resting .update-bar { display: none; }
 /* ================================================================== */
 /* Daten                                                              */
 /* ================================================================== */
-// eq: kg = Körpergewicht & Band, h = Hanteln, m = Kabel & Maschine · lvl 1–3 · sec = mittrainierte Gruppen
+// eq: kg = Körpergewicht & Band, h = Hanteln, m = Kabel & Maschine · lvl 1–3 · sec = mittrainierte Gruppen · optional "c" = Calisthenics
 const MUSCLES = [
   { id: 'brust', name: 'Brust', latin: 'M. pectoralis major', side: 'front', region: 'Oberkörper vorne',
     origin: 'Mediale Hälfte des Schlüsselbeins, Brustbein mit Rippenknorpeln 1–6, vordere Rektusscheide.',
@@ -577,12 +577,14 @@ const MUSCLES = [
     ex: [
       ['Bankdrücken (Langhantel)', '4 × 6–10', 'Schulterblätter zusammen, Stange kontrolliert zur unteren Brust.', 'h', 2, ['trizeps', 'delta']],
       ['Schrägbankdrücken (Kurzhantel)', '3 × 8–12', 'Bank auf 30°, betont die Pars clavicularis.', 'h', 2, ['delta', 'trizeps']],
-      ['Liegestütze', '3 × max', 'Körper bleibt gerade, Ellbogen etwa 45° vom Körper.', 'kg', 1, ['trizeps', 'delta']],
-      ['Dips (vorgebeugt)', '3 × 8–12', 'Oberkörper nach vorn neigen, betont die untere Brust.', 'kg', 3, ['trizeps', 'delta']],
+      ['Liegestütze', '3 × max', 'Körper bleibt gerade, Ellbogen etwa 45° vom Körper.', 'kg', 1, ['trizeps', 'delta'], 'c'],
+      ['Dips (vorgebeugt)', '3 × 8–12', 'Oberkörper nach vorn neigen, betont die untere Brust.', 'kg', 3, ['trizeps', 'delta'], 'c'],
       ['Cable Flys', '3 × 12–15', 'Arme leicht gebeugt, Hände vor der Brust zusammenführen.', 'm', 1, ['delta']],
-      ['Wand-Liegestütze', '3 × 12–15', 'Hände schulterbreit an die Wand, Körper bleibt gerade. Brust zur Wand senken und wieder wegdrücken. Je weiter die Füße weg sind, desto schwerer.', 'kg', 1, ['trizeps', 'delta']],
-      ['Liegestütze auf den Knien', '3 × 8–12', 'Knie auf eine weiche Unterlage, Körper von den Knien bis zum Kopf gerade. Brust bis kurz über den Boden senken.', 'kg', 1, ['trizeps', 'delta']],
-      ['Brustpresse (Maschine)', '3 × 10–12', 'Sitz so einstellen, dass die Griffe auf Brusthöhe sind. Ruhig nach vorn drücken, die Ellbogen nicht ganz durchstrecken.', 'm', 1, ['trizeps', 'delta']]
+      ['Wand-Liegestütze', '3 × 12–15', 'Hände schulterbreit an die Wand, Körper bleibt gerade. Brust zur Wand senken und wieder wegdrücken. Je weiter die Füße weg sind, desto schwerer.', 'kg', 1, ['trizeps', 'delta'], 'c'],
+      ['Liegestütze auf den Knien', '3 × 8–12', 'Knie auf eine weiche Unterlage, Körper von den Knien bis zum Kopf gerade. Brust bis kurz über den Boden senken.', 'kg', 1, ['trizeps', 'delta'], 'c'],
+      ['Brustpresse (Maschine)', '3 × 10–12', 'Sitz so einstellen, dass die Griffe auf Brusthöhe sind. Ruhig nach vorn drücken, die Ellbogen nicht ganz durchstrecken.', 'm', 1, ['trizeps', 'delta']],
+      ['Erhöhte Liegestütze (Incline Push-ups)', '3 × 10–15', 'Hände auf eine Bank, Stange oder Tischkante, der Körper bleibt gerade. Je höher die Hände, desto leichter. Der Zwischenschritt von der Wand zum Boden.', 'kg', 1, ['trizeps', 'delta'], 'c'],
+      ['Negative Liegestütze', '3 × 5–8', 'Aus der Liegestützposition in 3 bis 4 Sekunden langsam bis zum Boden absenken. Auf den Knien wieder hochkommen und wiederholen.', 'kg', 1, ['trizeps', 'delta'], 'c']
     ] },
   { id: 'bauch', name: 'Bauch', latin: 'M. rectus abdominis, Mm. obliqui externus et internus', side: 'front', region: 'Bauch',
     origin: 'Rectus: Schambein und Symphyse. Obliquus externus: Außenfläche der Rippen 5–12. Obliquus internus: Fascia thoracolumbalis, Darmbeinkamm, Leistenband.',
@@ -590,14 +592,16 @@ const MUSCLES = [
     func: 'Beugen und drehen den Rumpf, neigen ihn zur Seite und stabilisieren die Wirbelsäule. Erhöhen den Druck im Bauchraum, etwa beim schweren Heben.',
     nerve: 'Nn. intercostales Th5–Th12, N. iliohypogastricus, N. ilioinguinalis',
     ex: [
-      ['Plank (Unterarmstütz)', '3 × 30–60 s', 'Körper bildet eine Linie, Po leicht anspannen, nicht ins Hohlkreuz fallen.', 'kg', 1, []],
+      ['Plank (Unterarmstütz)', '3 × 30–60 s', 'Körper bildet eine Linie, Po leicht anspannen, nicht ins Hohlkreuz fallen.', 'kg', 1, [], 'c'],
       ['Crunches', '3 × 15–20', 'Nur die Schulterblätter abheben, Blick schräg nach oben.', 'kg', 1, []],
-      ['Hängendes Beinheben', '3 × 8–12', 'Ohne Schwung, am Ende das Becken leicht einrollen.', 'kg', 3, ['unterarm']],
+      ['Hängendes Beinheben', '3 × 8–12', 'Ohne Schwung, am Ende das Becken leicht einrollen.', 'kg', 3, ['unterarm'], 'c'],
       ['Kabel-Crunches (kniend)', '3 × 12–15', 'Seil am Kopf halten, den Rumpf einrollen statt aus der Hüfte zu ziehen.', 'm', 2, []],
       ['Pallof Press', '3 × 10 je Seite', 'Seitlich zum Kabel stehen, Griff vor der Brust wegdrücken, Rumpf nicht verdrehen lassen.', 'm', 1, []],
       ['Dead Bug', '3 × 8 je Seite', 'Auf dem Rücken liegen, der untere Rücken bleibt am Boden. Gegenüberliegenden Arm und Bein langsam strecken und zurückholen.', 'kg', 1, []],
       ['Seitstütz auf den Knien', '3 × 20–30 s je Seite', 'Auf Unterarm und Knien seitlich stützen, Hüfte anheben, sodass Kopf, Hüfte und Knie eine Linie bilden.', 'kg', 1, []],
-      ['Bauchmaschine (Crunch)', '3 × 12–15', 'Polster an die Brust, den Oberkörper langsam einrollen und kontrolliert zurück. Nicht mit den Armen ziehen.', 'm', 1, []]
+      ['Bauchmaschine (Crunch)', '3 × 12–15', 'Polster an die Brust, den Oberkörper langsam einrollen und kontrolliert zurück. Nicht mit den Armen ziehen.', 'm', 1, []],
+      ['Hollow Body Hold (Knie gebeugt)', '3 × 15–30 s', 'Auf dem Rücken liegen und den unteren Rücken fest in den Boden drücken. Knie anwinkeln, Schultern und Füße leicht abheben und halten. Eine Grundübung im Calisthenics.', 'kg', 1, [], 'c'],
+      ['Knieheben hängend (Hanging Knee Raises)', '3 × 8–12', 'An der Stange hängen und die Knie kontrolliert Richtung Brust ziehen. Nicht schwingen, langsam wieder ablassen.', 'kg', 1, ['unterarm'], 'c']
     ] },
   { id: 'delta', name: 'Deltamuskel', latin: 'M. deltoideus', side: 'front', region: 'Schulter',
     origin: 'Laterales Drittel des Schlüsselbeins, Acromion, Spina scapulae.',
@@ -608,11 +612,13 @@ const MUSCLES = [
       ['Schulterdrücken (Kurzhantel)', '4 × 8–10', 'Im Sitzen, Rumpf fest, kein Hohlkreuz.', 'h', 2, ['trizeps', 'trapez']],
       ['Seitheben', '3 × 12–15', 'Leichtes Gewicht bis Schulterhöhe, trifft die Pars acromialis.', 'h', 1, ['trapez']],
       ['Face Pulls', '3 × 15', 'Seil zum Gesicht ziehen, trifft die Pars spinalis.', 'm', 1, ['trapez', 'rhomb', 'rotator']],
-      ['Pike Push-ups', '3 × 8–12', 'Hüfte hoch, Kopf zwischen die Hände absenken.', 'kg', 2, ['trizeps']],
+      ['Pike Push-ups', '3 × 8–12', 'Hüfte hoch, Kopf zwischen die Hände absenken.', 'kg', 2, ['trizeps'], 'c'],
       ['Frontheben', '3 × 10–12', 'Kontrolliert ohne Schwung, trifft die Pars clavicularis.', 'h', 1, ['brust']],
       ['Schulterdrücken an der Maschine', '3 × 10–12', 'Rücken fest an die Lehne, Griffe auf Schulterhöhe. Nach oben drücken, ohne ins Hohlkreuz zu gehen.', 'm', 1, ['trizeps']],
       ['Seitheben mit Band', '3 × 12–15', 'Band unter die Füße, Arme leicht gebeugt seitlich bis auf Schulterhöhe heben und langsam senken.', 'kg', 1, []],
-      ['Schulterdrücken sitzend (Kurzhantel)', '3 × 10–12', 'Auf einer Bank mit Lehne sitzen, leichte Hanteln von Schulterhöhe nach oben drücken, Bauch fest.', 'h', 1, ['trizeps']]
+      ['Schulterdrücken sitzend (Kurzhantel)', '3 × 10–12', 'Auf einer Bank mit Lehne sitzen, leichte Hanteln von Schulterhöhe nach oben drücken, Bauch fest.', 'h', 1, ['trizeps']],
+      ['Pike Hold (Hüfte hoch)', '3 × 20–30 s', 'Hände und Füße am Boden, Hüfte hoch wie ein umgedrehtes V. Gewicht über die Hände schieben und halten. Vorstufe zu Pike Push-ups und Handstand.', 'kg', 1, ['trizeps', 'trapez'], 'c'],
+      ['Schulter-Taps im Liegestütz', '3 × 10 je Seite', 'In der hohen Liegestützposition abwechselnd mit einer Hand die andere Schulter antippen. Die Hüfte bleibt dabei ruhig.', 'kg', 1, ['bauch', 'brust'], 'c']
     ] },
   { id: 'bizeps', name: 'Bizeps', latin: 'M. biceps brachii', side: 'front', region: 'Oberarm vorne',
     origin: 'Caput longum: Tuberculum supraglenoidale. Caput breve: Processus coracoideus.',
@@ -623,11 +629,13 @@ const MUSCLES = [
       ['Langhantel-Curls', '3 × 8–12', 'Ellbogen bleiben am Körper.', 'h', 1, []],
       ['Hammer Curls', '3 × 10–12', 'Neutraler Griff, trifft auch M. brachialis und M. brachioradialis.', 'h', 1, ['unterarm']],
       ['Schrägbank-Curls (Kurzhantel)', '3 × 10', 'Arme hängen hinter dem Körper und dehnen das Caput longum.', 'h', 2, []],
-      ['Klimmzüge im Untergriff', '3 × max', 'Schulterbreit greifen, Kinn über die Stange.', 'kg', 3, ['lat', 'rhomb']],
+      ['Klimmzüge im Untergriff', '3 × max', 'Schulterbreit greifen, Kinn über die Stange.', 'kg', 3, ['lat', 'rhomb'], 'c'],
       ['Kabel-Curls', '3 × 12–15', 'Konstante Spannung über den ganzen Weg.', 'm', 1, []],
       ['Bizeps-Curls mit Band', '3 × 12–15', 'Auf das Band stellen, die Ellbogen bleiben am Körper. Hände langsam zu den Schultern führen und kontrolliert senken.', 'kg', 1, ['unterarm']],
       ['Konzentrationscurls (sitzend)', '3 × 10–12 je Arm', 'Ellbogen innen am Oberschenkel abstützen und die Hantel ohne Schwung zur Schulter beugen.', 'h', 1, []],
-      ['Bizepsmaschine (Scott-Curls)', '3 × 10–12', 'Oberarme liegen auf dem Polster. Ruhig beugen und langsam fast ganz strecken.', 'm', 1, ['unterarm']]
+      ['Bizepsmaschine (Scott-Curls)', '3 × 10–12', 'Oberarme liegen auf dem Polster. Ruhig beugen und langsam fast ganz strecken.', 'm', 1, ['unterarm']],
+      ['Australian Chin-ups (Untergriff)', '3 × 8–12', 'Wie Australian Pull-ups, aber die Handflächen zeigen zu dir und die Hände sind schulterbreit. Brust zur Stange ziehen, Ellbogen bleiben nah am Körper.', 'kg', 1, ['lat', 'rhomb'], 'c'],
+      ['Negative Chin-ups', '3 × 3–5', 'Im Untergriff mit einem Sprung nach oben, Kinn über der Stange. 3 bis 5 Sekunden langsam absenken.', 'kg', 2, ['lat'], 'c']
     ] },
   { id: 'trizeps', name: 'Trizeps', latin: 'M. triceps brachii', side: 'back', region: 'Oberarm hinten',
     origin: 'Caput longum: Tuberculum infraglenoidale. Caput laterale und mediale: Rückseite des Oberarmknochens.',
@@ -635,14 +643,16 @@ const MUSCLES = [
     func: 'Streckt den Ellbogen. Das Caput longum zieht den Arm zusätzlich nach hinten und zum Körper.',
     nerve: 'N. radialis',
     ex: [
-      ['Dips', '3 × 8–12', 'Oberkörper aufrecht für mehr Trizeps-Fokus.', 'kg', 2, ['brust', 'delta']],
-      ['Diamant-Liegestütze', '3 × max', 'Hände unter der Brust, Daumen und Zeigefinger bilden eine Raute.', 'kg', 2, ['brust']],
+      ['Dips', '3 × 8–12', 'Oberkörper aufrecht für mehr Trizeps-Fokus.', 'kg', 2, ['brust', 'delta'], 'c'],
+      ['Diamant-Liegestütze', '3 × max', 'Hände unter der Brust, Daumen und Zeigefinger bilden eine Raute.', 'kg', 2, ['brust'], 'c'],
       ['Trizepsdrücken am Kabel', '3 × 12–15', 'Ellbogen fixiert, unten voll strecken.', 'm', 1, []],
       ['Überkopf-Trizepsstrecken (Kurzhantel)', '3 × 10–12', 'Dehnt das Caput longum am stärksten.', 'h', 1, []],
       ['Enges Bankdrücken', '3 × 6–10', 'Griff schulterbreit, Ellbogen nah am Körper.', 'h', 2, ['brust']],
-      ['Bank-Dips mit gebeugten Beinen', '3 × 8–12', 'Hände hinter dir auf eine stabile Bank oder einen Stuhl, Füße nah am Körper. Ellbogen zeigen beim Absenken nach hinten.', 'kg', 1, ['brust', 'delta']],
+      ['Bank-Dips mit gebeugten Beinen', '3 × 8–12', 'Hände hinter dir auf eine stabile Bank oder einen Stuhl, Füße nah am Körper. Ellbogen zeigen beim Absenken nach hinten.', 'kg', 1, ['brust', 'delta'], 'c'],
       ['Trizeps-Kickbacks (Kurzhantel)', '3 × 12 je Arm', 'Oberkörper vorgebeugt abstützen, der Oberarm bleibt am Körper. Nur den Unterarm nach hinten strecken.', 'h', 1, []],
-      ['Trizepsdrücken mit Band', '3 × 12–15', 'Band oben an einer Tür befestigen, Ellbogen am Körper lassen und die Hände nach unten strecken.', 'kg', 1, []]
+      ['Trizepsdrücken mit Band', '3 × 12–15', 'Band oben an einer Tür befestigen, Ellbogen am Körper lassen und die Hände nach unten strecken.', 'kg', 1, []],
+      ['Diamant-Liegestütze auf den Knien', '3 × 8–12', 'Auf den Knien, Daumen und Zeigefinger formen unter der Brust ein Dreieck. Ellbogen eng am Körper nach hinten beugen.', 'kg', 1, ['brust'], 'c'],
+      ['Unterstützte Dips am Barren', '3 × 6–10', 'Am Barren oder zwischen zwei stabilen Stühlen stützen, die Füße bleiben leicht am Boden und helfen mit. Bis etwa 90 Grad im Ellbogen absenken.', 'kg', 1, ['brust', 'delta'], 'c']
     ] },
   { id: 'unterarm', name: 'Unterarme', latin: 'Unterarmbeuger und -strecker, M. brachioradialis', side: 'front', region: 'Unterarm',
     origin: 'Beuger: innerer Oberarmknorren (Epicondylus medialis). Strecker: äußerer Oberarmknorren (Epicondylus lateralis). Brachioradialis: Außenkante des Oberarmknochens.',
@@ -650,14 +660,15 @@ const MUSCLES = [
     func: 'Beugen und strecken Handgelenk und Finger und sorgen für die Griffkraft. Der Brachioradialis beugt zusätzlich den Ellbogen.',
     nerve: 'N. medianus und N. ulnaris (Beuger), N. radialis (Strecker)',
     ex: [
-      ['Dead Hang (Hängen an der Stange)', '3 × 30–60 s', 'Schultern leicht aktiv, so lange wie möglich hängen bleiben.', 'kg', 1, ['lat']],
+      ['Dead Hang (Hängen an der Stange)', '3 × 30–60 s', 'Schultern leicht aktiv, so lange wie möglich hängen bleiben.', 'kg', 1, ['lat'], 'c'],
       ['Handgelenkcurls (Kurzhantel)', '3 × 15', 'Unterarme auf den Oberschenkeln ablegen, nur das Handgelenk bewegen.', 'h', 1, []],
       ['Reverse Curls (Obergriff)', '3 × 10–12', 'Stange im Obergriff, trifft besonders den Brachioradialis.', 'h', 1, ['bizeps']],
       ['Handgelenkstrecken (Kurzhantel)', '3 × 15', 'Handrücken zeigt nach oben, Hantel langsam heben und senken.', 'h', 1, []],
       ['Handtrainer drücken', '3 × 20 je Hand', 'Langsam schließen, 1 s halten, kontrolliert öffnen.', 'kg', 1, []],
       ['Handgelenkcurls mit Band', '3 × 15', 'Unterarme auf den Oberschenkeln, Band unter den Füßen. Nur die Handgelenke bewegen.', 'kg', 1, []],
       ['Handtuch auswringen', '3 × 20 s', 'Ein Handtuch mit beiden Händen kräftig auswringen, dann die Richtung wechseln.', 'kg', 1, []],
-      ['Farmer\'s Hold (Kurzhantel)', '3 × 20–30 s', 'Zwei Hanteln seitlich halten, aufrecht stehen, Schultern locker nach hinten unten.', 'h', 1, ['trapez']]
+      ['Farmer\'s Hold (Kurzhantel)', '3 × 20–30 s', 'Zwei Hanteln seitlich halten, aufrecht stehen, Schultern locker nach hinten unten.', 'h', 1, ['trapez']],
+      ['Aktives Hängen (Active Hang)', '3 × 15–30 s', 'An der Stange hängen und die Schultern aktiv nach unten ziehen, weg von den Ohren. Stärkt Griff und Schultern für die ersten Klimmzüge.', 'kg', 1, ['lat', 'trapez'], 'c']
     ] },
   { id: 'lat', name: 'Latissimus', latin: 'M. latissimus dorsi', side: 'back', region: 'Rücken seitlich',
     origin: 'Dornfortsätze Th7–L5 über die Fascia thoracolumbalis, Kreuzbein, Darmbeinkamm, Rippen 10–12.',
@@ -665,14 +676,17 @@ const MUSCLES = [
     func: 'Adduktion, Innenrotation und Retroversion des Arms. Sorgt für den breiten V-Rücken.',
     nerve: 'N. thoracodorsalis',
     ex: [
-      ['Klimmzüge', '4 × max', 'Weiter Griff, Brust zur Stange ziehen.', 'kg', 3, ['bizeps', 'rhomb']],
+      ['Klimmzüge', '4 × max', 'Weiter Griff, Brust zur Stange ziehen.', 'kg', 3, ['bizeps', 'rhomb'], 'c'],
       ['Latzug zur Brust', '3 × 10–12', 'Leicht zurücklehnen, Ellbogen nach unten führen.', 'm', 1, ['bizeps']],
       ['Einarmiges Kurzhantelrudern', '3 × 10 je Seite', 'Hantel zur Hüfte ziehen, nicht zur Brust.', 'h', 1, ['rhomb', 'bizeps']],
       ['Straight-Arm Pulldown', '3 × 12–15', 'Gestreckte Arme, Stange bis zu den Oberschenkeln.', 'm', 1, ['trizeps']],
-      ['Tischrudern (Inverted Rows)', '3 × 10', 'Unter einer stabilen Stange oder Tischkante, Brust zur Kante ziehen.', 'kg', 1, ['rhomb', 'bizeps']],
+      ['Australian Pull-ups (Tischrudern)', '3 × 8–12', 'Unter eine hüfthohe Stange oder einen stabilen Tisch legen, Hände etwas breiter als schulterbreit. Körper gerade wie ein Brett, Brust zur Stange ziehen. Je aufrechter du stehst, desto leichter.', 'kg', 1, ['rhomb', 'bizeps'], 'c'],
       ['Latzug mit Band (kniend)', '3 × 12–15', 'Band oben befestigen, kniend die Ellbogen Richtung Hüfte ziehen und die Brust aufrichten.', 'kg', 1, ['bizeps', 'rhomb']],
       ['Unterstützte Klimmzüge (Maschine)', '3 × 6–10', 'Die Maschine nimmt dir einen Teil des Gewichts ab. Brust zur Stange ziehen und langsam ablassen.', 'm', 1, ['bizeps', 'rhomb']],
-      ['Latzug im Untergriff (eng)', '3 × 10–12', 'Schulterbreiter Untergriff, Stange zur oberen Brust ziehen, die Schultern bleiben unten.', 'm', 1, ['bizeps']]
+      ['Latzug im Untergriff (eng)', '3 × 10–12', 'Schulterbreiter Untergriff, Stange zur oberen Brust ziehen, die Schultern bleiben unten.', 'm', 1, ['bizeps']],
+      ['Scapula Pull-ups', '3 × 8–10', 'An der Klimmzugstange hängen, die Arme bleiben gestreckt. Nur die Schulterblätter nach unten ziehen, sodass du ein paar Zentimeter hochkommst. Langsam wieder lösen.', 'kg', 1, ['trapez', 'rhomb'], 'c'],
+      ['Klimmzüge mit Widerstandsband', '3 × 5–8', 'Band um die Stange schlingen und einen Fuß oder ein Knie hineinstellen. Das Band hilft unten am meisten. Mit der Zeit ein dünneres Band nehmen.', 'kg', 1, ['bizeps', 'rhomb'], 'c'],
+      ['Negative Klimmzüge', '3 × 3–5', 'Mit einem Sprung oder von einer Kiste nach oben, Kinn über der Stange. Dann so langsam wie möglich absenken, 3 bis 5 Sekunden. Der beste Weg zum ersten Klimmzug.', 'kg', 2, ['bizeps', 'rhomb'], 'c']
     ] },
   { id: 'trapez', name: 'Trapez', latin: 'M. trapezius', side: 'back', region: 'Nacken und oberer Rücken',
     origin: 'Hinterhauptbein, Nackenband, Dornfortsätze C7–Th12.',
@@ -687,7 +701,8 @@ const MUSCLES = [
       ['Y-T-W am Boden', '3 × 8 je Form', 'Bauchlage, Arme in Y-, T- und W-Form vom Boden heben.', 'kg', 1, ['rhomb', 'delta']],
       ['Shrugs mit Band', '3 × 15', 'Auf das Band stellen und die Schultern gerade zu den Ohren ziehen, kurz halten und langsam senken.', 'kg', 1, []],
       ['Shrugs an der Maschine', '3 × 12–15', 'Arme bleiben gestreckt, nur die Schultern heben. Nicht kreisen.', 'm', 1, []],
-      ['Wandengel (Wall Angels)', '3 × 10', 'Rücken an die Wand, Arme in U-Form an der Wand langsam hoch und wieder runter schieben.', 'kg', 1, ['rhomb', 'rotator']]
+      ['Wandengel (Wall Angels)', '3 × 10', 'Rücken an die Wand, Arme in U-Form an der Wand langsam hoch und wieder runter schieben.', 'kg', 1, ['rhomb', 'rotator']],
+      ['Scapula Push-ups', '3 × 10–12', 'In der Liegestützposition bleiben die Arme gestreckt. Nur die Schulterblätter zusammen- und wieder auseinanderschieben.', 'kg', 1, ['rhomb', 'brust'], 'c']
     ] },
   { id: 'rhomb', name: 'Rhomboiden', latin: 'Mm. rhomboidei major et minor', side: 'back', region: 'Zwischen den Schulterblättern',
     origin: 'Minor: Dornfortsätze C6–C7. Major: Dornfortsätze Th1–Th4.',
@@ -699,10 +714,11 @@ const MUSCLES = [
       ['Kabelrudern (enger Griff)', '3 × 12', 'Brust raus, Griff zum Bauchnabel.', 'm', 1, ['lat', 'bizeps']],
       ['Reverse Flys (Kurzhantel)', '3 × 12–15', 'Vorgebeugt, Arme seitlich öffnen.', 'h', 1, ['delta', 'trapez']],
       ['Band Pull-Aparts', '3 × 20', 'Gestreckte Arme, Band vor der Brust auseinanderziehen.', 'kg', 1, ['delta', 'trapez']],
-      ['Tischrudern (breit)', '3 × 10', 'Ellbogen breit führen, Schulterblätter am Ende zusammen.', 'kg', 1, ['lat', 'bizeps']],
+      ['Australian Pull-ups breit (Tischrudern)', '3 × 10', 'Ellbogen breit führen, Schulterblätter am Ende zusammen.', 'kg', 1, ['lat', 'bizeps'], 'c'],
       ['Rudern mit Band (sitzend)', '3 × 12–15', 'Beine gestreckt, Band um die Füße. Ellbogen nach hinten ziehen und die Schulterblätter zusammendrücken.', 'kg', 1, ['lat', 'bizeps']],
       ['Rudermaschine mit Brustpolster', '3 × 10–12', 'Brust ans Polster, Griffe zu dir ziehen und die Schulterblätter kurz zusammenhalten.', 'm', 1, ['lat', 'bizeps']],
-      ['Schulterblätter zusammenziehen', '3 × 12', 'Aufrecht sitzen oder stehen, die Schulterblätter nach hinten unten ziehen und jeweils 3 Sekunden halten.', 'kg', 1, ['trapez']]
+      ['Schulterblätter zusammenziehen', '3 × 12', 'Aufrecht sitzen oder stehen, die Schulterblätter nach hinten unten ziehen und jeweils 3 Sekunden halten.', 'kg', 1, ['trapez']],
+      ['Australian Pull-ups mit Pause', '3 × 8–10', 'Wie Australian Pull-ups, oben die Schulterblätter 2 Sekunden fest zusammendrücken. So arbeiten die Muskeln zwischen den Schulterblättern am meisten.', 'kg', 1, ['lat', 'trapez'], 'c']
     ] },
   { id: 'rotator', name: 'Rotatorenmanschette', latin: 'Mm. supraspinatus, infraspinatus et teres minor', side: 'back', region: 'Schulterblatt und Schultergelenk',
     origin: 'Obergrätengrube (Supraspinatus) und Untergrätengrube (Infraspinatus) des Schulterblatts. Teres minor: Außenrand des Schulterblatts.',
@@ -726,7 +742,7 @@ const MUSCLES = [
     nerve: 'Rami posteriores der Spinalnerven',
     ex: [
       ['Hyperextensions (Rückenstrecker)', '3 × 12–15', 'Nur bis zur geraden Linie hochkommen, nicht überstrecken.', 'm', 1, ['glute', 'ham']],
-      ['Superman', '3 × 12', 'Bauchlage, Arme und Beine gleichzeitig leicht anheben und 2 s halten.', 'kg', 1, ['glute']],
+      ['Superman', '3 × 12', 'Bauchlage, Arme und Beine gleichzeitig leicht anheben und 2 s halten.', 'kg', 1, ['glute'], 'c'],
       ['Bird Dog', '3 × 10 je Seite', 'Vierfüßlerstand, Arm und gegenüberliegendes Bein strecken, Becken bleibt ruhig.', 'kg', 1, ['glute', 'bauch']],
       ['Kreuzheben (Langhantel)', '4 × 5–8', 'Rücken neutral, Stange nah am Körper, aus den Beinen hochdrücken.', 'h', 3, ['glute', 'ham', 'quad', 'trapez']],
       ['Kettlebell Swings', '3 × 15', 'Der Schwung kommt aus der Hüfte, nicht aus den Armen. Rücken bleibt gerade.', 'h', 2, ['glute', 'ham']],
@@ -741,13 +757,14 @@ const MUSCLES = [
     nerve: 'N. gluteus inferior (Maximus), N. gluteus superior (Medius, Minimus)',
     ex: [
       ['Hip Thrust (Langhantel)', '4 × 8–12', 'Schulterblätter auf der Bank, Hüfte ganz strecken und oben 1 s halten.', 'h', 2, ['ham']],
-      ['Glute Bridge', '3 × 15', 'Rückenlage, Fersen nah am Po, Becken bis zur Linie Knie–Schulter heben.', 'kg', 1, ['ham']],
+      ['Glute Bridge', '3 × 15', 'Rückenlage, Fersen nah am Po, Becken bis zur Linie Knie–Schulter heben.', 'kg', 1, ['ham'], 'c'],
       ['Bulgarian Split Squats (vorgebeugt)', '3 × 10 je Bein', 'Oberkörper leicht nach vorn neigen, so arbeitet das Gesäß mehr als der Oberschenkel.', 'h', 2, ['quad', 'adduk']],
       ['Kabel-Kickbacks', '3 × 12–15 je Bein', 'Fußschlaufe am Kabel, Bein gestreckt nach hinten führen, Rücken bleibt gerade.', 'm', 1, ['ham']],
       ['Seitliches Gehen mit Miniband', '3 × 15 Schritte je Seite', 'Band über den Knien, leicht in die Hocke, Füße bleiben parallel. Trifft den Gluteus medius.', 'kg', 1, []],
       ['Donkey Kicks (Vierfüßlerstand)', '3 × 12 je Seite', 'Im Vierfüßlerstand ein angewinkeltes Bein nach oben drücken, der Rücken bleibt gerade.', 'kg', 1, ['ham']],
       ['Abduktorenmaschine', '3 × 12–15', 'Aufrecht sitzen, die Knie langsam nach außen drücken und kontrolliert zurück.', 'm', 1, []],
-      ['Step-ups auf eine Stufe', '3 × 10 je Bein', 'Den ganzen Fuß auf eine stabile Stufe oder Bank stellen und über die Ferse nach oben drücken.', 'kg', 1, ['quad', 'ham']]
+      ['Step-ups auf eine Stufe', '3 × 10 je Bein', 'Den ganzen Fuß auf eine stabile Stufe oder Bank stellen und über die Ferse nach oben drücken.', 'kg', 1, ['quad', 'ham']],
+      ['Einbeinige Glute Bridge', '3 × 10 je Seite', 'Auf dem Rücken, ein Fuß am Boden, das andere Bein gestreckt in der Luft. Hüfte hochdrücken, bis Knie, Hüfte und Schultern eine Linie bilden.', 'kg', 1, ['ham'], 'c']
     ] },
   { id: 'quad', name: 'Quadrizeps', latin: 'M. quadriceps femoris', side: 'front', region: 'Oberschenkel vorne',
     origin: 'Rectus femoris: Spina iliaca anterior inferior. Vasti: Schaft des Oberschenkelknochens.',
@@ -758,11 +775,14 @@ const MUSCLES = [
       ['Kniebeugen', '4 × 6–10', 'Knie zeigen Richtung Zehen, mindestens bis parallel.', 'h', 2, ['glute', 'adduk', 'ham']],
       ['Beinpresse', '3 × 10–12', 'Füße hüftbreit, Knie nicht ganz durchstrecken.', 'm', 1, []],
       ['Bulgarian Split Squats', '3 × 8–10 je Bein', 'Hinterer Fuß auf der Bank, vorderes Knie über dem Fuß.', 'h', 2, ['glute', 'ham']],
-      ['Ausfallschritte', '3 × 10 je Bein', 'Großer Schritt, hinteres Knie fast zum Boden.', 'kg', 1, ['glute', 'ham']],
+      ['Ausfallschritte', '3 × 10 je Bein', 'Großer Schritt, hinteres Knie fast zum Boden.', 'kg', 1, ['glute', 'ham'], 'c'],
       ['Beinstrecker', '3 × 12–15', 'Oben kurz halten, langsam ablassen.', 'm', 1, []],
-      ['Kniebeuge zum Stuhl', '3 × 10–12', 'Füße schulterbreit vor einem Stuhl. Po nach hinten absenken, kurz antippen und wieder aufstehen.', 'kg', 1, ['glute', 'adduk']],
+      ['Kniebeuge zum Stuhl', '3 × 10–12', 'Füße schulterbreit vor einem Stuhl. Po nach hinten absenken, kurz antippen und wieder aufstehen.', 'kg', 1, ['glute', 'adduk'], 'c'],
       ['Goblet Squat (Kurzhantel)', '3 × 10–12', 'Hantel vor der Brust halten, Brust aufrecht, die Knie zeigen in Richtung der Zehen.', 'h', 1, ['glute', 'adduk']],
-      ['Wandsitzen (Wall Sit)', '3 × 20–40 s', 'Rücken an der Wand, Knie etwa 90° gebeugt, Füße stehen unter den Knien.', 'kg', 1, ['glute']]
+      ['Wandsitzen (Wall Sit)', '3 × 20–40 s', 'Rücken an der Wand, Knie etwa 90° gebeugt, Füße stehen unter den Knien.', 'kg', 1, ['glute'], 'c'],
+      ['Kniebeuge mit Körpergewicht (Air Squat)', '3 × 15–20', 'Füße schulterbreit, Arme nach vorn. Hüfte nach hinten und unten, die Knie zeigen in Richtung Zehen. Die Fersen bleiben am Boden.', 'kg', 1, ['glute', 'ham'], 'c'],
+      ['Split Squat (ohne Gewicht)', '3 × 10 je Bein', 'Großer Schritt nach vorn, beide Füße bleiben stehen. Das hintere Knie Richtung Boden senken und wieder hochdrücken.', 'kg', 1, ['glute'], 'c'],
+      ['Pistol Squats mit Halt', '3 × 5 je Bein', 'An einer Stange oder einem Türrahmen festhalten und auf einem Bein so tief wie möglich hocken. Die Hände helfen nur so viel wie nötig.', 'kg', 2, ['glute'], 'c']
     ] },
   { id: 'adduk', name: 'Adduktoren', latin: 'Mm. adductor longus et magnus, M. gracilis', side: 'front', region: 'Oberschenkel innen',
     origin: 'Schambein und Sitzbein (Ramus ossis pubis, Tuber ischiadicum).',
@@ -772,12 +792,13 @@ const MUSCLES = [
     ex: [
       ['Sumo-Kniebeugen', '3 × 10–12', 'Breiter Stand, Fußspitzen nach außen, Knie folgen den Zehen.', 'h', 2, ['glute', 'quad']],
       ['Adduktorenmaschine', '3 × 12–15', 'Langsam schließen, kontrolliert öffnen.', 'm', 1, []],
-      ['Copenhagen Plank', '3 × 15–30 s je Seite', 'Oberes Bein auf einer Bank ablegen, Hüfte heben, Körper bleibt gerade.', 'kg', 3, ['bauch']],
+      ['Copenhagen Plank', '3 × 15–30 s je Seite', 'Oberes Bein auf einer Bank ablegen, Hüfte heben, Körper bleibt gerade.', 'kg', 3, ['bauch'], 'c'],
       ['Seitliche Ausfallschritte', '3 × 10 je Seite', 'Weit zur Seite treten, Gewicht auf die Ferse, das andere Bein bleibt gestreckt.', 'kg', 1, ['glute', 'quad']],
       ['Adduktion am Kabel', '3 × 12 je Bein', 'Fußschlaufe am inneren Bein, Bein vor dem Standbein vorbeiführen.', 'm', 1, []],
       ['Beinheben innen (seitlich liegend)', '3 × 12–15 je Seite', 'Auf der Seite liegen, das obere Bein vor dem Körper aufstellen und das untere gestreckte Bein anheben.', 'kg', 1, []],
       ['Kissen zwischen den Knien drücken', '3 × 10', 'Im Sitzen oder in Rückenlage ein Kissen oder einen Ball zwischen den Knien zusammendrücken, jeweils 5 Sekunden halten.', 'kg', 1, []],
-      ['Sumo-Kniebeuge ohne Gewicht', '3 × 12–15', 'Breiter Stand, Fußspitzen nach außen, die Knie zeigen in Richtung der Zehen.', 'kg', 1, ['quad', 'glute']]
+      ['Sumo-Kniebeuge ohne Gewicht', '3 × 12–15', 'Breiter Stand, Fußspitzen nach außen, die Knie zeigen in Richtung der Zehen.', 'kg', 1, ['quad', 'glute']],
+      ['Copenhagen Plank auf den Knien', '3 × 15–20 s je Seite', 'Seitstütz, das obere Knie liegt auf einer Bank, das untere Bein hängt frei. Hüfte hochhalten. Die leichtere Variante der Copenhagen Plank.', 'kg', 1, ['bauch'], 'c']
     ] },
   { id: 'ham', name: 'Hamstrings', latin: 'Ischiocrurale Muskulatur', side: 'back', region: 'Oberschenkel hinten',
     origin: 'Sitzbeinhöcker (Tuber ischiadicum). Kurzer Kopf des Biceps femoris: Linea aspera.',
@@ -787,12 +808,13 @@ const MUSCLES = [
     ex: [
       ['Rumänisches Kreuzheben', '4 × 8–10', 'Hüfte nach hinten schieben, Stange nah an den Beinen.', 'h', 2, ['glute', 'ruecken']],
       ['Beinbeuger liegend', '3 × 10–12', 'Hüfte bleibt auf dem Polster.', 'm', 1, ['wade']],
-      ['Nordic Curls', '3 × 5–8', 'Füße fixiert, langsam nach vorn ablassen.', 'kg', 3, []],
+      ['Nordic Curls', '3 × 5–8', 'Füße fixiert, langsam nach vorn ablassen.', 'kg', 3, [], 'c'],
       ['Slider Leg Curls', '3 × 10', 'Rückenlage, Fersen auf einem Handtuch, Hüfte hoch, Fersen zum Po ziehen.', 'kg', 2, []],
       ['Good Mornings', '3 × 10', 'Leichtes Gewicht, Rücken neutral.', 'h', 2, ['ruecken', 'glute']],
       ['Beinbeuger sitzend (Maschine)', '3 × 10–12', 'Das Polster liegt knapp über den Fersen. Beine ruhig beugen und langsam zurück.', 'm', 1, []],
       ['Brücke mit Füßen weit vorn', '3 × 12', 'Wie die Glute Bridge, nur mit den Füßen weiter weg. So arbeitet die Oberschenkelrückseite mehr.', 'kg', 1, ['glute']],
-      ['Rumänisches Kreuzheben (leichte Kurzhanteln)', '3 × 10–12', 'Hanteln eng an den Beinen nach unten führen, Knie leicht gebeugt, Rücken gerade, bis es hinten im Oberschenkel zieht.', 'h', 1, ['glute', 'ruecken']]
+      ['Rumänisches Kreuzheben (leichte Kurzhanteln)', '3 × 10–12', 'Hanteln eng an den Beinen nach unten führen, Knie leicht gebeugt, Rücken gerade, bis es hinten im Oberschenkel zieht.', 'h', 1, ['glute', 'ruecken']],
+      ['Nordic Curls (nur absenken)', '3 × 3–5', 'Knie auf eine weiche Unterlage, Füße unter einem Sofa festklemmen. Langsam nach vorn lehnen, so weit es kontrolliert geht, dann mit den Händen abfangen.', 'kg', 2, ['glute'], 'c']
     ] },
   { id: 'wade', name: 'Waden', latin: 'M. triceps surae', side: 'back', region: 'Unterschenkel hinten',
     origin: 'Gastrocnemius: Femurkondylen. Soleus: Rückseite von Schienbein und Wadenbein.',
@@ -802,7 +824,7 @@ const MUSCLES = [
     ex: [
       ['Wadenheben stehend', '4 × 12–15', 'Volle Bewegung, oben 1 s halten, betont den Gastrocnemius.', 'h', 1, []],
       ['Wadenheben sitzend', '3 × 15–20', 'Mit gebeugtem Knie arbeitet vor allem der Soleus.', 'm', 1, []],
-      ['Einbeiniges Wadenheben (Stufe)', '3 × 12 je Bein', 'Ferse unter Stufenniveau absenken.', 'kg', 1, []],
+      ['Einbeiniges Wadenheben (Stufe)', '3 × 12 je Bein', 'Ferse unter Stufenniveau absenken.', 'kg', 1, [], 'c'],
       ['Seilspringen', '3 × 60 s', 'Locker auf den Fußballen federn.', 'kg', 1, []],
       ['Wadenheben an der Beinpresse', '3 × 15', 'Nur die Fußballen auf der Platte.', 'm', 1, []],
       ['Wadenheben an der Wand', '3 × 15–20', 'Hände an der Wand, langsam auf die Zehenspitzen und kontrolliert zurück.', 'kg', 1, []],
@@ -920,6 +942,7 @@ const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
+const placeTxt = e => e[6] === 'c' ? 'Calisthenics' : e[3] === 'kg' ? 'Zuhause' : 'Studio';
 const libEx = k => { const p = String(k || '').split('.'); return BY_ID[p[0]] && BY_ID[p[0]].ex[+p[1]] || null; };
 let myList = store.get('plan', []).filter(p => p && BY_ID[p.m] && BY_ID[p.m].ex[p.i]).map(p => ({ m: p.m, i: p.i }));   // "Meine Übungen"
 let filter = store.get('filter', 'all');
@@ -959,7 +982,8 @@ function videoUrl(x) {
   if (x.v) return x.v;
   const fromPlan = x.k && coachPlan && coachPlan.d.reduce((f, d) => f || d.x.find(y => y.k === x.k && y.v), null);
   if (fromPlan) return fromPlan.v;
-  return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(x.n + ' Übung richtige Ausführung');
+  const L = x.k && libEx(x.k);   // Calisthenics: Anfänger-Tutorials statt allgemeiner Übungsvideos
+  return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(x.n + (L && L[6] === 'c' ? ' Calisthenics Anfänger Tutorial' : ' Übung richtige Ausführung'));
 }
 const waLink = (text, phone) => 'https://wa.me/' + String(phone || '').replace(/\D/g, '') + '?text=' + encodeURIComponent(text);
 function keepScroll(fn) { const sc = $('scroller'), y = sc.scrollTop; fn(); sc.scrollTop = y; }
@@ -1193,7 +1217,7 @@ function renderDetail() {
     (items.length ? '<ul class="list">' + items.map(({ e, i }) => {
       const on = inMine(m.id, i), open = openRow === i, k = m.id + '.' + i;
       return '<li class="row">' +
-        '<button type="button" class="row-main" data-open="' + i + '" aria-expanded="' + open + '"><span class="row-name">' + esc(e[0]) + '</span><span class="row-sub">' + esc(e[1]) + ' · ' + (e[3] === 'kg' ? 'Zuhause' : 'Studio') + (e[4] === 1 ? ' <span class="tag holo">Einsteiger</span>' : '') + (inCoachPlan(k) ? ' <span class="tag">In deinem Plan</span>' : '') + '</span></button>' +
+        '<button type="button" class="row-main" data-open="' + i + '" aria-expanded="' + open + '"><span class="row-name">' + esc(e[0]) + '</span><span class="row-sub">' + esc(e[1]) + ' · ' + placeTxt(e) + (e[4] === 1 ? ' <span class="tag holo">Einsteiger</span>' : '') + (inCoachPlan(k) ? ' <span class="tag">In deinem Plan</span>' : '') + '</span></button>' +
         '<button type="button" class="add" data-add="' + i + '" aria-pressed="' + on + '" aria-label="' + esc(e[0]) + (on ? ' aus Meine Übungen entfernen' : ' zu Meine Übungen hinzufügen') + '">' + (on ? ICON_CHECK : ICON_PLUS) + '</button>' +
         (open ? '<div class="row-more"><p>' + esc(e[2]) + '</p>' +
           (e[5].length ? '<p class="also">Trainiert auch: ' + e[5].map(s => '<button type="button" class="link" data-go="' + s + '">' + esc(BY_ID[s].name) + '</button>').join(', ') + '</p>' : '') +
@@ -1830,7 +1854,7 @@ function picker(box, onPick, onClose) {
   function draw() {
     box.innerHTML = '<div class="card picker"><b>Übung hinzufügen</b><div class="pills">' +
       MUSCLES.map(m => '<button type="button" class="pill" data-pg="' + m.id + '" aria-pressed="' + (m.id === g) + '">' + esc(m.name) + '</button>').join('') + '</div>' +
-      '<ul class="list">' + BY_ID[g].ex.map((e, i) => '<li class="pick-row"><div style="min-width:0;display:grid;gap:2px"><span class="row-name">' + esc(e[0]) + '</span><span class="row-sub">' + esc(e[1]) + ' · ' + (e[3] === 'kg' ? 'Zuhause' : 'Studio') + (e[4] === 1 ? ' <span class="tag holo">Einsteiger</span>' : '') + '</span></div>' +
+      '<ul class="list">' + BY_ID[g].ex.map((e, i) => '<li class="pick-row"><div style="min-width:0;display:grid;gap:2px"><span class="row-name">' + esc(e[0]) + '</span><span class="row-sub">' + esc(e[1]) + ' · ' + placeTxt(e) + (e[4] === 1 ? ' <span class="tag holo">Einsteiger</span>' : '') + '</span></div>' +
         '<button type="button" class="add" data-pick="' + i + '" aria-label="' + esc(e[0]) + ' hinzufügen">' + ICON_PLUS + '</button></li>').join('') + '</ul>' +
       '<div class="field"><span>Eigene Übung (zählt zu ' + esc(BY_ID[g].name) + ')</span><div class="custom-row"><input class="input" data-pk-name placeholder="z. B. Hip Thrust" maxlength="80"><button type="button" class="btn secondary" data-pk-add>Hinzufügen</button></div></div>' +
       '<button type="button" class="text-btn" data-pk-close style="justify-self:center">Schließen</button></div>';
