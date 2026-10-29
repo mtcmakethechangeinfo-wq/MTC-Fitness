@@ -46,6 +46,7 @@
   color-scheme: dark;
 }
 html, body { height: 100%; }
+[hidden] { display: none !important; }
 body { background: var(--stage); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.45; overflow: hidden; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
 button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -515,6 +516,78 @@ body.touring .tabbar, body.touring .sheet, body.touring .topbar, body.touring .s
 @media (max-width: 899px) { body.touring .sheet, body.touring .stage-tools { visibility: hidden; } }
 @media (min-width: 900px) { .tour-card { left: 24px; right: 444px; bottom: 28px; } }
 @media (prefers-reduced-motion: reduce) { .tour-card, .tour-tap::before, .tour-tap::after, .tab.tour-spot::after { animation: none; } }
+/* Timer: Halten, Intervalle, Aufwärmen */
+.timer { position: fixed; inset: 0; z-index: 22; display: grid; overflow-y: auto; overscroll-behavior: contain; background: radial-gradient(ellipse 100% 60% at 50% 30%, #121a33 0%, var(--stage) 75%); padding: calc(10px + env(safe-area-inset-top, 0px)) 20px calc(20px + env(safe-area-inset-bottom, 0px)); box-sizing: border-box; --tc: var(--holo); }
+.timer[data-k="prep"] { --tc: #8fa6be; }
+.timer[data-k="rest"] { --tc: var(--accent); }
+.timer[data-k="done"] { --tc: var(--accent); }
+.tm-inner { width: min(420px, 100%); margin: 0 auto; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 8px; min-height: 100%; }
+.tm-main { display: grid; gap: 14px; align-content: center; justify-items: center; text-align: center; }
+.tm-top { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.tm-head { font-family: var(--font-brand); font-weight: 700; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--holo); text-align: left; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tm-x { flex: none; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--fill); color: var(--ink); display: grid; place-items: center; cursor: pointer; }
+.tm-x svg { width: 18px; height: 18px; }
+.tm-fig { width: 132px; height: 0; overflow: hidden; transition: height 0.25s; }
+.tm-fig.on { height: 228px; }
+.tm-fig canvas { width: 132px; height: 228px; display: block; mix-blend-mode: screen; -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent 100%); mask-image: radial-gradient(closest-side, #000 55%, transparent 100%); }
+.tm-txt { display: grid; gap: 6px; min-height: 76px; align-content: start; width: 100%; }
+.tm-txt h2 { margin: 0; font-size: 25px; line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+.tm-txt p { margin: 0 auto; color: var(--ink-2); font-size: 15px; max-width: 34ch; text-wrap: pretty; }
+.tm-ring { position: relative; width: min(236px, 62vw); aspect-ratio: 1; }
+.tm-ring > svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.tm-track { fill: none; stroke: #16233a; stroke-width: 9; }
+.tm-arc, .tm-glow { fill: none; stroke: var(--tc); stroke-width: 9; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 0; transition: stroke 0.3s; }
+.tm-glow { stroke-width: 12; opacity: 0.7; }
+.tm-num { position: absolute; inset: 0; display: grid; place-content: center; gap: 2px; }
+.tm-num b { font-size: 58px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; color: #fff; display: grid; place-items: center; }
+.tm-num b svg { width: 64px; height: 64px; color: var(--accent); }
+.tm-num span { font-size: 14px; font-weight: 600; color: var(--tc); text-transform: uppercase; letter-spacing: 0.08em; }
+.timer.paused .tm-num b { opacity: 0.45; }
+.tm-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; min-height: 6px; max-width: 280px; }
+.tm-dots i { width: 6px; height: 6px; border-radius: 3px; background: #2c3f55; transition: width 0.2s, background 0.2s; }
+.tm-dots i.done { background: rgba(181, 123, 255, 0.6); }
+.tm-dots i.on { width: 18px; background: var(--tc); }
+.tm-btns { width: 100%; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 10px; min-height: 48px; }
+.tm-btns .btn { padding: 14px 12px; }
+@media (max-height: 720px) { .tm-fig.on { height: 0; } .tm-inner { gap: 12px; } }
+@media (prefers-reduced-motion: reduce) { .tm-fig, .tm-dots i { transition: none; } }
+body.timing .rest, body.timing .update-bar { display: none; }
+.btn.tm-go { width: 100%; box-sizing: border-box; gap: 8px; }
+.btn.tm-go svg { width: 19px; height: 19px; }
+.wk-tools { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.wk-tools .text-btn { display: inline-flex; align-items: center; gap: 6px; }
+.wk-tools .text-btn svg { width: 18px; height: 18px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.card.warm { box-shadow: 0 0 0 1px rgba(95, 225, 255, 0.28); background: linear-gradient(160deg, rgba(95, 225, 255, 0.07), rgba(181, 123, 255, 0.05)) , var(--card); }
+.warm-h { display: block; font-size: 18px; margin-top: 2px; }
+/* Skill-Ziel */
+.sk-card { gap: 14px; }
+.sk-title { margin: 0 0 2px; font-size: 21px; letter-spacing: -0.01em; line-height: 1.2; }
+.sk-path { position: relative; display: flex; justify-content: space-between; gap: 4px; }
+.sk-path::before { content: ""; position: absolute; left: 20px; right: 20px; top: 50%; height: 2px; margin-top: -1px; background: linear-gradient(90deg, rgba(181, 123, 255, 0.5), #22344a); }
+.sk-node { position: relative; border: 0; background: none; padding: 0; width: 42px; height: 46px; flex: none; cursor: pointer; border-radius: 12px; }
+.sk-node svg { width: 42px; height: 42px; display: block; margin: 2px 0; }
+.sk-node.done svg { filter: drop-shadow(0 0 6px rgba(181, 123, 255, 0.45)); }
+.sk-node.next svg { filter: drop-shadow(0 0 8px rgba(95, 225, 255, 0.55)); }
+.sk-node[aria-pressed="true"]::after { content: ""; position: absolute; left: 13px; right: 13px; bottom: -6px; height: 3px; border-radius: 2px; background: var(--ink); }
+.sk-step { display: grid; gap: 10px; padding-top: 12px; border-top: 1px solid var(--hair); }
+.sk-step b { font-size: 16px; line-height: 1.3; }
+.sk-step .eyebrow.done { color: var(--accent); }
+.sk-step .eyebrow.lock { color: var(--ink-2); }
+.sk-step .goal-bar i { background: var(--holo); }
+.sk-mark { justify-self: start; padding-left: 0; }
+.sk-empty { justify-items: start; }
+.sk-hexes { display: flex; gap: 6px; }
+.sk-hexes svg { width: 34px; height: 34px; }
+.sk-mini { grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+.sk-mini > svg { width: 44px; height: 44px; filter: drop-shadow(0 0 8px rgba(95, 225, 255, 0.45)); }
+.sk-mini b { font-size: 15.5px; line-height: 1.3; }
+.sk-mini .muted { font-size: 13px; }
+.sk-won .bdg-new svg { filter: drop-shadow(0 0 8px rgba(181, 123, 255, 0.55)); }
+.ladder-goal { margin: 2px 0 0; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--accent); justify-self: start; }
+p.ladder-goal { font-weight: 600; }
+button.ladder-goal { padding: 4px 0; font-size: 14px; text-align: left; }
+.ladder-goal svg { width: 16px; height: 16px; flex: none; }
 /* Vollbild-App: Statusleiste oben und Home-Balken unten freihalten */
 .topbar { top: calc(12px + env(safe-area-inset-top, 0px)); }
 .stage-tools { top: calc(62px + env(safe-area-inset-top, 0px)); }
@@ -603,6 +676,7 @@ body.touring .tabbar, body.touring .sheet, body.touring .topbar, body.touring .s
     <button type="button" class="go" id="rest-skip">Weiter</button>
     <i class="rest-bar" id="rest-bar"></i>
   </div>
+  <div class="timer" id="timer" hidden></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div class="modal" id="modal" hidden></div>
   <div class="tour" id="tour" hidden></div>
@@ -889,23 +963,49 @@ const MUSCLES = [
     ] }
 ];
 const BY_ID = Object.fromEntries(MUSCLES.map(m => [m.id, m]));
-// Calisthenics-Stufen: jeder Weg geht von leicht nach schwer (Schlüssel wie in MUSCLES[].ex)
+// Calisthenics-Stufen: jeder Weg geht von leicht nach schwer (Schlüssel wie in MUSCLES[].ex), dazu der Name als Skill-Ziel.
+// Die Position in der Liste ist die Kennung des Skill-Ziels (Profil, Check-in): neue Wege nur hinten anhängen.
 const LADDERS = [
-  ['Weg zum Klimmzug', ['unterarm.0', 'unterarm.8', 'lat.8', 'lat.4', 'lat.9', 'lat.10', 'lat.0']],
-  ['Weg zum Chin-up', ['bizeps.8', 'bizeps.9', 'bizeps.3']],
-  ['Weg zum Liegestütz', ['brust.5', 'brust.8', 'brust.6', 'brust.9', 'brust.2']],
-  ['Weg zum Diamant-Liegestütz', ['trizeps.8', 'trizeps.1']],
-  ['Weg zum Dip', ['trizeps.5', 'trizeps.9', 'trizeps.0', 'brust.3']],
-  ['Weg zum Pike Push-up', ['delta.8', 'delta.3']],
-  ['Weg zum Hollow Body Hold', ['bauch.0', 'bauch.8']],
-  ['Weg zum Beinheben an der Stange', ['bauch.9', 'bauch.2']],
-  ['Weg zum Pistol Squat', ['quad.5', 'quad.8', 'quad.9', 'quad.3', 'quad.10']],
-  ['Weg zur einbeinigen Brücke', ['glute.1', 'glute.8']],
-  ['Weg zum Nordic Curl', ['ham.8', 'ham.2']],
-  ['Weg zur Copenhagen Plank', ['adduk.8', 'adduk.2']],
-  ['Weg zum Rudern mit Pause', ['rhomb.4', 'rhomb.8']],
-  ['Weg zum einbeinigen Wadenheben', ['wade.5', 'wade.2']]
+  ['Weg zum Klimmzug', ['unterarm.0', 'unterarm.8', 'lat.8', 'lat.4', 'lat.9', 'lat.10', 'lat.0'], 'Mein erster Klimmzug'],
+  ['Weg zum Chin-up', ['bizeps.8', 'bizeps.9', 'bizeps.3'], 'Mein erster Chin-up'],
+  ['Weg zum Liegestütz', ['brust.5', 'brust.8', 'brust.6', 'brust.9', 'brust.2'], 'Mein erster Liegestütz'],
+  ['Weg zum Diamant-Liegestütz', ['trizeps.8', 'trizeps.1'], 'Mein erster Diamant-Liegestütz'],
+  ['Weg zum Dip', ['trizeps.5', 'trizeps.9', 'trizeps.0', 'brust.3'], 'Mein erster Dip'],
+  ['Weg zum Pike Push-up', ['delta.8', 'delta.3'], 'Mein erster Pike Push-up'],
+  ['Weg zum Hollow Body Hold', ['bauch.0', 'bauch.8'], 'Hollow Body Hold'],
+  ['Weg zum Beinheben an der Stange', ['bauch.9', 'bauch.2'], 'Beinheben an der Stange'],
+  ['Weg zum Pistol Squat', ['quad.5', 'quad.8', 'quad.9', 'quad.3', 'quad.10'], 'Pistol Squat mit Halt'],
+  ['Weg zur einbeinigen Brücke', ['glute.1', 'glute.8'], 'Einbeinige Brücke'],
+  ['Weg zum Nordic Curl', ['ham.8', 'ham.2'], 'Mein erster Nordic Curl'],
+  ['Weg zur Copenhagen Plank', ['adduk.8', 'adduk.2'], 'Copenhagen Plank'],
+  ['Weg zum Rudern mit Pause', ['rhomb.4', 'rhomb.8'], 'Rudern mit Pause'],
+  ['Weg zum einbeinigen Wadenheben', ['wade.5', 'wade.2'], 'Einbeiniges Wadenheben']
 ];
+// Aufwärmen: [Name, So geht's, Sekunden, Bereiche, Muskeln am Modell]
+// Bereiche: a = ganzer Körper, o = Drücken (Brust, Schultern), z = Ziehen (Rücken, Arme), b = Beine und Po, r = Rumpf
+const WARMUPS = [
+  ['Hampelmänner', 'Locker springen und die Arme über dem Kopf zusammenführen.', 45, 'a', 'delta wade quad glute'],
+  ['Auf der Stelle joggen', 'Knie locker anheben, Arme mitschwingen.', 40, 'a', 'quad ham wade'],
+  ['Armkreisen', 'Erst vorwärts, dann rückwärts. Die Kreise langsam größer werden lassen.', 30, 'oz', 'delta rotator'],
+  ['Arme öffnen und schließen', 'Arme vor der Brust kreuzen, dann weit nach hinten öffnen.', 30, 'o', 'brust delta'],
+  ['Wandengel', 'Rücken an die Wand, Arme wie beim Schneeengel langsam hoch und runter schieben.', 30, 'oz', 'delta trapez rotator'],
+  ['Schulterblatt-Liegestütze', 'Im Liegestütz bleiben, nur die Schulterblätter zusammen und auseinander bewegen.', 30, 'o', 'brust delta'],
+  ['Langsame Liegestütze auf den Knien', 'Drei Sekunden runter, ruhig wieder hoch.', 30, 'o', 'brust trizeps delta'],
+  ['Schulterblätter zusammenziehen', 'Arme nach vorn strecken, Schulterblätter nach hinten zusammen und wieder lösen.', 30, 'z', 'rhomb trapez'],
+  ['Y-T-W im Stand', 'Leicht vorbeugen und die Arme nacheinander als Y, T und W nach hinten führen.', 30, 'z', 'trapez rhomb rotator'],
+  ['Lockeres Hängen', 'An der Stange locker hängen und ruhig atmen. Ohne Stange: Arme lang nach oben strecken.', 20, 'z', 'lat unterarm'],
+  ['Katze-Kuh', 'Im Vierfüßlerstand den Rücken rund machen, dann sanft durchhängen lassen.', 30, 'zr', 'ruecken bauch'],
+  ['Kniebeugen ohne Gewicht', 'Langsam und tief, die Fersen bleiben am Boden.', 40, 'b', 'quad glute'],
+  ['Ausfallschritte im Wechsel', 'Großer Schritt nach vorn, das hintere Knie sinkt Richtung Boden.', 40, 'b', 'quad glute adduk'],
+  ['Hüftkreisen', 'Hände an die Hüfte, große Kreise in beide Richtungen.', 30, 'br', 'glute adduk ruecken'],
+  ['Beinpendel', 'An der Wand festhalten, ein Bein locker vor und zurück schwingen. Nach der Hälfte wechseln.', 30, 'b', 'ham adduk glute'],
+  ['Glute Bridge', 'Auf dem Rücken, Füße aufgestellt. Hüfte hoch, kurz halten, ablegen.', 30, 'b', 'glute ham'],
+  ['Wadenheben', 'Langsam auf die Zehenspitzen und kontrolliert wieder runter.', 30, 'b', 'wade'],
+  ['Bird Dog', 'Im Vierfüßlerstand im Wechsel einen Arm und das andere Bein lang strecken.', 30, 'r', 'ruecken bauch glute'],
+  ['Dead Bug', 'Auf dem Rücken Arm und Bein im Wechsel langsam absenken. Der untere Rücken bleibt am Boden.', 30, 'r', 'bauch']
+];
+// Muskelgruppe der Übung -> Bereich fürs Aufwärmen
+const WARM_AREA = { brust: 'o', delta: 'o', trizeps: 'o', rotator: 'o', lat: 'z', rhomb: 'z', trapez: 'z', bizeps: 'z', unterarm: 'z', quad: 'b', ham: 'b', glute: 'b', adduk: 'b', wade: 'b', bauch: 'r', ruecken: 'r' };
 const EQUIP = [['all', 'Alle'], ['kg', 'Körpergewicht & Band'], ['h', 'Hanteln'], ['m', 'Kabel & Maschine']];
 const EQUIP_LABEL = { kg: 'Körpergewicht', h: 'Hanteln', m: 'Kabel/Maschine' };
 
@@ -990,6 +1090,7 @@ const ICON_PLAY = '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="tru
 const ICON_UP = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10l4-4 4 4"/></svg>';
 const ICON_DOWN = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>';
 const ICON_TROPHY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M10 17h4"/></svg>';
+const ICON_FLAG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 21V4M5.5 4.5h12l-2.5 4 2.5 4h-12"/></svg>';
 const ICON_LAYERS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>';
 // Zwei Ausgaben derselben App: als Artifact in claude.ai oder als installierbare Web-App (mit Manifest) unter eigener Adresse
 const HOSTED = !!document.querySelector('link[rel="manifest"]');
@@ -1018,7 +1119,7 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&am
 const placeTxt = e => e[6] === 'c' ? 'Calisthenics' : e[3] === 'kg' ? 'Zuhause' : 'Studio';
 // Calisthenics-Stufe einer Übung: Weg, Position, leichter und schwerer
 const LADDER_OF = {};
-LADDERS.forEach(([t, ks]) => ks.forEach((k, i) => { if (!LADDER_OF[k]) LADDER_OF[k] = { t, ks, i, prev: ks[i - 1] || '', next: ks[i + 1] || '' }; }));
+LADDERS.forEach(([t, ks], li) => ks.forEach((k, i) => { if (!LADDER_OF[k]) LADDER_OF[k] = { t, ks, i, li, prev: ks[i - 1] || '', next: ks[i + 1] || '' }; }));
 const ladderOf = k => (k && LADDER_OF[k]) || null;
 const libEx = k => { const p = String(k || '').split('.'); return BY_ID[p[0]] && BY_ID[p[0]].ex[+p[1]] || null; };
 let myList = store.get('plan', []).filter(p => p && BY_ID[p.m] && BY_ID[p.m].ex[p.i]).map(p => ({ m: p.m, i: p.i }));   // "Meine Übungen"
@@ -1180,11 +1281,13 @@ function cleanSession(s) {
     c: cleanCardio(s && s.c)
   };
 }
+// Skill-Ziel im Check-in: [Weg, geschaffte Stufen]
+const cleanSkill = v => Array.isArray(v) && LADDERS[v[0]] && Number.isInteger(v[0]) ? [v[0], Math.round(cNum(v[1], 0, LADDERS[v[0]][1].length, 0))] : null;
 function cleanCheckin(c) {
   if (!c || typeof c !== 'object') return null;
   return {
     id: cStr(c.id, 40) || uid(), cl: cStr(c.cl, 60), pid: cStr(c.pid, 40), at: cNum(c.at, 0, 9e15, Date.now()),
-    w: cNum(c.w, 20, 400, null), e: Math.round(cNum(c.e, 1, 5, 0)) || null, t: cStr(c.t, 600),
+    w: cNum(c.w, 20, 400, null), e: Math.round(cNum(c.e, 1, 5, 0)) || null, t: cStr(c.t, 600), sk: cleanSkill(c.sk),
     s: (Array.isArray(c.s) ? c.s : []).slice(0, 40).map(cleanSession)
   };
 }
@@ -1317,6 +1420,7 @@ function renderDetail() {
   el.querySelectorAll('[data-add]').forEach(b => b.addEventListener('click', () => toggleMine(m.id, +b.dataset.add)));
   el.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => select(b.dataset.go, { fly: true })));
   el.querySelectorAll('[data-lad]').forEach(b => b.addEventListener('click', () => goLadder(b.dataset.lad)));
+  el.querySelectorAll('[data-sk-set]').forEach(b => b.addEventListener('click', () => setSkillGoal(+b.dataset.skSet)));
   $('more').addEventListener('toggle', e => store.set('moreOpen', e.target.open));
 }
 
@@ -1328,7 +1432,9 @@ function ladderHTML(k) {
   return '<div class="ladder"><div class="ladder-h"><b>' + esc(L.t) + '</b><span>Stufe ' + (L.i + 1) + ' von ' + L.ks.length + '</span></div>' +
     '<div class="ladder-bar" aria-hidden="true">' + L.ks.map((_, i) => '<i' + (i < L.i ? ' class="done"' : i === L.i ? ' class="on"' : '') + '></i>').join('') + '</div>' +
     '<div class="ladder-nav">' + (L.prev ? step(L.prev, '', ICON_DOWN + 'Leichter') : '<span></span>') +
-    (L.next ? step(L.next, ' next', 'Nächste Stufe' + ICON_UP) : '<p class="ladder-top">' + ICON_TROPHY + 'Das ist das Ziel dieses Wegs</p>') + '</div></div>';
+    (L.next ? step(L.next, ' next', 'Nächste Stufe' + ICON_UP) : '<p class="ladder-top">' + ICON_TROPHY + 'Das ist das Ziel dieses Wegs</p>') + '</div>' +
+    (skillGoal() === L.li ? '<p class="ladder-goal">' + ICON_FLAG + 'Dein Skill-Ziel · ' + skillLevel(L.li, skillBest()) + ' von ' + L.ks.length + ' Stufen geschafft</p>'
+      : '<button type="button" class="text-btn ladder-goal" data-sk-set="' + L.li + '">' + ICON_FLAG + 'Als Skill-Ziel wählen: ' + esc(LADDERS[L.li][2]) + '</button>') + '</div>';
 }
 function goLadder(k) {
   const [g, i] = k.split('.'), e = libEx(k);
@@ -1339,6 +1445,74 @@ function goLadder(k) {
   const row = document.querySelector('#detail [data-open="' + i + '"]');
   if (row) row.closest('.row').scrollIntoView({ block: 'start', behavior: 'smooth' });
 }
+
+/* ---------- Skill-Ziele: ein Calisthenics-Weg Stufe für Stufe ---------- */
+// Eine Stufe ist geschafft, wenn ein Satz das obere Ende der Vorgabe erreicht (12 bei „8–12“, 60 s bei „30–60 s“, 1 bei „max“)
+// oder wenn sie von Hand abgehakt ist. Wer eine höhere Stufe schafft, hat die Stufen darunter automatisch.
+const stepGoal = k => { const m = parseDose(libEx(k)[1]).r.match(/\d+/g); return m ? +m[m.length - 1] : 1; };
+const stepTimed = k => /\d\s*s\b/.test(libEx(k)[1]);
+const stepSide = k => { const m = /je (Seite|Bein)/.exec(libEx(k)[1]); return m ? ' ' + m[0] : ''; };
+function stepGoalTxt(k) {
+  const n = stepGoal(k);
+  if (stepTimed(k)) return n + ' Sekunden halten' + stepSide(k);
+  return n === 1 ? '1 saubere Wiederholung' : n + ' Wiederholungen am Stück' + stepSide(k);
+}
+const stepVal = (k, v) => v + (stepTimed(k) ? ' s' : ' Wdh.');
+function skillBest(list) {
+  const b = {};
+  (list || sessions).forEach(s => {
+    if (s.c) return;
+    s.x.forEach(x => {
+      if (!x.k || !LADDER_OF[x.k]) return;
+      const v = x.sets.reduce((a, st) => Math.max(a, st[1] || 0), 0), o = b[x.k] || (b[x.k] = { v: 0, at: 0 });
+      o.v = Math.max(o.v, v);
+      if (!o.at && v >= stepGoal(x.k)) o.at = s.end || s.at;
+    });
+  });
+  return b;
+}
+const skillMarked = k => (profile.skm || []).includes(k);
+const stepDone = (k, best) => skillMarked(k) || !!(best[k] && best[k].v >= stepGoal(k));
+function skillLevel(li, best) {
+  const ks = LADDERS[li][1];
+  for (let i = ks.length - 1; i >= 0; i--) if (stepDone(ks[i], best)) return i + 1;
+  return 0;
+}
+const skillLevels = best => { best = best || skillBest(); return LADDERS.map((_, li) => skillLevel(li, best)); };
+const skillGoal = () => profile.sk >= 0 && LADDERS[profile.sk] ? profile.sk : -1;
+// Abzeichen einer Stufe: Sechseck mit Nummer, lila = geschafft, cyan = als Nächstes dran
+function stepHex(n, st) {
+  const c = st === 'done' ? 'var(--accent)' : st === 'next' ? 'var(--holo)' : '#33475e';
+  return '<svg viewBox="0 0 46 46" aria-hidden="true"><path d="M23 2.5l17.8 10.25v20.5L23 43.5 5.2 33.25v-20.5z" fill="' + (st === 'done' ? '#2b2549' : st === 'next' ? '#142b3a' : '#0c1520') + '" stroke="' + c + '" stroke-width="2.2" stroke-linejoin="round"/>' +
+    '<text x="23" y="28.5" text-anchor="middle" font-size="15" font-weight="700" fill="' + (st === 'lock' ? '#62788f' : c) + '" font-family="var(--font)">' + n + '</text></svg>';
+}
+function setSkillGoal(li) {
+  profile.sk = li; store.set('profile', profile); skSel = null;
+  toast('Dein Skill-Ziel: ' + LADDERS[li][2]);
+  keepScroll(() => showTab(tab));
+}
+function skillPickModal() {
+  const cur = skillGoal(), lv = skillLevels();
+  modal('<h3>Skill-Ziel wählen</h3><p>Worauf willst du hinarbeiten? Die App zeigt dir den Weg in Stufen. Für jede geschaffte Stufe gibt es ein Abzeichen.</p>' +
+    '<div class="opt-grid one">' + LADDERS.map(([t, ks, goal], li) => {
+      const g = exGroup({ k: ks[ks.length - 1] });
+      return '<button type="button" class="opt" data-sk-li="' + li + '" aria-pressed="' + (li === cur) + '">' + esc(goal) +
+        '<small>' + ks.length + ' Stufen · ' + esc(BY_ID[g].name) + (lv[li] ? ' · ' + (lv[li] === ks.length ? 'schon gemeistert' : lv[li] + ' geschafft') : '') + '</small></button>';
+    }).join('') + '</div>' +
+    '<div class="actions">' + (cur >= 0 ? '<button type="button" class="text-btn danger" id="sk-none">Kein Ziel</button>' : '<span></span>') + '<button type="button" class="text-btn" id="md-later">Abbrechen</button></div>', (m, close) => {
+    m.querySelectorAll('[data-sk-li]').forEach(b => b.addEventListener('click', () => { close(); setSkillGoal(+b.dataset.skLi); }));
+    m.querySelector('#md-later').addEventListener('click', close);
+    const no = m.querySelector('#sk-none');
+    if (no) no.addEventListener('click', () => { close(); delete profile.sk; store.set('profile', profile); keepScroll(() => showTab(tab)); toast('Skill-Ziel entfernt'); });
+  }, { left: true });
+}
+// Stufe üben: im laufenden Training anhängen, sonst ein kurzes Training damit starten
+function practiceStep(k) {
+  const x = fromLib(k), L = ladderOf(k);
+  if (active) { active.x.push(Object.assign(x, { sets: Array.from({ length: x.s }, () => ['', '', 0]) })); saveActive(); showTab('train'); toast('Zum Training hinzugefügt: ' + x.n); }
+  else startWorkout(L ? LADDERS[L.li][2] : x.n, [x]);
+}
+let skSel = null;   // in der Skill-Karte angetippte Stufe (null = die nächste)
 
 function select(id, opts) {
   opts = opts || {};
@@ -1745,9 +1919,12 @@ function renderTrain() {
       '<div class="card"><b style="font-size:17px">Noch kein Trainingsplan</b><p class="muted">Hast du einen Link von deinem Coach? Öffne ihn einfach, dann erscheint dein Plan hier mit Wochenübersicht.</p>' +
       '<button type="button" class="btn" data-paste-plan>Plan von meinem Coach einfügen</button><button type="button" class="btn secondary" id="own-new">Eigenen Plan erstellen</button></div>';
   }
+  h += skillMiniHTML();
   h += '<div><p class="group-title">Mehr</p><div class="list">' +
     '<button type="button" class="nav-row" data-cardio><span style="display:grid;gap:2px"><span class="row-name">Cardio eintragen</span><span class="muted">Laufen, Rad, Rudern und mehr</span></span><span class="chev"></span></button>' +
     '<button type="button" class="nav-row" id="start-empty"><span style="display:grid;gap:2px"><span class="row-name">Freies Training</span><span class="muted">Übungen selbst zusammenstellen</span></span><span class="chev"></span></button>' +
+    '<button type="button" class="nav-row" id="tr-ivl"><span style="display:grid;gap:2px"><span class="row-name">Intervall-Timer</span><span class="muted">Tabata, EMOM oder eigene Zeiten, mit Ton</span></span><span class="chev"></span></button>' +
+    (skillGoal() < 0 ? '<button type="button" class="nav-row" data-sk-pick><span style="display:grid;gap:2px"><span class="row-name">Skill-Ziel wählen</span><span class="muted">Zum Beispiel dein erster Klimmzug, Stufe für Stufe</span></span><span class="chev"></span></button>' : '') +
     (p ? '<button type="button" class="nav-row" data-paste-plan><span style="display:grid;gap:2px"><span class="row-name">Neuen Plan einfügen</span><span class="muted">Link oder Code von deinem Coach</span></span><span class="chev"></span></button>' : '') +
     '</div></div>';
   h += '<details class="more" id="tr-mine"' + (store.get('mineOpen', false) ? ' open' : '') + '><summary>Meine Übungen' + (myList.length ? ' (' + myList.length + ')' : '') + '</summary><div class="more-body">' + (myList.length ? '<ul class="list">' + myList.map((m, k) => {
@@ -1766,11 +1943,23 @@ function renderTrain() {
   const cg = $('ci-go'); if (cg) cg.addEventListener('click', goCheckin);
   const sm = $('start-mine'); if (sm) sm.addEventListener('click', () => startWorkout('Meine Übungen', myList.map(m => fromLib(m.m + '.' + m.i))));
   $('start-empty').addEventListener('click', () => startWorkout('Freies Training', []));
+  $('tr-ivl').addEventListener('click', intervalModal);
+  bindSkill(el, renderTrain);
   el.querySelectorAll('[data-paste-plan]').forEach(b => b.addEventListener('click', pasteCodeModal));
   const on = $('own-new'); if (on) on.addEventListener('click', () => { trainWiz = wizardDefaults(); trainView = 'wizard'; $('scroller').scrollTop = 0; renderTrain(); });
   const oe = $('own-edit'); if (oe) oe.addEventListener('click', () => { trainView = 'edit'; $('scroller').scrollTop = 0; renderTrain(); });
   const td = $('tr-days'); if (td) td.addEventListener('toggle', e => store.set('daysOpen', e.target.open));
   $('tr-mine').addEventListener('toggle', e => store.set('mineOpen', e.target.open));
+}
+// Skill-Ziel im Training-Tab: nächste Stufe mit einem Tipp üben
+function skillMiniHTML() {
+  const li = skillGoal();
+  if (li < 0) return '';
+  const ks = LADDERS[li][1], best = skillBest(), lvl = skillLevel(li, best), n = ks.length;
+  if (lvl === n) return '<div class="card sk-mini">' + stepHex(n, 'done') + '<div style="min-width:0;display:grid;gap:1px"><span class="eyebrow">Skill-Ziel gemeistert</span><b>' + esc(LADDERS[li][2]) + '</b><span class="muted">Alle ' + n + ' Stufen geschafft. Zeit für ein neues Ziel?</span></div><button type="button" class="mini" data-sk-pick>Neues Ziel</button></div>';
+  const k = ks[lvl], b = best[k];
+  return '<div class="card sk-mini">' + stepHex(lvl + 1, 'next') + '<div style="min-width:0;display:grid;gap:1px"><span class="eyebrow">Dein Skill-Ziel</span><b>' + esc(LADDERS[li][2]) + '</b>' +
+    '<span class="muted">Stufe ' + (lvl + 1) + ' von ' + n + ': ' + esc(libEx(k)[0]) + ', ' + stepGoalTxt(k) + (b && b.v ? ' (bisher ' + stepVal(k, b.v) + ')' : '') + '</span></div><button type="button" class="mini" data-sk-train="' + k + '">' + ICON_PLAY + 'Üben</button></div>';
 }
 function goCheckin() { finished = null; showTab('progress'); const c = $('ci-card'); if (c) c.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
 
@@ -1850,29 +2039,38 @@ function ladderSwapHTML(x, j) {
   const b = (k, label) => '<button type="button" class="swap-chip" data-swap-lad="' + j + ':' + k + '">' + label + '<b>' + esc(libEx(k)[0]) + '</b></button>';
   return '<div class="swap-lad">' + (L.prev ? b(L.prev, ICON_DOWN + 'Zu schwer?') : '') + (L.next ? b(L.next, ICON_UP + 'Zu leicht?') : '') + '</div>';
 }
+// Halte-Timer-Knopf zeigt immer auf den nächsten offenen Satz
+function holdLabel(card, x) {
+  const b = card && card.querySelector('[data-hold]'), k = x.sets.findIndex(s => !s[2]);
+  if (!b) return;
+  b.hidden = k < 0;
+  if (k >= 0) b.querySelector('span').textContent = 'Timer für Satz ' + (k + 1);
+}
 function renderWorkout(el) {
   const cnt = workoutCount();
   let h = '<div class="sheet-head"><h2>' + esc(active.title) + '</h2><p><span class="wk-time" id="wk-time">' + clockTxt((Date.now() - active.at) / 1000) + '</span> · <span id="wk-count">' + cnt.done + ' von ' + cnt.all + ' Sätzen</span></p></div>';
   if (!active.x.length) h += '<p class="empty">Füge unten deine erste Übung hinzu.</p>';
+  h += warmupHTML();
   h += active.x.map((x, j) => {
-    const last = lastFor(exKey(x)), lib = libEx(x.k), rep = parseInt(x.r, 10);
+    const last = lastFor(exKey(x)), lib = libEx(x.k), rep = parseInt(x.r, 10), timed = timedEx(x), k0 = x.sets.findIndex(s => !s[2]);
     return '<div class="card ex-card">' +
       '<div class="ex-top"><div style="min-width:0"><b>' + esc(x.n) + '</b><span class="row-sub">Ziel ' + x.s + ' × ' + esc(x.r) + (x.p ? ' · Pause ' + x.p + ' s' : '') + '</span></div>' +
         '<a class="mini" href="' + esc(videoUrl(x)) + '" target="_blank" rel="noopener">' + ICON_PLAY + 'Video</a></div>' +
       (x.t ? '<p class="coach-note">' + esc(x.t) + '</p>' : '') +
       (last ? '<p class="last">Letztes Mal: ' + last.map(setShort).join(' · ') + '</p>' : lib ? '<p class="last">' + esc(lib[2]) + '</p>' : '') +
       ladderSwapHTML(x, j) +
-      '<div class="sets"><div class="set-row head"><span class="n">Satz</span><span style="text-align:center">kg</span><span style="text-align:center">Wdh.</span><span></span></div>' +
+      '<div class="sets"><div class="set-row head"><span class="n">Satz</span><span style="text-align:center">kg</span><span style="text-align:center">' + (timed ? 'Sek.' : 'Wdh.') + '</span><span></span></div>' +
       x.sets.map((s, k) => {
         const ph = last ? (last[k] || last[last.length - 1]) : null;
         return '<div class="set-row' + (s[2] ? ' done' : '') + '"><span class="n">' + (k + 1) + '</span>' +
           '<input class="input" inputmode="decimal" enterkeyhint="next" autocomplete="off" aria-label="Gewicht Satz ' + (k + 1) + '" data-kg="' + j + '.' + k + '" value="' + esc(s[0]) + '" placeholder="' + (ph && ph[0] ? fmtNum(ph[0]) : '–') + '">' +
-          '<input class="input" inputmode="numeric" enterkeyhint="done" autocomplete="off" aria-label="Wiederholungen Satz ' + (k + 1) + '" data-reps="' + j + '.' + k + '" value="' + esc(s[1]) + '" placeholder="' + (ph ? ph[1] : (rep || '')) + '">' +
+          '<input class="input" inputmode="numeric" enterkeyhint="done" autocomplete="off" aria-label="' + (timed ? 'Sekunden' : 'Wiederholungen') + ' Satz ' + (k + 1) + '" data-reps="' + j + '.' + k + '" value="' + esc(s[1]) + '" placeholder="' + (ph ? ph[1] : (rep || '')) + '">' +
           '<button type="button" class="check" data-set="' + j + '.' + k + '" aria-pressed="' + !!s[2] + '" aria-label="Satz ' + (k + 1) + ' erledigt">' + ICON_CHECK + '</button></div>';
       }).join('') + '</div>' +
+      (timed ? '<button type="button" class="btn secondary tm-go" data-hold="' + j + '"' + (k0 < 0 ? ' hidden' : '') + '>' + ICON_TIMER + '<span>Timer für Satz ' + (k0 < 0 ? 1 : k0 + 1) + '</span></button>' : '') +
       '<div class="ex-actions"><button type="button" class="text-btn" data-add-set="' + j + '">+ Satz</button><button type="button" class="text-btn" style="color:var(--ink-2)" data-rm-ex="' + j + '">Übung entfernen</button></div></div>';
   }).join('');
-  h += '<div id="wk-picker" style="display:grid"></div><button type="button" class="text-btn" id="wk-add" style="justify-self:start">+ Übung hinzufügen</button>' +
+  h += '<div id="wk-picker" style="display:grid"></div><div class="wk-tools"><button type="button" class="text-btn" id="wk-add">+ Übung hinzufügen</button><button type="button" class="text-btn" id="wk-ivl">' + ICON_TIMER + 'Intervall-Timer</button></div>' +
     '<button type="button" class="btn wide" id="wk-finish">Training beenden</button>' +
     '<button type="button" class="text-btn danger" id="wk-cancel" style="justify-self:center">Training verwerfen</button>';
   el.innerHTML = h;
@@ -1887,9 +2085,10 @@ function renderWorkout(el) {
     if (!s[2]) {
       // leere Felder übernehmen den Vorschlag (letztes Mal bzw. Ziel)
       if (s[0] === '') s[0] = num(kgI.placeholder) != null ? kgI.placeholder : '0';
-      if (s[1] === '') { if (num(rI.placeholder) == null) { rI.focus(); toast('Trag deine Wiederholungen ein'); return; } s[1] = rI.placeholder; }
+      if (s[1] === '') { if (num(rI.placeholder) == null) { rI.focus(); toast(timedEx(x) ? 'Trag deine Sekunden ein' : 'Trag deine Wiederholungen ein'); return; } s[1] = rI.placeholder; }
       s[2] = 1;
       const sw = b.closest('.ex-card').querySelector('.swap-lad'); if (sw) sw.remove();   // Stufe nur vor dem ersten Satz tauschen
+      const wc = $('wu-card'); if (wc) wc.remove();   // Aufwärmen nur vor dem ersten Satz anbieten
       // nächsten Satz ohne Vorschlag mit diesen Werten vorbelegen
       const nx = row.nextElementSibling;
       if (nx) { const a = nx.querySelector('[data-kg]'), r = nx.querySelector('[data-reps]'); if (a.placeholder === '–') a.placeholder = s[0]; if (!r.placeholder || r.placeholder === String(parseInt(x.r, 10))) r.placeholder = s[1]; }
@@ -1898,6 +2097,7 @@ function renderWorkout(el) {
     kgI.value = s[0]; rI.value = s[1];
     row.classList.toggle('done', !!s[2]); b.setAttribute('aria-pressed', String(!!s[2]));
     saveActive();
+    holdLabel(b.closest('.ex-card'), x);
     const c = workoutCount();
     $('wk-count').textContent = c.done + ' von ' + c.all + ' Sätzen';
     if (s[2] && c.done === c.all) { stopRest(); toast('Alle Sätze geschafft! Tippe auf „Training beenden“.'); }
@@ -1913,9 +2113,19 @@ function renderWorkout(el) {
     const j = +b.dataset.rmEx, rm = () => { active.x.splice(j, 1); saveActive(); keepScroll(renderTrain); };
     if (active.x[j].sets.some(s => s[2])) arm(b, 'Wirklich entfernen?', rm); else b.addEventListener('click', rm);
   });
+  el.querySelectorAll('[data-hold]').forEach(b => b.addEventListener('click', () => {
+    const j = +b.dataset.hold, x = active.x[j], k = x.sets.findIndex(s => !s[2]);
+    if (k < 0) return;
+    const row = b.closest('.ex-card').querySelectorAll('.set-row:not(.head)')[k], rI = row.querySelector('[data-reps]'), kI = row.querySelector('[data-kg]');
+    const sec = Math.min(600, Math.max(5, Math.round(num(rI.value) || num(rI.placeholder) || 30)));
+    holdTimer(j, k, sec, num(kI.value) != null ? num(kI.value) : num(kI.placeholder));
+  }));
+  const wg = $('wu-go'); if (wg) wg.addEventListener('click', startWarmup);
+  const ws = $('wu-skip'); if (ws) ws.addEventListener('click', () => { active.wu = 1; saveActive(); $('wu-card').remove(); });
+  $('wk-ivl').addEventListener('click', intervalModal);
   $('wk-add').addEventListener('click', () => {
     $('wk-add').hidden = true;
-    picker($('wk-picker'), x => { active.x.push(Object.assign(x, { sets: Array.from({ length: x.s }, () => ['', '', 0]) })); saveActive(); keepScroll(renderTrain); }, () => { $('wk-add').hidden = false; });
+    picker($('wk-picker'), x => { active.x.push(Object.assign(x, { sets: Array.from({ length: x.s }, () => ['', '', 0]) })); saveActive(); keepScroll(renderTrain); }, () => { const a = $('wk-add'); if (a) a.hidden = false; });
   });
   const fin = $('wk-finish');
   fin.addEventListener('click', () => {
@@ -1930,7 +2140,7 @@ function finishWorkout() {
   const end = Date.now();
   const x = active.x.map(x => ({ n: x.n, k: x.k || '', g: exGroup(x), sets: x.sets.filter(s => s[2]).map(s => [num(s[0]) || 0, Math.round(num(s[1]) || 0)]) })).filter(x => x.sets.length);
   if (x.length) {
-    const before = earnedBadges();
+    const before = earnedBadges(), lv0 = skillLevels();
     // Bestleistungen gegen alle früheren Trainings prüfen
     const prs = [];
     x.forEach(e => {
@@ -1940,7 +2150,8 @@ function finishWorkout() {
     });
     const s = { id: active.id, at: active.at, end, title: active.title, pid: active.pid, day: active.day, x };
     sessions.push(s); sessions.sort((a, b) => a.at - b.at); store.set('sessions', sessions);
-    finished = { s, prs, nb: earnedBadges().filter(id => !before.includes(id)) };
+    const lv1 = skillLevels(), sk = lv1.map((l, li) => ({ li, from: lv0[li], to: l })).filter(o => o.to > o.from);
+    finished = { s, prs, sk, nb: earnedBadges().filter(id => !before.includes(id)) };
   } else finished = null;
   active = null; saveActive(); stopRest(); wakeOff();
   $('scroller').scrollTop = 0;
@@ -1948,12 +2159,17 @@ function finishWorkout() {
 }
 
 function renderFinished(el) {
-  const { s, prs, nb } = finished, t = weekTarget(), n = sessions.filter(x => !x.c && x.at >= weekStart(Date.now())).length;
+  const { s, prs, nb, sk } = finished, t = weekTarget(), n = sessions.filter(x => !x.c && x.at >= weekStart(Date.now())).length;
   el.innerHTML =
     '<div class="done-hero">' + ICON_TROPHY + '<h2>' + (profile.name ? 'Stark, ' + esc(profile.name) + '!' : 'Stark gemacht!') + '</h2><p class="muted">' + esc(s.title) + ' ist gespeichert.</p></div>' +
     '<div class="stats"><div class="stat"><b>' + durMin(s) + ' min</b><span>Dauer</span></div><div class="stat"><b>' + s.x.length + '</b><span>Übungen</span></div><div class="stat"><b>' + prs.length + '</b><span>Bestleistung' + (prs.length === 1 ? '' : 'en') + '</span></div></div>' +
     '<div class="card"><div class="ex-top"><b>Wochenziel</b><span class="muted">' + Math.min(n, t) + ' von ' + t + '</span></div><div class="goal-bar"><i style="width:' + Math.min(100, n / t * 100) + '%"></i></div><p class="muted">' + (n >= t ? (n === t ? 'Geschafft! Alle Trainings dieser Woche erledigt.' : 'Sogar mehr als geplant. Denk an genug Erholung.') : 'Noch ' + (t - n === 1 ? 'ein Training' : (t - n) + ' Trainings') + ' bis zu deinem Wochenziel.') + '</p></div>' +
     (prs.length ? '<div class="card"><b>Neue Bestleistung' + (prs.length > 1 ? 'en' : '') + '</b>' + prs.map(p => '<div class="pr">' + ICON_TROPHY + '<span>' + esc(p.n) + ' · ' + setTxt(p.st) + '</span></div>').join('') + '</div>' : '') +
+    (sk && sk.length ? '<div class="card sk-won"><b>' + (sk.length > 1 ? 'Neue Skill-Stufen geschafft' : 'Neue Skill-Stufe geschafft') + '</b>' + sk.map(o => {
+      const [, ks, goal] = LADDERS[o.li], n = ks.length, top = o.to === n;
+      return '<div class="bdg-new">' + stepHex(o.to, 'done') + '<span style="display:grid;gap:1px;min-width:0"><b>' + (top ? 'Gemeistert: ' + esc(goal) : esc(libEx(ks[o.to - 1])[0])) + '</b><span class="muted">' + esc(goal) + ' · Stufe ' + o.to + ' von ' + n +
+        (top ? '' : '. Als Nächstes: ' + esc(libEx(ks[o.to])[0])) + '</span></span></div>';
+    }).join('') + '</div>' : '') +
     (nb && nb.length ? '<div class="card"><b>Neues Abzeichen</b>' + nb.map(id => { const b = BADGE_BY[id]; return '<div class="bdg-new">' + badgeSvg(b, true) + '<span style="display:grid;gap:1px"><b>' + esc(b[1]) + '</b><span class="muted">' + esc(b[2]) + '</span></span></div>'; }).join('') + '</div>' : '') +
     (coachPlan && coachPlan.c ? '<div class="card"><b>' + esc(coachPlan.c) + ' Bescheid geben?</b><p class="muted">Mit einem Check-in siehst du gemeinsam mit deinem Coach, wie es läuft.</p><button type="button" class="btn secondary" id="fin-ci">Zum Check-in</button></div>' : '') +
     '<button type="button" class="btn secondary wide" id="fin-share">' + ICON_SHARE + 'Als Bild teilen</button>' +
@@ -2028,6 +2244,292 @@ let wake = null;
 async function wakeOn() { try { if (navigator.wakeLock && !wake) { wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => { wake = null; }); } } catch (e) { wake = null; } }
 function wakeOff() { try { if (wake) wake.release(); } catch (e) {} wake = null; }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && active) wakeOn(); });
+
+/* ---------- Timer: Halteübungen, Intervalle und Aufwärmen ---------- */
+// Ein Ablauf besteht aus Phasen { k: 'prep' | 'work' | 'rest', t: Titel, s: Hinweis, sec, kl: Wort unter der Zeit, g: Muskeln am Modell }
+// cfg: { head, mode: 'hold' (ein Satz, wird eingetragen) | 'seq' (Intervalle, Aufwärmen), phases, done: [Titel, Text], onEnd(fertig, t) }
+const ICON_TIMER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.5 2M9.5 2.5h5M12 2.5V6"/></svg>';
+const ICON_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+const TM_KIND = { prep: 'Bereit machen', work: 'Los', rest: 'Pause' };
+let tmr = null;
+function runTimer(cfg) {
+  if (tmr) closeTimer(false);
+  audioInit(); wakeOn(); stopRest();
+  tmr = { cfg, i: -1, end: 0, left: 0, last: null, paused: false, held: 0, fin: false, figs: {} };
+  const el = $('timer');
+  el.innerHTML = '<div class="tm-inner" role="dialog" aria-modal="true" aria-label="' + esc(cfg.head) + '">' +
+    '<div class="tm-top"><span class="tm-head">' + esc(cfg.head) + '</span><button type="button" class="tm-x" id="tm-x" aria-label="Timer beenden">' + ICON_X + '</button></div><div class="tm-main">' +
+    '<div class="tm-fig" id="tm-fig" aria-hidden="true"></div>' +
+    '<div class="tm-txt"><h2 id="tm-title"></h2><p id="tm-sub"></p></div>' +
+    '<div class="tm-ring"><svg viewBox="0 0 220 220" aria-hidden="true"><defs><filter id="tm-blur" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="7"/></filter></defs><circle class="tm-track" cx="110" cy="110" r="100"/><circle class="tm-glow" filter="url(#tm-blur)" id="tm-glow" cx="110" cy="110" r="100" pathLength="100"/><circle class="tm-arc" id="tm-arc" cx="110" cy="110" r="100" pathLength="100"/></svg>' +
+      '<div class="tm-num"><b id="tm-time">0:00</b><span id="tm-kind"></span></div></div>' +
+    '<div class="tm-dots" id="tm-dots" aria-hidden="true"></div>' +
+    '<div class="tm-btns" id="tm-btns"></div></div></div>';
+  el.hidden = false; document.body.classList.add('timing');
+  $('tm-x').addEventListener('click', () => closeTimer(false));
+  nextPhase(false);
+  tmr.iv = setInterval(tickTimer, 100);
+}
+function nextPhase(carry) {
+  const ph = tmr.cfg.phases, prev = ph[tmr.i];
+  if (prev && prev.k === 'work') tmr.held = prev.sec;
+  tmr.i++;
+  if (tmr.i >= ph.length) return finishTimer(carry && Date.now() - tmr.end > 1500);
+  const p = ph[tmr.i], start = carry ? tmr.end : Date.now();
+  tmr.end = start + p.sec * 1000; tmr.last = null;
+  if (p.k !== 'prep' && Date.now() - start < 1500) tone(p.k === 'work' ? 'go' : 'rest');   // nach langer Abwesenheit still nachholen
+  paintPhase();
+}
+function paintPhase() {
+  const ph = tmr.cfg.phases, p = ph[tmr.i], el = $('timer');
+  el.dataset.k = p.k;
+  $('tm-title').textContent = p.t; $('tm-sub').textContent = p.s || '';
+  $('tm-kind').textContent = p.kl || TM_KIND[p.k];
+  // Punkte: eine pro Arbeitsphase (Runden bzw. Aufwärm-Übungen)
+  const works = ph.map((x, i) => x.k === 'work' ? i : -1).filter(i => i >= 0);
+  $('tm-dots').innerHTML = tmr.cfg.mode === 'seq' && works.length > 1 && works.length <= 20 ? works.map(i => '<i class="' + (i < tmr.i ? 'done' : i === tmr.i ? 'on' : '') + '"></i>').join('') : '';
+  timerButtons();
+  timerFig(p.g);
+  paintTime();
+}
+function timerButtons() {
+  const p = tmr.cfg.phases[tmr.i], b = $('tm-btns');
+  if (tmr.fin) {
+    b.innerHTML = tmr.cfg.mode === 'seq' ? '<button type="button" class="btn wide" id="tm-ok">' + esc(tmr.cfg.done && tmr.cfg.done[2] || 'Fertig') + '</button>' : '';
+    const ok = $('tm-ok'); if (ok) ok.addEventListener('click', () => closeTimer(true));
+    return;
+  }
+  if (tmr.cfg.mode === 'hold') {
+    b.innerHTML = '<button type="button" class="btn secondary" id="tm-stop">Abbrechen</button>' +
+      (p.k === 'prep' ? '<button type="button" class="btn" id="tm-skip">Sofort los</button>' : '<button type="button" class="btn" id="tm-done">Fertig</button>');
+    $('tm-stop').addEventListener('click', () => closeTimer(false));
+    const sk = $('tm-skip'); if (sk) sk.addEventListener('click', () => nextPhase(false));
+    const dn = $('tm-done'); if (dn) dn.addEventListener('click', () => {
+      const q = tmr.cfg.phases[tmr.i];
+      if (q.k === 'work') tmr.held = Math.max(1, Math.round(q.sec - (tmr.end - Date.now()) / 1000));
+      closeTimer(true);
+    });
+    return;
+  }
+  b.innerHTML = '<button type="button" class="btn secondary" id="tm-skip">Überspringen</button><button type="button" class="btn" id="tm-pause">' + (tmr.paused ? ICON_PLAY + 'Weiter' : 'Pause') + '</button>';
+  $('tm-skip').addEventListener('click', () => { if (tmr.paused) { tmr.paused = false; $('timer').classList.remove('paused'); } nextPhase(false); });
+  $('tm-pause').addEventListener('click', () => {
+    if (tmr.paused) { tmr.end = Date.now() + tmr.left; tmr.paused = false; audioInit(); }
+    else { tmr.left = Math.max(0, tmr.end - Date.now()); tmr.paused = true; }
+    $('timer').classList.toggle('paused', tmr.paused);
+    const q = tmr.cfg.phases[tmr.i]; $('tm-kind').textContent = tmr.paused ? 'Angehalten' : q.kl || TM_KIND[q.k];
+    timerButtons(); paintTime();
+  });
+}
+function tickTimer() {
+  if (!tmr || tmr.paused || tmr.fin) return;
+  let n = 0;
+  while (tmr && !tmr.fin && Date.now() >= tmr.end && n++ < 400) nextPhase(true);
+  if (tmr && !tmr.fin) paintTime();
+}
+function paintTime() {
+  const p = tmr.cfg.phases[tmr.i], ms = tmr.paused ? tmr.left : tmr.end - Date.now(), left = Math.max(0, ms / 1000), s = Math.ceil(left);
+  if (s !== tmr.last) {
+    if (tmr.last != null && s >= 1 && s <= 3 && !tmr.paused) tone('tick');
+    tmr.last = s;
+    $('tm-time').textContent = clockTxt(s);
+  }
+  $('tm-arc').style.strokeDashoffset = $('tm-glow').style.strokeDashoffset = (100 * (1 - left / p.sec)).toFixed(2);
+}
+function finishTimer(silent) {
+  tmr.fin = true; tmr.paused = false;
+  const el = $('timer'), d = tmr.cfg.done || [];
+  el.dataset.k = 'done'; el.classList.remove('paused');
+  if (!silent) tone('end');
+  $('tm-title').textContent = d[0] || 'Geschafft!';
+  $('tm-sub').textContent = typeof d[1] === 'function' ? d[1](tmr) : d[1] || '';
+  $('tm-kind').textContent = '';
+  $('tm-time').innerHTML = ICON_CHECK;
+  $('tm-arc').style.strokeDashoffset = $('tm-glow').style.strokeDashoffset = '0';
+  // am Ende alle Muskeln des Ablaufs zusammen zeigen
+  const all = {};
+  tmr.cfg.phases.forEach(q => { for (const g in q.g || {}) all[g] = Math.max(all[g] || 0, q.g[g]); });
+  timerFig(Object.keys(all).length ? all : null);
+  $('tm-dots').querySelectorAll('i').forEach(i => { i.className = 'done'; });
+  timerButtons();
+  if (tmr.cfg.mode === 'hold') tmr.to = setTimeout(() => closeTimer(true), 1300);
+}
+function closeTimer(done) {
+  if (!tmr) return;
+  const t = tmr; tmr = null;
+  clearInterval(t.iv); clearTimeout(t.to);
+  const el = $('timer'); el.hidden = true; el.innerHTML = ''; el.className = 'timer'; delete el.dataset.k;
+  document.body.classList.remove('timing');
+  if (!active) wakeOff();
+  if (t.cfg.onEnd) t.cfg.onEnd(done, t);
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && tmr) closeTimer(false); });
+
+// Der 3D-Mann zeigt, welche Muskeln gerade arbeiten (Standbild, wird je Ablauf zwischengespeichert)
+const figSide = g => { let f = 0, b = 0; for (const k in g) { if (BY_ID[k] && BY_ID[k].side === 'back') b += g[k]; else f += g[k]; } return b > f ? 'back' : 'front'; };
+async function timerFig(g) {
+  const box = $('tm-fig');
+  if (!box) return;
+  const key = g ? Object.keys(g).sort().map(k => k + g[k]).join(',') : '';
+  if (box.dataset.key === key) return;
+  box.dataset.key = key;
+  if (!key) { box.innerHTML = ''; box.classList.remove('on'); return; }
+  const t = tmr;
+  let cv = t.figs[key];
+  if (cv === undefined) {
+    await new Promise(r => setTimeout(r, 20));   // erst die Zeit zeigen, dann rendern
+    if (tmr !== t || box.dataset.key !== key) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    try { cv = await hooks.snapshot(g, figSide(g), Math.round(132 * dpr), Math.round(228 * dpr)); } catch (e) { cv = null; }
+    t.figs[key] = cv;
+  }
+  if (tmr !== t || box.dataset.key !== key) return;
+  box.innerHTML = '';
+  if (cv) box.appendChild(cv);
+  box.classList.toggle('on', !!cv);
+}
+// Muskeln einer Übung: Hauptmuskel orange, mittrainierte lila
+function exLoads(x) {
+  const g = exGroup(x), lib = libEx(x.k), t = {};
+  if (lib) lib[5].forEach(s => { if (BY_ID[s]) t[s] = 0.44; });
+  if (BY_ID[g]) t[g] = 0.9;
+  return Object.keys(t).length ? t : null;
+}
+
+// Töne: kurz bei 3-2-1, hoch beim Start, tiefer zur Pause, Dreiklang am Ende
+function tone(kind) {
+  const N = { tick: [[880, 0, 0.09]], go: [[880, 0, 0.12], [1320, 0.13, 0.26]], rest: [[660, 0, 0.14], [494, 0.16, 0.24]], end: [[784, 0, 0.14], [1046, 0.16, 0.14], [1318, 0.32, 0.4]] }[kind];
+  const V = { tick: [40], go: [180], rest: [80, 60, 80], end: [120, 80, 120, 80, 260] }[kind];
+  if (!N) return;
+  try {
+    if (actx) N.forEach(([f, t, d]) => {
+      const o = actx.createOscillator(), g = actx.createGain(), t0 = actx.currentTime + t;
+      o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(kind === 'tick' ? 0.18 : 0.28, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + d);
+      o.connect(g); g.connect(actx.destination); o.start(t0); o.stop(t0 + d + 0.02);
+    });
+  } catch (e) {}
+  try { if (navigator.vibrate) navigator.vibrate(V); } catch (e) {}
+}
+
+/* Halte-Timer für einen Satz: zählt herunter und trägt die gehaltenen Sekunden ein */
+const timedEx = x => /\d\s*s\b/.test(x.r || '') || isTimed(x);
+const sideEx = x => /je (Seite|Bein)/.test(x.r || '') || /je (Seite|Bein)/.test((libEx(x.k) || [])[1] || '');
+function holdTimer(j, k, sec, kg) {
+  const x = active.x[j], g = exLoads(x), side = sideEx(x), of = 'Satz ' + (k + 1) + ' von ' + x.sets.length;
+  const ph = [{ k: 'prep', t: x.n, s: side ? 'Erst die linke Seite. Geh in Position.' : 'Geh in Position.', sec: 3, g }];
+  if (side) ph.push({ k: 'work', t: x.n, s: of + ' · linke Seite', sec, kl: 'Durchhalten', g }, { k: 'rest', t: 'Seite wechseln', s: 'Gleich: rechte Seite', sec: 5, kl: 'Wechseln', g }, { k: 'work', t: x.n, s: of + ' · rechte Seite', sec, kl: 'Durchhalten', g });
+  else ph.push({ k: 'work', t: x.n, s: of, sec, kl: 'Durchhalten', g });
+  runTimer({
+    head: 'Halte-Timer', mode: 'hold', phases: ph, done: ['Geschafft!', sec + ' Sekunden gehalten'],
+    onEnd(done, t) {
+      if (!done || !active || active.x[j] !== x) return;
+      const s = x.sets[k];
+      if (!s || s[2]) return;
+      s[1] = String(Math.max(1, Math.round(t.held)));
+      if (s[0] === '') s[0] = kg != null ? String(kg) : '0';
+      s[2] = 1; saveActive();
+      keepScroll(renderTrain);
+      const c = workoutCount();
+      if (c.done === c.all) toast('Alle Sätze geschafft! Tippe auf „Training beenden“.');
+      else { startRest(x.p || 90); toast('Satz ' + (k + 1) + ' eingetragen: ' + s[1] + ' s'); }
+    }
+  });
+}
+
+/* Intervall-Timer: Tabata, EMOM oder eigene Zeiten */
+const IVL_PRESETS = [['Tabata', 20, 10, 8], ['EMOM', 60, 0, 10], ['40 / 20', 40, 20, 10], ['30 / 30', 30, 30, 10]];
+let ivl = Object.assign({ w: 20, r: 10, n: 8 }, store.get('ivl', {}));
+const ivlTotal = d => 5 + d.w * d.n + d.r * Math.max(0, d.n - 1);
+function intervalModal() {
+  const d = Object.assign({}, ivl);
+  const preTxt = p => p[1] + ' s Arbeit' + (p[2] ? ' · ' + p[2] + ' s Pause' : '') + ' · ' + p[3] + ' Runden';
+  const isPre = p => p[1] === d.w && p[2] === d.r && p[3] === d.n;
+  modal('<h3>Intervall-Timer</h3><p>Die App zählt die Zeit herunter und gibt dir mit Ton und Vibration Bescheid, wann Arbeit und Pause beginnen.</p>' +
+    '<div class="field"><span>Vorlage</span><div class="opt-grid">' + IVL_PRESETS.map((p, i) => '<button type="button" class="opt" data-ivp="' + i + '" aria-pressed="' + isPre(p) + '">' + esc(p[0]) + '<small>' + preTxt(p) + '</small></button>').join('') + '</div></div>' +
+    '<div class="grid3"><label class="field"><span>Arbeit (s)</span><input class="input" id="iv-w" inputmode="numeric" maxlength="3" value="' + d.w + '"></label>' +
+    '<label class="field"><span>Pause (s)</span><input class="input" id="iv-r" inputmode="numeric" maxlength="3" value="' + d.r + '"></label>' +
+    '<label class="field"><span>Runden</span><input class="input" id="iv-n" inputmode="numeric" maxlength="2" value="' + d.n + '"></label></div>' +
+    '<p class="muted" id="iv-sum"></p>' +
+    '<div class="actions"><button type="button" class="text-btn" id="md-later">Abbrechen</button><button type="button" class="btn" id="md-ok">' + ICON_PLAY + 'Start</button></div>', (m, close) => {
+    const sum = () => { m.querySelector('#iv-sum').textContent = d.w >= 5 && d.n >= 1 ? 'Dauer mit 5 Sekunden Vorlauf: ' + clockTxt(ivlTotal(d)) + ' min' : 'Arbeit mindestens 5 Sekunden, mindestens 1 Runde.'; };
+    const mark = () => m.querySelectorAll('[data-ivp]').forEach(b => b.setAttribute('aria-pressed', String(isPre(IVL_PRESETS[+b.dataset.ivp]))));
+    m.querySelectorAll('[data-ivp]').forEach(b => b.addEventListener('click', () => {
+      const p = IVL_PRESETS[+b.dataset.ivp]; d.w = p[1]; d.r = p[2]; d.n = p[3];
+      m.querySelector('#iv-w').value = d.w; m.querySelector('#iv-r').value = d.r; m.querySelector('#iv-n').value = d.n;
+      mark(); sum();
+    }));
+    [['#iv-w', 'w', 600], ['#iv-r', 'r', 600], ['#iv-n', 'n', 99]].forEach(([id, f, max]) => m.querySelector(id).addEventListener('input', e => { d[f] = Math.min(max, Math.max(0, Math.round(num(e.target.value) || 0))); mark(); sum(); }));
+    m.querySelector('#md-later').addEventListener('click', close);
+    m.querySelector('#md-ok').addEventListener('click', () => {
+      if (!(d.w >= 5 && d.n >= 1)) { m.querySelector(d.w >= 5 ? '#iv-n' : '#iv-w').focus(); toast(d.w >= 5 ? 'Mindestens 1 Runde' : 'Arbeit mindestens 5 Sekunden'); return; }
+      ivl = { w: d.w, r: d.r, n: d.n }; store.set('ivl', ivl);
+      close(); intervalTimer(ivl);
+    });
+    sum();
+  }, { left: true });
+}
+function intervalTimer(d) {
+  const pre = IVL_PRESETS.find(p => p[1] === d.w && p[2] === d.r && p[3] === d.n), emom = !d.r;
+  const ph = [{ k: 'prep', t: 'Gleich geht’s los', s: d.n + ' Runden · ' + d.w + ' s Arbeit' + (d.r ? ' · ' + d.r + ' s Pause' : ''), sec: 5 }];
+  for (let i = 1; i <= d.n; i++) {
+    ph.push({ k: 'work', t: (emom ? 'Minute ' : 'Runde ') + i + ' von ' + d.n, s: emom ? 'Übungen machen, der Rest der Minute ist Pause.' : i === d.n ? 'Letzte Runde, gib alles!' : d.r ? 'Danach ' + d.r + ' Sekunden Pause.' : '', sec: d.w, kl: emom ? 'Los' : 'Arbeit' });
+    if (d.r && i < d.n) ph.push({ k: 'rest', t: 'Pause', s: 'Gleich kommt Runde ' + (i + 1) + ' von ' + d.n + '.', sec: d.r });
+  }
+  runTimer({ head: 'Intervall-Timer' + (pre ? ' · ' + pre[0] : ''), mode: 'seq', phases: ph, done: ['Geschafft!', d.n + ' Runden in ' + clockTxt(ivlTotal(d) - 5) + ' min'] });
+}
+
+/* Aufwärmen passend zum Training: rund 5 Minuten für die Muskeln von heute */
+const WARM_NAME = { o: 'Brust und Schultern', z: 'Rücken und Arme', b: 'Beine und Po', r: 'Rumpf' };
+function warmupFor(list) {
+  const w = {};
+  list.forEach(x => {
+    const g = exGroup(x), lib = libEx(x.k);
+    if (WARM_AREA[g]) w[WARM_AREA[g]] = (w[WARM_AREA[g]] || 0) + 2;
+    if (lib) lib[5].forEach(s => { if (WARM_AREA[s]) w[WARM_AREA[s]] = (w[WARM_AREA[s]] || 0) + 1; });
+  });
+  const areas = Object.keys(w).sort((a, b) => w[b] - w[a]);
+  if (!areas.length) return null;
+  // erst den Kreislauf, dann reihum je eine Übung pro Bereich (wichtigster Bereich zuerst)
+  const moves = [WARMUPS[0]], pools = areas.map(a => WARMUPS.filter(m => m[3] !== 'a' && m[3].includes(a))), at = pools.map(() => 0);
+  for (let added = true; added && moves.length < 7;) {
+    added = false;
+    pools.forEach((p, i) => {
+      if (moves.length >= 7) return;
+      while (at[i] < p.length && moves.includes(p[at[i]])) at[i]++;
+      if (at[i] < p.length) { moves.push(p[at[i]++]); added = true; }
+    });
+  }
+  if (moves.length < 6) moves.splice(1, 0, WARMUPS[1]);
+  const g = m => { const t = {}; m[4].split(' ').forEach(k => { t[k] = 0.44; }); return t; };
+  const ph = [{ k: 'prep', t: 'Gleich geht’s los', s: 'Erste Übung: ' + moves[0][0], sec: 5, g: g(moves[0]) }];
+  moves.forEach((m, i) => {
+    if (i) ph.push({ k: 'rest', t: 'Gleich: ' + m[0], s: m[1], sec: 10, kl: 'Kurz lockern', g: g(m) });
+    ph.push({ k: 'work', t: m[0], s: m[1], sec: m[2], g: g(m) });
+  });
+  return { moves, areas, ph, sec: ph.reduce((a, p) => a + p.sec, 0) };
+}
+function warmupHTML() {
+  const wu = active.x.length && !active.wu && !workoutCount().done && warmupFor(active.x);
+  if (!wu) return '';
+  const names = wu.areas.slice(0, 2).map(a => WARM_NAME[a]);
+  return '<div class="card warm" id="wu-card"><div class="ex-top"><div style="min-width:0"><span class="eyebrow">Vor dem ersten Satz</span><b class="warm-h">Erst aufwärmen?</b></div><span class="tag holo">' + Math.round(wu.sec / 60) + ' min</span></div>' +
+    '<p class="muted">' + wu.moves.length + ' Übungen für ' + names.join(' sowie ') + ': ' + esc(wu.moves.map(m => m[0]).join(', ')) + '.</p>' +
+    '<div class="btn-row"><button type="button" class="btn" id="wu-go">' + ICON_PLAY + 'Aufwärmen starten</button><button type="button" class="btn secondary" id="wu-skip">Überspringen</button></div></div>';
+}
+function startWarmup() {
+  const wu = warmupFor(active.x), a = active;
+  if (!wu) return;
+  runTimer({
+    head: 'Aufwärmen', mode: 'seq', phases: wu.ph, done: ['Aufgewärmt!', 'Jetzt bist du bereit für ' + a.title + '.', 'Zum Training'],
+    onEnd(done, t) {
+      // zählt auch, wenn mindestens die Hälfte geschafft ist
+      if (active !== a || !(done || t.i >= wu.ph.length / 2)) return;
+      a.wu = 1; saveActive(); keepScroll(renderTrain);
+      if (done) toast('Viel Erfolg beim Training!');
+    }
+  });
+}
 
 /* ================================================================== */
 /* Fortschritt                                                         */
@@ -2141,7 +2643,10 @@ const BADGES = [
   ['km10', '10 km Cardio', 'Zusammen 10 km gelaufen, geradelt oder gerudert', '10', 'km', 10],
   ['km50', '50 km Cardio', 'Zusammen 50 km Cardio', '50', 'km', 50],
   ['km100', '100 km Cardio', 'Zusammen 100 km Cardio', '100', 'km', 100],
-  ['ci1', 'Erster Check-in', 'Deinem Coach den ersten Check-in geschickt', '@chat', 'ci', 1]
+  ['ci1', 'Erster Check-in', 'Deinem Coach den ersten Check-in geschickt', '@chat', 'ci', 1],
+  ['sk1', 'Erste Skill-Stufe', 'Eine Calisthenics-Stufe geschafft', '@stairs', 'skill', 1],
+  ['sk10', '10 Skill-Stufen', 'Zehn Calisthenics-Stufen geschafft', '@peak', 'skill', 10],
+  ['skg', 'Skill gemeistert', 'Einen Calisthenics-Weg bis zur letzten Stufe geschafft', '@flag', 'skillTop', 1]
 ];
 const BADGE_BY = {}; BADGES.forEach(b => { BADGE_BY[b[0]] = b; });
 const BIG10 = ['brust', 'lat', 'delta', 'bizeps', 'trizeps', 'trapez', 'quad', 'ham', 'glute', 'wade'];
@@ -2151,7 +2656,10 @@ const BADGE_ICONS = {
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/>',
   moon: '<path d="M19.5 14.5A7.5 7.5 0 0 1 9.5 4.5a7.5 7.5 0 1 0 10 10z"/>',
   bolt: '<path d="M13 3L5.5 13.5H11L10 21l7.5-10.5H12z"/>',
-  chat: '<path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/>'
+  chat: '<path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/>',
+  stairs: '<path d="M4 19.5h4.5v-4.5H13v-4.5h4.5V6H21"/>',
+  peak: '<path d="M2.5 19.5l6.5-11 4 6.5 2.5-3.5 6 8z"/><path d="M9 8.5V3.5h4l-1 1.5 1 1.5H9"/>',
+  flag: '<path d="M6 21V3.5M6 4h12l-2.5 4 2.5 4H6"/>'
 };
 function badgeSvg(b, on) {
   const col = on ? 'var(--accent)' : '#4d6378', sym = b[3];
@@ -2172,7 +2680,9 @@ function badgeStats() {
     tr.forEach(o => { if (o.at <= s.at && o.at > s.at - 7 * DAY) o.x.forEach(x => { const g = exGroup(x); if (BIG10.includes(g)) set.add(g); }); });
     groups = Math.max(groups, set.size);
   });
+  const lv = skillLevels();
   return {
+    skill: lv.reduce((a, b) => a + b, 0), skillTop: lv.filter((l, i) => l === LADDERS[i][1].length).length,
     train: tr.length, goalWeeks: ok.length, bestStreak, prs: prHistory(sessions).length, groups,
     early: tr.some(s => new Date(s.at).getHours() < 7) ? 1 : 0, night: tr.some(s => new Date(s.at).getHours() >= 21) ? 1 : 0,
     cardio: ca.length, km: ca.reduce((a, s) => a + (s.c.km || 0), 0), ci: profile.ci || 0
@@ -2270,6 +2780,7 @@ function renderProgress() {
     '<div class="stat"><b>' + st + '</b><span>Wochen in Folge</span></div>' +
     '<div class="stat"><b>' + (chg == null ? '–' : (chg >= 0 ? '+' : '−') + Math.abs(Math.round(chg * 100)) + ' %') + '</b><span>' + (chg == null ? 'Kraft (ab 2 Wochen)' : 'Kraft in 6 Wochen') + '</span></div></div>';
   if (any) h += chartBlock(sessions, target);
+  h += skillHTML();
 
   // Muskeln: Erholung oder Verteilung, das Modell zeigt dasselbe
   h += '<div><div class="sec-head"><p class="group-title">Muskeln</p></div><div class="seg" role="group" aria-label="Muskelansicht" style="margin-bottom:10px">' +
@@ -2341,6 +2852,50 @@ function renderProgress() {
   }));
   const hm = $('hist-more'); if (hm) hm.addEventListener('click', () => { histAll = true; keepScroll(renderProgress); });
   const ba = $('bdg-all'); if (ba) ba.addEventListener('click', () => { badgesAll = !badgesAll; keepScroll(renderProgress); });
+  bindSkill(el, renderProgress);
+}
+
+/* ---------- Skill-Ziel: Karte mit allen Stufen als Abzeichen ---------- */
+function skillHTML() {
+  const li = skillGoal();
+  if (li < 0) return '<div><p class="group-title">Skill-Ziel</p><div class="card sk-empty"><div class="sk-hexes" aria-hidden="true">' + stepHex(1, 'done') + stepHex(2, 'next') + stepHex(3, 'lock') + '</div>' +
+    '<b>Wähle ein Skill-Ziel</b><p class="muted">Zum Beispiel deinen ersten Klimmzug. Die App zeigt dir den Weg in Stufen, und für jede geschaffte Stufe bekommst du ein Abzeichen.</p>' +
+    '<button type="button" class="btn" data-sk-pick>Skill-Ziel wählen</button></div></div>';
+  const ks = LADDERS[li][1], best = skillBest(), lvl = skillLevel(li, best), n = ks.length;
+  const sel = skSel != null && skSel < n ? skSel : Math.min(lvl, n - 1), k = ks[sel], e = libEx(k), b = best[k];
+  const state = i => i < lvl ? 'done' : i === lvl ? 'next' : 'lock';
+  const st = state(sel), goal = stepGoal(k), have = b ? b.v : 0;
+  let detail = '<div class="sk-step"><div class="ex-top"><div style="min-width:0"><span class="eyebrow' + (st === 'done' ? ' done' : st === 'lock' ? ' lock' : '') + '">Stufe ' + (sel + 1) + ' · ' + (st === 'done' ? 'Geschafft' : st === 'next' ? 'Als Nächstes' : 'Später') + '</span><b>' + esc(e[0]) + '</b></div>' +
+    '<a class="mini" href="' + esc(videoUrl({ n: e[0], k })) + '" target="_blank" rel="noopener">' + ICON_PLAY + 'Video</a></div>';
+  if (st === 'done') detail += '<p class="muted">' + (b && b.at ? 'Geschafft am ' + fmtDay(b.at) + '. ' : skillMarked(k) ? 'Von dir abgehakt. ' : 'Mit einer höheren Stufe geschafft. ') + (have ? 'Bestwert: ' + stepVal(k, have) + '.' : '') + '</p>';
+  else {
+    detail += '<p class="muted">Ziel: ' + stepGoalTxt(k) + '. ' + (have ? 'Dein Bestwert: ' + stepVal(k, have) + '.' : 'Noch nicht trainiert.') + '</p>' +
+      '<div class="goal-bar"><i style="width:' + Math.min(100, have / goal * 100).toFixed(0) + '%"></i></div>';
+  }
+  detail += '<div class="btn-row"><button type="button" class="btn' + (st === 'next' ? '' : ' secondary') + '" data-sk-train="' + k + '">' + ICON_PLAY + 'Jetzt üben</button><button type="button" class="btn secondary" data-sk-ex="' + k + '">Übung ansehen</button></div>' +
+    (st !== 'done' ? '<button type="button" class="text-btn sk-mark" data-sk-mark="' + k + '">' + (st === 'next' ? 'Kann ich schon, Stufe abhaken' : 'Kann ich schon, bis hier abhaken') + '</button>'
+      : skillMarked(k) ? '<button type="button" class="text-btn sk-mark" data-sk-unmark="' + k + '">Haken entfernen</button>' : '') + '</div>';
+  return '<div><div class="sec-head"><p class="group-title">Skill-Ziel</p><button type="button" class="text-btn" data-sk-pick style="padding:0 4px;font-size:14px">Ändern</button></div>' +
+    '<div class="card sk-card"><div><h3 class="sk-title">' + esc(LADDERS[li][2]) + '</h3><span class="muted">' + (lvl === n ? 'Gemeistert! Alle ' + n + ' Stufen geschafft.' : lvl + ' von ' + n + ' Stufen geschafft') + '</span></div>' +
+    '<div class="sk-path" style="--n:' + n + '">' + ks.map((key, i) => '<button type="button" class="sk-node ' + state(i) + '" data-sk-step="' + i + '" aria-pressed="' + (i === sel) + '" aria-label="Stufe ' + (i + 1) + ': ' + esc(libEx(key)[0]) + (i < lvl ? ', geschafft' : '') + '">' + stepHex(i + 1, state(i)) + '</button>').join('') + '</div>' +
+    detail + '</div></div>';
+}
+// gemeinsam für Fortschritt und Training
+function bindSkill(el, again) {
+  el.querySelectorAll('[data-sk-pick]').forEach(b => b.addEventListener('click', skillPickModal));
+  el.querySelectorAll('[data-sk-step]').forEach(b => b.addEventListener('click', () => { skSel = +b.dataset.skStep; keepScroll(again); }));
+  el.querySelectorAll('[data-sk-train]').forEach(b => b.addEventListener('click', () => practiceStep(b.dataset.skTrain)));
+  el.querySelectorAll('[data-sk-ex]').forEach(b => b.addEventListener('click', () => { selected = null; goLadder(b.dataset.skEx); }));
+  el.querySelectorAll('[data-sk-mark]').forEach(b => arm(b, 'Sicher? Tippe nochmal zum Abhaken', () => {
+    const before = earnedBadges(), k = b.dataset.skMark;
+    profile.skm = (profile.skm || []).filter(x => x !== k).concat(k); store.set('profile', profile); skSel = null;
+    const nb = earnedBadges().filter(id => !before.includes(id));
+    keepScroll(again);
+    toast(nb.length ? 'Neues Abzeichen: ' + BADGE_BY[nb[0]][1] : 'Stufe abgehakt');
+  }));
+  el.querySelectorAll('[data-sk-unmark]').forEach(b => b.addEventListener('click', () => {
+    profile.skm = (profile.skm || []).filter(x => x !== b.dataset.skUnmark); store.set('profile', profile); keepScroll(again);
+  }));
 }
 
 /* ---------- Training als Bild teilen (Story-Format 1080 × 1920) ---------- */
@@ -2484,6 +3039,7 @@ async function makeCheckin() {
   const w = num(ciDraft.w), target = weekTarget(), wkDone = countIn(sessions, weekStart(now), now + DAY);
   const data = {
     v: 3, id: uid(), cl: profile.name || '', pid: coachPlan ? coachPlan.id : '', at: now, w: w && w > 20 && w < 400 ? w : null, e: ciDraft.e || null, t: ciDraft.t.trim().slice(0, 600),
+    sk: skillGoal() >= 0 ? [skillGoal(), skillLevel(skillGoal(), skillBest())] : null,
     s: list.map(s => { const a = [Math.round(s.at / 60000), s.title, Math.round((s.end - s.at) / 60000), s.c ? [] : s.x.map(packEx)]; if (s.c) a.push(s.c); return a; })
   };
   const week = list.filter(s => s.end > now - 7 * DAY);
@@ -2495,6 +3051,7 @@ async function makeCheckin() {
   week.forEach(s => lines.push('• ' + fmtDate(s.at) + ' ' + s.title + ': ' + (s.c ? cardioTxt(s) : s.x.length + ' Übungen, ' + durMin(s) + ' min')));
   const prs = prHistory(sessions).filter(p => p.at > now - 7 * DAY);
   if (prs.length) lines.push('Bestleistungen: ' + prs.map(p => p.n + ' ' + setTxt(p.st)).join(', '));
+  if (data.sk) lines.push('Skill-Ziel: ' + LADDERS[data.sk[0]][2] + ', ' + data.sk[1] + ' von ' + LADDERS[data.sk[0]][1].length + ' Stufen geschafft');
   if (data.t) lines.push('Notiz: ' + data.t);
   let tok;
   try { tok = await packToken('C', data); } catch (e) { toast('Check-in konnte nicht erstellt werden'); return; }
@@ -2678,7 +3235,7 @@ function mergeCoach(src) {
   src.clients.forEach(c => {
     if (!c || !c.id || C.clients.some(x => x.id === c.id)) return;
     const plan = cleanPlan(Object.assign({}, c.plan, { c: '', ph: '', cl: '' }));
-    C.clients.push({ id: cStr(c.id, 40), name: cStr(c.name, 60) || 'Kunde', ph: cStr(c.ph, 20).replace(/\D/g, ''), sentU: cNum(c.sentU, 0, 9e15, 0), plan: plan || newClient('').plan, checkins: (Array.isArray(c.checkins) ? c.checkins : []).map(cleanCheckin).filter(Boolean).map(x => ({ id: x.id, at: x.at, w: x.w, e: x.e, t: x.t })), sessions: {} });
+    C.clients.push({ id: cStr(c.id, 40), name: cStr(c.name, 60) || 'Kunde', ph: cStr(c.ph, 20).replace(/\D/g, ''), sentU: cNum(c.sentU, 0, 9e15, 0), plan: plan || newClient('').plan, checkins: (Array.isArray(c.checkins) ? c.checkins : []).map(cleanCheckin).filter(Boolean).map(x => ({ id: x.id, at: x.at, w: x.w, e: x.e, t: x.t, sk: x.sk })), sessions: {} });
     const dst = C.clients[C.clients.length - 1];
     if (c.sessions && typeof c.sessions === 'object') Object.values(c.sessions).forEach(s => { const cs = cleanCheckin({ s: [s] }).s[0]; if (cs.d) dst.sessions[cs.id || cs.d] = cs; });
   });
@@ -2808,6 +3365,7 @@ function clientOverHTML(c, st) {
   h += sendBox(c);
   h += '<div><p class="group-title">Letzter Check-in</p>' + (ci ? '<div class="card" style="gap:8px"><div class="ex-top"><b>' + fmtDate(ci.at) + '</b><span class="muted">' + ago(ci.at) + '</span></div>' +
     '<div class="mini-stats"><div><b>' + st.wk + '<small>/' + st.target + '</small></b><span>Trainings</span></div><div><b>' + (ci.e ? ci.e + '<small>/5</small>' : '–') + '</b><span>Energie</span></div><div><b>' + (ci.w ? fmtNum(ci.w) : '–') + '</b><span>kg</span></div></div>' +
+    (ci.sk && LADDERS[ci.sk[0]] ? '<div class="kv"><b>Skill-Ziel</b><span>' + esc(LADDERS[ci.sk[0]][2]) + ' · ' + ci.sk[1] + ' von ' + LADDERS[ci.sk[0]][1].length + ' Stufen geschafft</span></div>' : '') +
     (ci.t ? '<p class="coach-note" style="white-space:pre-line">' + esc(ci.t) + '</p>' : '') + '</div>'
     : '<p class="empty">Noch kein Check-in. ' + esc(c.name) + ' erstellt ihn in der App unter Fortschritt und schickt ihn dir per WhatsApp.</p>') + '</div>';
   h += '<div class="card"><label class="field"><span>Check-in von ' + esc(c.name) + ' einfügen</span>' + clipBtn('co-clip') + '<textarea class="textarea code" id="co-ci" rows="2" placeholder="WhatsApp-Nachricht hier einfügen"></textarea></label></div>';
@@ -2848,7 +3406,7 @@ function clientHistHTML(c, st) {
     h += '<div><p class="group-title">Check-ins</p><div style="display:grid;gap:10px">' +
       (ws.length > 1 ? '<div class="best-row card" style="padding:12px 14px 12px 16px"><div style="display:grid;gap:2px"><span class="row-name">Gewicht ' + fmtNum(ws[ws.length - 1].w) + ' kg</span><span class="muted">' + (ws[ws.length - 1].w - ws[0].w >= 0 ? '+' : '') + fmtNum(ws[ws.length - 1].w - ws[0].w) + ' kg seit ' + fmtDay(ws[0].at) + '</span></div>' + spark(ws.slice(-12).map(x => x.w)) + '</div>' : '') +
       c.checkins.slice().reverse().slice(0, 8).map(ci => '<div class="card" style="gap:6px"><div class="ex-top"><b>' + fmtDate(ci.at) + '</b><span class="muted">' + ago(ci.at) + '</span></div>' +
-        '<p class="muted">' + ([ci.w ? 'Gewicht ' + fmtNum(ci.w) + ' kg' : '', ci.e ? 'Energie ' + ci.e + '/5 (' + ENERGY[ci.e - 1] + ')' : ''].filter(Boolean).join(' · ') || 'Ohne Angaben') + '</p>' +
+        '<p class="muted">' + ([ci.w ? 'Gewicht ' + fmtNum(ci.w) + ' kg' : '', ci.e ? 'Energie ' + ci.e + '/5 (' + ENERGY[ci.e - 1] + ')' : '', ci.sk && LADDERS[ci.sk[0]] ? LADDERS[ci.sk[0]][2] + ' ' + ci.sk[1] + '/' + LADDERS[ci.sk[0]][1].length : ''].filter(Boolean).join(' · ') || 'Ohne Angaben') + '</p>' +
         (ci.t ? '<p class="coach-note" style="white-space:pre-line">' + esc(ci.t) + '</p>' : '') + '</div>').join('') + '</div></div>';
   }
   if (cs.length) h += '<div><p class="group-title">Gemeldete Trainings</p><ul class="list">' + histRows(cs.slice().reverse().slice(0, 14), 'chist') + '</ul></div>';
@@ -2879,7 +3437,7 @@ async function importCheckin(text, client) {
   const c = client || C.clients.find(x => d.pid && x.plan.id === d.pid) || C.clients.find(x => d.cl && x.name.toLowerCase() === d.cl.toLowerCase());
   if (!c) { pickClient(d, text); return; }
   const dup = c.checkins.some(x => x.id === d.id);
-  if (!dup) { c.checkins.push({ id: d.id, at: d.at, w: d.w, e: d.e, t: d.t }); c.checkins.sort((a, b) => a.at - b.at); }
+  if (!dup) { c.checkins.push({ id: d.id, at: d.at, w: d.w, e: d.e, t: d.t, sk: d.sk }); c.checkins.sort((a, b) => a.at - b.at); }
   // dasselbe Training kann in mehreren Check-ins stecken: gleiche Startzeit (±90 s) ersetzt den alten Eintrag
   d.s.forEach(s => {
     if (!s.d) return;
