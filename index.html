@@ -275,13 +275,22 @@ details.more .more-body { padding: 0 16px 16px; display: grid; gap: 12px; font-s
 .set-row .n { text-align: center; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .set-row .input { text-align: center; padding: 8px 6px; font-variant-numeric: tabular-nums; }
 .set-row.done .input { background: var(--accent-soft); border-color: transparent; color: var(--ink); }
+.set-row.next .check { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(181, 123, 255, 0.14); }
+.set-row.next .n { color: var(--accent); }
+.ex-card { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 72px); transition: opacity 0.3s; }
+.ex-card.ex-done { opacity: 0.6; }
+.ex-ok { display: none; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); place-items: center; margin-right: 8px; vertical-align: -3px; }
+.ex-ok svg { width: 12px; height: 12px; }
+.ex-done .ex-ok { display: inline-grid; }
+.wk-prog { height: 4px; border-radius: 2px; background: var(--fill); margin-top: 12px; overflow: hidden; }
+.wk-prog i { display: block; height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--holo), var(--accent)); transition: width 0.35s ease; }
 .set-row .check { width: 34px; height: 34px; justify-self: center; }
 .set-row .check svg { width: 16px; height: 16px; }
 .ex-actions { display: flex; justify-content: space-between; gap: 8px; }
 
 .rest { position: fixed; z-index: 8; left: 50%; bottom: calc(var(--tabbar-h) + 12px); transform: translateX(-50%); width: min(380px, calc(100% - 32px)); box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 6px; align-items: center; padding: 10px 10px 10px 16px; border-radius: 18px; background: rgba(15, 25, 38, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(181, 123, 255, 0.35); overflow: hidden; }
 .rest b { font-size: 20px; font-variant-numeric: tabular-nums; display: block; line-height: 1.1; }
-.rest span { font-size: 12.5px; color: var(--ink-2); }
+.rest span { font-size: 12.5px; color: var(--ink-2); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rest button { border: 0; background: var(--fill); color: var(--ink); border-radius: 10px; padding: 8px 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
 .rest button.go { background: var(--accent); color: var(--accent-ink); }
 .rest .rest-bar { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--accent); width: 0; }
@@ -485,13 +494,24 @@ body.resting .update-bar { display: none; }
 @media (min-width: 900px) { .update-bar { left: auto; right: 210px; transform: translateX(50%); bottom: 82px; } }
 /* Teilen-Bild */
 .modal-card.share { gap: 12px; padding: 18px 16px 10px; }
-.modal-card img.share-img { height: auto; width: auto; max-width: 100%; max-height: calc(100vh - 300px); max-height: calc(100dvh - 300px); object-fit: contain; border-radius: 16px; box-shadow: 0 0 0 1px var(--hair); background: #04070c; }
+.modal-card img.share-img { height: auto; width: auto; max-width: 100%; max-height: calc(100vh - 340px); max-height: calc(100dvh - 340px); object-fit: contain; border-radius: 16px; box-shadow: 0 0 0 1px var(--hair); background: #04070c; }
 .share-acts { display: grid; gap: 8px; }
 .share-acts .small { font-size: 13px; }
 a.btn.wide { box-sizing: border-box; }
 .hist-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; }
 .hist-actions .text-btn { display: inline-flex; align-items: center; gap: 6px; padding-left: 0; }
 .hist-actions .text-btn svg { width: 17px; height: 17px; }
+.share-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.share-tile { display: grid; justify-items: start; align-content: start; gap: 2px; min-height: 104px; padding: 14px; border: 1px solid var(--hair); border-radius: 16px; background: var(--fill); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.share-tile svg { width: 26px; height: 26px; margin-bottom: 8px; color: var(--holo); }
+.share-tile:first-child svg { color: var(--accent); }
+.share-tile b { font-size: 16px; }
+.share-tile span { font-size: 13px; color: var(--ink-2); }
+.share-tile:disabled { opacity: 0.6; cursor: default; }
+.share-tile:active:not(:disabled) { transform: scale(0.98); }
+.share-alt { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 18px; }
+.share-alt .text-btn { display: inline-flex; align-items: center; gap: 6px; }
+.share-alt .text-btn svg { width: 18px; height: 18px; }
 /* Einführung am 3D-Modell */
 .tour { position: fixed; inset: 0; z-index: 24; pointer-events: none; }
 .tour-card { pointer-events: auto; position: absolute; left: 12px; right: 12px; bottom: calc(var(--tabbar-h) + 12px); max-width: 440px; margin: 0 auto; box-sizing: border-box; display: grid; gap: 8px; padding: 18px 20px 14px; border-radius: 24px; background: rgba(10, 17, 27, 0.86); -webkit-backdrop-filter: blur(18px) saturate(1.3); backdrop-filter: blur(18px) saturate(1.3); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 24px 60px rgba(0, 0, 0, 0.55); animation: tour-in 0.35s ease both; }
@@ -554,6 +574,38 @@ body.touring .tabbar, body.touring .sheet, body.touring .topbar, body.touring .s
 body.timing .rest, body.timing .update-bar { display: none; }
 .btn.tm-go { width: 100%; box-sizing: border-box; gap: 8px; }
 .btn.tm-go svg { width: 19px; height: 19px; }
+.btn.cam-go { background: transparent; color: var(--accent); box-shadow: inset 0 0 0 1px rgba(181, 123, 255, 0.4); padding: 10px 16px; font-size: 15px; }
+/* Kamera zählt Wiederholungen */
+.cam { position: fixed; inset: 0; z-index: 23; display: grid; background: var(--stage); padding: calc(10px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px)); box-sizing: border-box; }
+.cam-inner { width: min(520px, 100%); margin: 0 auto; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 12px; min-height: 0; height: 100%; }
+.cam-stage { position: relative; border-radius: 22px; overflow: hidden; background: radial-gradient(ellipse 100% 60% at 50% 35%, #121a33 0%, #070b12 80%); box-shadow: 0 0 0 1px var(--hair); min-height: 0; }
+.cam-stage video, .cam-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cam-stage video.mirror { transform: scaleX(-1); }
+.cam-stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(4, 7, 12, 0.55) 0%, rgba(4, 7, 12, 0) 22%, rgba(4, 7, 12, 0) 62%, rgba(4, 7, 12, 0.75) 100%); }
+.cam-chip { position: absolute; z-index: 2; top: 12px; left: 12px; right: 60px; justify-self: start; width: fit-content; max-width: calc(100% - 72px); box-sizing: border-box; padding: 8px 13px; border-radius: 999px; background: rgba(10, 17, 27, 0.72); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: var(--ink); font-size: 14px; font-weight: 600; line-height: 1.3; }
+.cam-chip.live::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: 1px; box-shadow: 0 0 8px var(--accent); animation: cam-pulse 1.4s infinite; }
+.cam-chip.warn { color: #ffd2a8; }
+@keyframes cam-pulse { 50% { opacity: 0.35; } }
+.cam-flip { position: absolute; z-index: 2; top: 10px; right: 10px; width: 42px; height: 42px; border: 0; border-radius: 50%; background: rgba(10, 17, 27, 0.72); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: var(--ink); display: grid; place-items: center; cursor: pointer; }
+.cam-flip svg { width: 21px; height: 21px; }
+.cam-cd { position: absolute; z-index: 2; inset: 0; display: grid; place-items: center; pointer-events: none; font-size: 132px; font-weight: 800; color: #fff; text-shadow: 0 0 40px rgba(95, 225, 255, 0.7); font-variant-numeric: tabular-nums; }
+.cam-count { position: absolute; z-index: 2; left: 0; right: 0; bottom: 14px; display: grid; justify-items: center; gap: 0; pointer-events: none; text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6); }
+.cam-count b { font-size: 88px; line-height: 1; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.cam-count b.pop { animation: cam-pop 0.35s ease-out; }
+@keyframes cam-pop { 0% { transform: scale(1.25); color: var(--accent); } 100% { transform: scale(1); } }
+.cam-count span { font-size: 14px; font-weight: 600; color: var(--holo); text-transform: uppercase; letter-spacing: 0.08em; }
+.cam-msg { position: absolute; z-index: 3; inset: 0; overflow-y: auto; display: grid; align-items: center; padding: 14px; background: rgba(4, 7, 12, 0.55); }
+.cam-card { background: var(--card); border-radius: 18px; box-shadow: 0 0 0 1px var(--hair); padding: 18px; display: grid; gap: 12px; }
+.cam-card h3 { margin: 0; font-size: 20px; }
+.cam-card p { margin: 0; color: var(--ink-2); font-size: 15px; }
+.cam-card ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 15px; line-height: 1.4; }
+.cam-card .cam-priv { font-size: 13px; }
+.cam-info { display: grid; gap: 2px; text-align: center; }
+.cam-info b { font-size: 17px; }
+.cam-info span { font-size: 14px; color: var(--ink-2); }
+.cam-btns { display: grid; grid-template-columns: 56px minmax(0, 1fr) 56px; gap: 10px; }
+.cam-adj { height: 52px; border: 0; border-radius: 14px; background: var(--fill); color: var(--ink); font-size: 26px; font-weight: 500; cursor: pointer; }
+.cam-btns .btn { min-height: 52px; padding: 10px 12px; font-size: 16px; }
 .wk-tools { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
 .wk-tools .text-btn { display: inline-flex; align-items: center; gap: 6px; }
 .wk-tools .text-btn svg { width: 18px; height: 18px; }
@@ -677,6 +729,7 @@ button.ladder-goal { padding: 4px 0; font-size: 14px; text-align: left; }
     <i class="rest-bar" id="rest-bar"></i>
   </div>
   <div class="timer" id="timer" hidden></div>
+  <div class="cam" id="cam" hidden></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div class="modal" id="modal" hidden></div>
   <div class="tour" id="tour" hidden></div>
@@ -1092,6 +1145,8 @@ const ICON_DOWN = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" st
 const ICON_TROPHY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M10 17h4"/></svg>';
 const ICON_FLAG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 21V4M5.5 4.5h12l-2.5 4 2.5 4h-12"/></svg>';
 const ICON_LAYERS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>';
+const ICON_CAMERA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.5-2h5.6l1.5 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.4"/></svg>';
+const ICON_FIGURE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.6" r="2"/><path d="M6 8.6c2 .9 4 1.3 6 1.3s4-.4 6-1.3M12 9.9v4.6M12 14.5l-2.6 6M12 14.5l2.6 6"/></svg>';
 // Zwei Ausgaben derselben App: als Artifact in claude.ai oder als installierbare Web-App (mit Manifest) unter eigener Adresse
 const HOSTED = !!document.querySelector('link[rel="manifest"]');
 const STANDALONE = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
@@ -2039,35 +2094,53 @@ function ladderSwapHTML(x, j) {
   const b = (k, label) => '<button type="button" class="swap-chip" data-swap-lad="' + j + ':' + k + '">' + label + '<b>' + esc(libEx(k)[0]) + '</b></button>';
   return '<div class="swap-lad">' + (L.prev ? b(L.prev, ICON_DOWN + 'Zu schwer?') : '') + (L.next ? b(L.next, ICON_UP + 'Zu leicht?') : '') + '</div>';
 }
-// Halte-Timer-Knopf zeigt immer auf den nächsten offenen Satz
+// Timer- und Kamera-Knopf zeigen immer auf den nächsten offenen Satz
 function holdLabel(card, x) {
-  const b = card && card.querySelector('[data-hold]'), k = x.sets.findIndex(s => !s[2]);
-  if (!b) return;
-  b.hidden = k < 0;
-  if (k >= 0) b.querySelector('span').textContent = 'Timer für Satz ' + (k + 1);
+  const k = x.sets.findIndex(s => !s[2]);
+  if (!card) return;
+  card.querySelectorAll('[data-hold], [data-cam]').forEach(b => {
+    b.hidden = k < 0;
+    if (k >= 0) b.querySelector('span').textContent = (b.dataset.cam != null ? 'Satz ' + (k + 1) + ' mit Kamera zählen' : 'Timer für Satz ' + (k + 1));
+  });
+}
+// Übungskarte: nächster offener Satz hervorgehoben, fertige Übung mit Haken
+function cardState(card, x) {
+  const k = x.sets.findIndex(s => !s[2]);
+  card.querySelectorAll('.set-row:not(.head)').forEach((r, i) => r.classList.toggle('next', i === k));
+  card.classList.toggle('ex-done', x.sets.length > 0 && k < 0);
+  return k < 0;
+}
+function wkCount(c) {
+  const t = $('wk-count'), p = $('wk-prog');
+  if (t) t.textContent = c.done + ' von ' + c.all + ' Sätzen';
+  if (p) p.style.width = (c.all ? c.done / c.all * 100 : 0) + '%';
 }
 function renderWorkout(el) {
   const cnt = workoutCount();
-  let h = '<div class="sheet-head"><h2>' + esc(active.title) + '</h2><p><span class="wk-time" id="wk-time">' + clockTxt((Date.now() - active.at) / 1000) + '</span> · <span id="wk-count">' + cnt.done + ' von ' + cnt.all + ' Sätzen</span></p></div>';
+  let h = '<div class="sheet-head"><h2>' + esc(active.title) + '</h2><p><span class="wk-time" id="wk-time">' + clockTxt((Date.now() - active.at) / 1000) + '</span> · <span id="wk-count">' + cnt.done + ' von ' + cnt.all + ' Sätzen</span></p>' +
+    '<div class="wk-prog" aria-hidden="true"><i id="wk-prog" style="width:' + (cnt.all ? cnt.done / cnt.all * 100 : 0) + '%"></i></div></div>';
   if (!active.x.length) h += '<p class="empty">Füge unten deine erste Übung hinzu.</p>';
   h += warmupHTML();
   h += active.x.map((x, j) => {
     const last = lastFor(exKey(x)), lib = libEx(x.k), rep = parseInt(x.r, 10), timed = timedEx(x), k0 = x.sets.findIndex(s => !s[2]);
-    return '<div class="card ex-card">' +
-      '<div class="ex-top"><div style="min-width:0"><b>' + esc(x.n) + '</b><span class="row-sub">Ziel ' + x.s + ' × ' + esc(x.r) + (x.p ? ' · Pause ' + x.p + ' s' : '') + '</span></div>' +
+    return '<div class="card ex-card' + (x.sets.length && k0 < 0 ? ' ex-done' : '') + '">' +
+      '<div class="ex-top"><div style="min-width:0"><b><span class="ex-ok" aria-label="Erledigt">' + ICON_CHECK + '</span>' + esc(x.n) + '</b><span class="row-sub">Ziel ' + x.s + ' × ' + esc(x.r) + (x.p ? ' · Pause ' + x.p + ' s' : '') + '</span></div>' +
         '<a class="mini" href="' + esc(videoUrl(x)) + '" target="_blank" rel="noopener">' + ICON_PLAY + 'Video</a></div>' +
       (x.t ? '<p class="coach-note">' + esc(x.t) + '</p>' : '') +
       (last ? '<p class="last">Letztes Mal: ' + last.map(setShort).join(' · ') + '</p>' : lib ? '<p class="last">' + esc(lib[2]) + '</p>' : '') +
       ladderSwapHTML(x, j) +
       '<div class="sets"><div class="set-row head"><span class="n">Satz</span><span style="text-align:center">kg</span><span style="text-align:center">' + (timed ? 'Sek.' : 'Wdh.') + '</span><span></span></div>' +
       x.sets.map((s, k) => {
-        const ph = last ? (last[k] || last[last.length - 1]) : null;
-        return '<div class="set-row' + (s[2] ? ' done' : '') + '"><span class="n">' + (k + 1) + '</span>' +
-          '<input class="input" inputmode="decimal" enterkeyhint="next" autocomplete="off" aria-label="Gewicht Satz ' + (k + 1) + '" data-kg="' + j + '.' + k + '" value="' + esc(s[0]) + '" placeholder="' + (ph && ph[0] ? fmtNum(ph[0]) : '–') + '">' +
-          '<input class="input" inputmode="numeric" enterkeyhint="done" autocomplete="off" aria-label="' + (timed ? 'Sekunden' : 'Wiederholungen') + ' Satz ' + (k + 1) + '" data-reps="' + j + '.' + k + '" value="' + esc(s[1]) + '" placeholder="' + (ph ? ph[1] : (rep || '')) + '">' +
+        // Vorschlag: letztes Mal, sonst der Satz davor in diesem Training, sonst das Ziel
+        const ph = last ? (last[k] || last[last.length - 1]) : null, pv = k > 0 && x.sets[k - 1][2] ? x.sets[k - 1] : null;
+        const kgPh = ph && ph[0] ? fmtNum(ph[0]) : pv && num(pv[0]) ? fmtNum(num(pv[0])) : '–', rPh = ph ? ph[1] : pv && num(pv[1]) ? num(pv[1]) : (rep || '');
+        return '<div class="set-row' + (s[2] ? ' done' : k === k0 ? ' next' : '') + '"><span class="n">' + (k + 1) + '</span>' +
+          '<input class="input" inputmode="decimal" enterkeyhint="next" autocomplete="off" aria-label="Gewicht Satz ' + (k + 1) + '" data-kg="' + j + '.' + k + '" value="' + esc(s[0]) + '" placeholder="' + kgPh + '">' +
+          '<input class="input" inputmode="numeric" enterkeyhint="done" autocomplete="off" aria-label="' + (timed ? 'Sekunden' : 'Wiederholungen') + ' Satz ' + (k + 1) + '" data-reps="' + j + '.' + k + '" value="' + esc(s[1]) + '" placeholder="' + rPh + '">' +
           '<button type="button" class="check" data-set="' + j + '.' + k + '" aria-pressed="' + !!s[2] + '" aria-label="Satz ' + (k + 1) + ' erledigt">' + ICON_CHECK + '</button></div>';
       }).join('') + '</div>' +
       (timed ? '<button type="button" class="btn secondary tm-go" data-hold="' + j + '"' + (k0 < 0 ? ' hidden' : '') + '>' + ICON_TIMER + '<span>Timer für Satz ' + (k0 < 0 ? 1 : k0 + 1) + '</span></button>' : '') +
+      (camKinds(x) && camAble() ? '<button type="button" class="btn tm-go cam-go" data-cam="' + j + '"' + (k0 < 0 ? ' hidden' : '') + '>' + ICON_CAMERA + '<span>Satz ' + (k0 < 0 ? 1 : k0 + 1) + ' mit Kamera zählen</span></button>' : '') +
       '<div class="ex-actions"><button type="button" class="text-btn" data-add-set="' + j + '">+ Satz</button><button type="button" class="text-btn" style="color:var(--ink-2)" data-rm-ex="' + j + '">Übung entfernen</button></div></div>';
   }).join('');
   h += '<div id="wk-picker" style="display:grid"></div><div class="wk-tools"><button type="button" class="text-btn" id="wk-add">+ Übung hinzufügen</button><button type="button" class="text-btn" id="wk-ivl">' + ICON_TIMER + 'Intervall-Timer</button></div>' +
@@ -2092,15 +2165,23 @@ function renderWorkout(el) {
       // nächsten Satz ohne Vorschlag mit diesen Werten vorbelegen
       const nx = row.nextElementSibling;
       if (nx) { const a = nx.querySelector('[data-kg]'), r = nx.querySelector('[data-reps]'); if (a.placeholder === '–') a.placeholder = s[0]; if (!r.placeholder || r.placeholder === String(parseInt(x.r, 10))) r.placeholder = s[1]; }
-      startRest(x.p || 90);
+      startRest(x.p || 90, j);
+      try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
     } else s[2] = 0;
     kgI.value = s[0]; rI.value = s[1];
     row.classList.toggle('done', !!s[2]); b.setAttribute('aria-pressed', String(!!s[2]));
     saveActive();
-    holdLabel(b.closest('.ex-card'), x);
+    const card = b.closest('.ex-card'), cardDone = cardState(card, x);
+    holdLabel(card, x);
     const c = workoutCount();
-    $('wk-count').textContent = c.done + ' von ' + c.all + ' Sätzen';
+    wkCount(c);
     if (s[2] && c.done === c.all) { stopRest(); toast('Alle Sätze geschafft! Tippe auf „Training beenden“.'); }
+    else if (s[2] && cardDone) {
+      // Übung fertig: zur nächsten offenen Übung scrollen
+      const all = [...document.querySelectorAll('.ex-card')], at = all.indexOf(card), open = all.filter(e => !e.classList.contains('ex-done'));
+      const nx = open.find(e => all.indexOf(e) > at) || open[0];
+      if (nx) setTimeout(() => { if (nx.isConnected) nx.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 450);
+    }
   }));
   el.querySelectorAll('[data-swap-lad]').forEach(b => b.addEventListener('click', () => {
     const [j, k] = b.dataset.swapLad.split(':'), x = active.x[+j], n = fromLib(k);
@@ -2120,6 +2201,7 @@ function renderWorkout(el) {
     const sec = Math.min(600, Math.max(5, Math.round(num(rI.value) || num(rI.placeholder) || 30)));
     holdTimer(j, k, sec, num(kI.value) != null ? num(kI.value) : num(kI.placeholder));
   }));
+  el.querySelectorAll('[data-cam]').forEach(b => b.addEventListener('click', () => camOpen(+b.dataset.cam)));
   const wg = $('wu-go'); if (wg) wg.addEventListener('click', startWarmup);
   const ws = $('wu-skip'); if (ws) ws.addEventListener('click', () => { active.wu = 1; saveActive(); $('wu-card').remove(); });
   $('wk-ivl').addEventListener('click', intervalModal);
@@ -2172,10 +2254,13 @@ function renderFinished(el) {
     }).join('') + '</div>' : '') +
     (nb && nb.length ? '<div class="card"><b>Neues Abzeichen</b>' + nb.map(id => { const b = BADGE_BY[id]; return '<div class="bdg-new">' + badgeSvg(b, true) + '<span style="display:grid;gap:1px"><b>' + esc(b[1]) + '</b><span class="muted">' + esc(b[2]) + '</span></span></div>'; }).join('') + '</div>' : '') +
     (coachPlan && coachPlan.c ? '<div class="card"><b>' + esc(coachPlan.c) + ' Bescheid geben?</b><p class="muted">Mit einem Check-in siehst du gemeinsam mit deinem Coach, wie es läuft.</p><button type="button" class="btn secondary" id="fin-ci">Zum Check-in</button></div>' : '') +
-    '<button type="button" class="btn secondary wide" id="fin-share">' + ICON_SHARE + 'Als Bild teilen</button>' +
+    '<div class="card"><b>Teile deinen Erfolg</b><div class="share-tiles">' +
+      '<button type="button" class="share-tile" id="fin-selfie">' + ICON_CAMERA + '<b>Selfie</b><span>Zeig deinen Pump</span></button>' +
+      '<button type="button" class="share-tile" id="fin-share">' + ICON_FIGURE + '<b>3D-Mann</b><span>Muskeln und Werte</span></button></div></div>' +
     '<button type="button" class="btn wide" id="fin-ok">Fertig</button>';
   $('fin-ok').addEventListener('click', () => { finished = null; trainSel = null; renderTrain(); });
-  $('fin-share').addEventListener('click', e => shareSession(s, e.currentTarget));
+  $('fin-share').addEventListener('click', e => shareSession(s, e.currentTarget, '3d'));
+  $('fin-selfie').addEventListener('click', e => shareSession(s, e.currentTarget, 'selfie'));
   const fc = $('fin-ci'); if (fc) fc.addEventListener('click', goCheckin);
 }
 
@@ -2203,7 +2288,15 @@ function picker(box, onPick, onClose) {
 
 /* ---------- Pausentimer ---------- */
 let rest = null;
-function startRest(sec) { rest = { end: Date.now() + sec * 1000, total: sec, over: false }; $('rest').hidden = false; $('rest').classList.remove('over'); document.body.classList.add('resting'); tickRest(); }
+// Was nach der Pause kommt: nächster Satz dieser Übung, sonst die nächste offene Übung
+function restNext(j) {
+  if (!active || j == null || !active.x[j]) return '';
+  const x = active.x[j], k = x.sets.findIndex(s => !s[2]);
+  if (k >= 0) return 'Satz ' + (k + 1) + ' von ' + x.sets.length;
+  for (let i = 1; i < active.x.length; i++) { const y = active.x[(j + i) % active.x.length]; if (y.sets.some(s => !s[2])) return y.n; }
+  return '';
+}
+function startRest(sec, j) { rest = { end: Date.now() + sec * 1000, total: sec, over: false, next: restNext(j) }; $('rest').hidden = false; $('rest').classList.remove('over'); document.body.classList.add('resting'); tickRest(); }
 function stopRest() { rest = null; $('rest').hidden = true; document.body.classList.remove('resting'); }
 function tickRest() {
   if (!rest) return;
@@ -2214,7 +2307,7 @@ function tickRest() {
     setTimeout(() => { if (rest && rest.over) stopRest(); }, 8000);
   }
   $('rest-time').textContent = left > 0 ? clockTxt(Math.ceil(left)) : 'Los geht’s';
-  $('rest-label').textContent = left > 0 ? 'Pause' : 'Nächster Satz';
+  $('rest-label').textContent = left > 0 ? (rest.next ? 'Gleich: ' + rest.next : 'Pause') : (rest.next ? 'Los: ' + rest.next : 'Nächster Satz');
   $('rest-bar').style.width = Math.min(100, (1 - Math.max(left, 0) / rest.total) * 100) + '%';
 }
 $('rest-minus').addEventListener('click', () => { if (rest) { rest.end = Math.max(Date.now() + 1000, rest.end - 15000); tickRest(); } });
@@ -2388,18 +2481,18 @@ async function timerFig(g) {
   if (cv) box.appendChild(cv);
   box.classList.toggle('on', !!cv);
 }
-// Muskeln einer Übung: Hauptmuskel orange, mittrainierte lila
+// Muskeln einer Übung leuchten orange (besserer Kontrast zum blauen Modell); Hauptmuskel etwas kräftiger
 function exLoads(x) {
   const g = exGroup(x), lib = libEx(x.k), t = {};
-  if (lib) lib[5].forEach(s => { if (BY_ID[s]) t[s] = 0.44; });
-  if (BY_ID[g]) t[g] = 0.9;
+  if (lib) lib[5].forEach(s => { if (BY_ID[s]) t[s] = 0.88; });
+  if (BY_ID[g]) t[g] = 1;
   return Object.keys(t).length ? t : null;
 }
 
 // Töne: kurz bei 3-2-1, hoch beim Start, tiefer zur Pause, Dreiklang am Ende
 function tone(kind) {
-  const N = { tick: [[880, 0, 0.09]], go: [[880, 0, 0.12], [1320, 0.13, 0.26]], rest: [[660, 0, 0.14], [494, 0.16, 0.24]], end: [[784, 0, 0.14], [1046, 0.16, 0.14], [1318, 0.32, 0.4]] }[kind];
-  const V = { tick: [40], go: [180], rest: [80, 60, 80], end: [120, 80, 120, 80, 260] }[kind];
+  const N = { rep: [[1175, 0, 0.11]], tick: [[880, 0, 0.09]], go: [[880, 0, 0.12], [1320, 0.13, 0.26]], rest: [[660, 0, 0.14], [494, 0.16, 0.24]], end: [[784, 0, 0.14], [1046, 0.16, 0.14], [1318, 0.32, 0.4]] }[kind];
+  const V = { rep: [35], tick: [40], go: [180], rest: [80, 60, 80], end: [120, 80, 120, 80, 260] }[kind];
   if (!N) return;
   try {
     if (actx) N.forEach(([f, t, d]) => {
@@ -2432,7 +2525,7 @@ function holdTimer(j, k, sec, kg) {
       keepScroll(renderTrain);
       const c = workoutCount();
       if (c.done === c.all) toast('Alle Sätze geschafft! Tippe auf „Training beenden“.');
-      else { startRest(x.p || 90); toast('Satz ' + (k + 1) + ' eingetragen: ' + s[1] + ' s'); }
+      else { startRest(x.p || 90, j); toast('Satz ' + (k + 1) + ' eingetragen: ' + s[1] + ' s'); }
     }
   });
 }
@@ -2501,7 +2594,7 @@ function warmupFor(list) {
     });
   }
   if (moves.length < 6) moves.splice(1, 0, WARMUPS[1]);
-  const g = m => { const t = {}; m[4].split(' ').forEach(k => { t[k] = 0.44; }); return t; };
+  const g = m => { const t = {}; m[4].split(' ').forEach(k => { t[k] = 0.92; }); return t; };   // orange wie im Training
   const ph = [{ k: 'prep', t: 'Gleich geht’s los', s: 'Erste Übung: ' + moves[0][0], sec: 5, g: g(moves[0]) }];
   moves.forEach((m, i) => {
     if (i) ph.push({ k: 'rest', t: 'Gleich: ' + m[0], s: m[1], sec: 10, kl: 'Kurz lockern', g: g(m) });
@@ -2530,6 +2623,320 @@ function startWarmup() {
     }
   });
 }
+
+/* ---------- Wiederholungen per Kamera zählen ---------- */
+// Die Körpererkennung (MediaPipe, läuft komplett auf dem Handy) liefert 33 Körperpunkte pro Bild.
+// Aus den Winkeln von Ellbogen, Schulter, Hüfte und Knie erkennt die App jede volle Bewegung.
+const ICON_FLIP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14.3-3.3L20 8M20 4v4h-4M20 15a8 8 0 0 1-14.3 3.3L4 16M4 20v-4h4"/></svg>';
+
+/* cam-pure:start (ohne DOM, wird im Test einzeln geprüft) */
+// Gelenke: [Punkt davor, Gelenk, Punkt danach] für links und rechts
+const CAM_JOINTS = {
+  elbow: [[11, 13, 15], [12, 14, 16]],
+  shoulder: [[23, 11, 13], [24, 12, 14]],
+  hip: [[11, 23, 25], [12, 24, 26]],
+  knee: [[23, 25, 27], [24, 26, 28]]
+};
+// Welche Gelenke je Muskelgruppe in Frage kommen (Waden: Bewegung zu klein für die Kamera)
+const CAM_SIG = {
+  brust: ['elbow', 'shoulder'], trizeps: ['elbow'], bizeps: ['elbow'], unterarm: ['elbow'],
+  delta: ['shoulder', 'elbow'], lat: ['elbow', 'shoulder'], rhomb: ['elbow', 'shoulder'], trapez: ['elbow', 'shoulder'], rotator: ['elbow', 'shoulder'],
+  ruecken: ['hip', 'knee'], bauch: ['hip', 'knee'], glute: ['hip', 'knee'], ham: ['knee', 'hip'], quad: ['knee', 'hip'], adduk: ['knee', 'hip']
+};
+// Winkel am Gelenk b in Grad, in Bildpunkten (damit Hoch- und Querformat gleich rechnen)
+function jointAngle(a, b, c, w, h) {
+  const ux = (a.x - b.x) * w, uy = (a.y - b.y) * h, vx = (c.x - b.x) * w, vy = (c.y - b.y) * h;
+  const l = Math.hypot(ux, uy) * Math.hypot(vx, vy);
+  if (!(l > 0)) return null;
+  return Math.acos(Math.max(-1, Math.min(1, (ux * vx + uy * vy) / l))) * 180 / Math.PI;
+}
+// Signale: { elbowL: Winkel, elbowR: …} nur für gut sichtbare Gelenke
+function camSignals(lm, w, h, kinds) {
+  const out = {};
+  kinds.forEach(k => CAM_JOINTS[k].forEach((t, side) => {
+    const p = t.map(i => lm[i]);
+    if (p.some(q => !q || (q.visibility != null && q.visibility < 0.5))) return;
+    const a = jointAngle(p[0], p[1], p[2], w, h);
+    if (a != null) out[k + (side ? 'R' : 'L')] = a;
+  }));
+  return out;
+}
+// Zähler: jedes Signal wird geglättet; aus den letzten 8 Sekunden ergibt sich die Spannweite.
+// Eine Wiederholung zählt, wenn das Gelenk erst gebeugt (unteres Drittel) und dann wieder gestreckt ist (oberes Drittel).
+// Das erste Signal, das so eine Wiederholung zeigt, zählt danach allein (z. B. bei Kniebeugen das Knie).
+function repCounter(opt) {
+  opt = Object.assign({ win: 8000, minRange: 35, lo: 0.32, hi: 0.68, gap: 450, ema: 0.45 }, opt || {});
+  const S = {};
+  let lock = null, reps = 0, lastT = -1e9;
+  return {
+    get reps() { return reps; },
+    get lock() { return lock; },
+    push(t, sig) {
+      let counted = false;
+      for (const n in sig) {
+        if (lock && n !== lock) continue;
+        const a = sig[n];
+        let s = S[n];
+        if (!s) s = S[n] = { v: a, h: [], st: null };
+        s.v += (a - s.v) * opt.ema;
+        s.h.push([t, s.v]);
+        while (s.h.length && s.h[0][0] < t - opt.win) s.h.shift();
+        let lo = Infinity, hi = -Infinity;
+        s.h.forEach(q => { if (q[1] < lo) lo = q[1]; if (q[1] > hi) hi = q[1]; });
+        if (hi - lo < opt.minRange) continue;
+        // Beginnt die Bewegung unten (z. B. Kreuzheben, Seitheben), zählt schon die erste Streckung
+        if (!s.st && (s.h[0][1] - lo) / (hi - lo) < opt.lo) s.st = 'lo';
+        const p = (s.v - lo) / (hi - lo);
+        if (p < opt.lo) s.st = 'lo';
+        else if (p > opt.hi) {
+          if (s.st === 'lo' && !counted && t - lastT >= opt.gap) { reps++; lastT = t; counted = true; if (!lock) lock = n; }
+          s.st = 'hi';
+        }
+      }
+      return counted;
+    }
+  };
+}
+// Ziel aus der Vorgabe: „8–12“ → 12, „10“ → 10, sonst keins
+function repGoal(r) { const m = String(r || '').match(/(\d+)\s*(?:[–-]\s*(\d+))?/); return m ? +(m[2] || m[1]) : 0; }
+/* cam-pure:end */
+
+const camKinds = x => (timedEx(x) ? null : CAM_SIG[exGroup(x)]) || null;
+const camAble = () => !HOSTED || !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+
+// Körpererkennung erst beim ersten Gebrauch laden (ca. 17 MB, danach offline im Speicher der App)
+const POSE_DIR = 'vendor/pose/';
+let poseP = null;
+function loadPose(cpu) {
+  if (!poseP || cpu) poseP = (async () => {
+    const { FilesetResolver, PoseLandmarker } = await import('./' + POSE_DIR + 'vision_bundle.js');
+    const fs = await FilesetResolver.forVisionTasks(POSE_DIR + 'wasm');
+    const make = d => PoseLandmarker.createFromOptions(fs, { baseOptions: { modelAssetPath: POSE_DIR + 'pose_landmarker_lite.task', delegate: d }, runningMode: 'VIDEO', numPoses: 1 });
+    let pl = null;
+    if (!cpu) try { pl = await make('GPU'); } catch (e) { pl = null; }
+    if (!pl) pl = await make('CPU');
+    store.set('poseOk', 1);
+    return pl;
+  })();
+  const p = poseP;
+  p.catch(() => { if (poseP === p) poseP = null; });
+  return p;
+}
+
+const CAM_LINES = [[11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [11, 23], [12, 24], [23, 24], [23, 25], [25, 27], [24, 26], [26, 28]];
+let cam = null;
+function camOpen(j) {
+  const x = active && active.x[j];
+  if (!x) return;
+  const k = x.sets.findIndex(s => !s[2]);
+  if (k < 0) return;
+  if (!HOSTED) {
+    modal('<h3>Wiederholungen per Kamera zählen</h3><p>Das geht in der MTC-App auf deinem Handy. Dort zählt die Kamera mit, das Video bleibt dabei auf dem Handy.</p>' +
+      '<a class="btn wide" href="' + APP_URL + '" target="_blank" rel="noopener">MTC-App öffnen</a><button type="button" class="text-btn" id="cm-close">Schließen</button>',
+      (m, close) => m.querySelector('#cm-close').addEventListener('click', close));
+    return;
+  }
+  if (tmr) closeTimer(false);
+  audioInit(); wakeOn(); stopRest();
+  const row = document.querySelectorAll('.ex-card')[j], kI = row && row.querySelectorAll('.set-row:not(.head)')[k].querySelector('[data-kg]');
+  cam = { j, k, x, kinds: camKinds(x) || ['elbow', 'knee'], goal: repGoal(x.r), reps: 0, adj: 0, cnt: null, phase: 'intro', face: store.get('camFace', 'user'),
+    kg: kI ? (num(kI.value) != null ? num(kI.value) : num(kI.placeholder)) : null, seen: 0, lost: 0, ts: 0, lastT: -1, goalHit: false };
+  const el = $('cam');
+  el.innerHTML = '<div class="cam-inner" role="dialog" aria-modal="true" aria-label="Kamera zählt">' +
+    '<div class="tm-top"><span class="tm-head">Kamera zählt</span><button type="button" class="tm-x" id="cam-x" aria-label="Kamera schließen">' + ICON_X + '</button></div>' +
+    '<div class="cam-stage" id="cam-stage"><video id="cam-v" playsinline muted autoplay></video><canvas id="cam-c" aria-hidden="true"></canvas>' +
+      '<span class="cam-chip" id="cam-chip" role="status"></span>' +
+      '<button type="button" class="cam-flip" id="cam-flip" aria-label="Kamera wechseln" hidden>' + ICON_FLIP + '</button>' +
+      '<div class="cam-cd" id="cam-cd" aria-hidden="true"></div>' +
+      '<div class="cam-count" id="cam-count" hidden><b id="cam-n">0</b><span>' + (cam.goal ? 'von ' + esc(x.r) : 'Wiederholungen') + '</span></div>' +
+      '<div class="cam-msg" id="cam-msg" hidden></div></div>' +
+    '<div class="cam-info"><b>' + esc(x.n) + '</b><span>Satz ' + (k + 1) + ' von ' + x.sets.length + (cam.kg ? ' · ' + fmtNum(cam.kg) + ' kg' : '') + (sideEx(x) ? ' · zählt eine Seite' : '') + '</span></div>' +
+    '<div class="cam-btns"><button type="button" class="cam-adj" id="cam-minus" aria-label="Eine Wiederholung weniger">−</button>' +
+      '<button type="button" class="btn" id="cam-ok" disabled>Eintragen</button>' +
+      '<button type="button" class="cam-adj" id="cam-plus" aria-label="Eine Wiederholung mehr">+</button></div></div>';
+  el.hidden = false; document.body.classList.add('timing');
+  $('cam-x').addEventListener('click', () => camClose(false));
+  $('cam-minus').addEventListener('click', () => camAdjust(-1));
+  $('cam-plus').addEventListener('click', () => camAdjust(1));
+  $('cam-ok').addEventListener('click', () => camClose(true));
+  $('cam-flip').addEventListener('click', () => { cam.face = cam.face === 'user' ? 'environment' : 'user'; store.set('camFace', cam.face); camStart(); });
+  camShowCount();
+  if (store.get('camIntro', 0)) camStart();
+  else camIntro();
+}
+// Beim ersten Mal kurz erklären, wie es geht und dass das Video auf dem Handy bleibt
+function camIntro() {
+  const m = $('cam-msg');
+  m.hidden = false;
+  m.innerHTML = '<div class="cam-card"><h3>So zählt die Kamera mit</h3><ol>' +
+    '<li>Stell dein Handy so hin, dass es dich ganz sieht. Von der Seite klappt es meistens am besten.</li>' +
+    '<li>Nach dem Countdown machst du deine Wiederholungen wie immer. Jede volle Bewegung zählt.</li>' +
+    '<li>Daneben gezählt? Mit − und + korrigierst du, dann auf „Eintragen“.</li></ol>' +
+    '<p class="cam-priv">Das Video bleibt auf deinem Handy und wird nirgends gespeichert oder gesendet.</p>' +
+    (store.get('poseOk', 0) ? '' : '<p class="cam-priv">Beim ersten Mal lädt die App die Bewegungserkennung (ca. 17 MB, am besten im WLAN).</p>') +
+    '<button type="button" class="btn wide" id="cam-go">Kamera starten</button></div>';
+  $('cam-go').addEventListener('click', () => { store.set('camIntro', 1); camStart(); });
+}
+function camChip(t, kind) { const c = $('cam-chip'); if (!c) return; c.textContent = t; c.className = 'cam-chip' + (kind ? ' ' + kind : ''); c.hidden = !t; }
+function camShowCount() {
+  if (!cam) return;
+  const n = Math.max(0, cam.reps), b = $('cam-ok');
+  $('cam-n').textContent = n;
+  b.disabled = !n;
+  b.textContent = n ? n + ' Wdh. eintragen' : 'Eintragen';
+}
+function camAdjust(d) {
+  if (!cam) return;
+  cam.adj += d;
+  cam.reps = Math.max(0, (cam.cnt ? cam.cnt.reps : 0) + cam.adj);
+  cam.adj = cam.reps - (cam.cnt ? cam.cnt.reps : 0);
+  $('cam-count').hidden = false;
+  camShowCount();
+}
+function camError(t, retry) {
+  if (!cam) return;
+  cam.phase = 'err'; camStop();
+  camChip('');
+  const m = $('cam-msg');
+  m.hidden = false;
+  m.innerHTML = '<div class="cam-card"><h3>Das hat nicht geklappt</h3><p>' + esc(t) + '</p>' + (retry ? '<button type="button" class="btn wide" id="cam-retry">Nochmal versuchen</button>' : '') + '</div>';
+  if (retry) $('cam-retry').addEventListener('click', camStart);
+}
+function camStop(c) {
+  c = c || cam;
+  if (!c) return;
+  cancelAnimationFrame(c.raf); c.raf = 0; c.loop = (c.loop || 0) + 1;
+  if (c.stream) c.stream.getTracks().forEach(t => t.stop());
+  c.stream = null;
+  const v = $('cam-v'); if (v) v.srcObject = null;
+}
+async function camStart() {
+  if (!cam) return;
+  const c = cam;
+  camStop();
+  const m = $('cam-msg'); m.hidden = true; m.innerHTML = '';
+  c.phase = 'start'; c.seen = 0;
+  camChip('Kamera wird gestartet …');
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return camError('Dein Browser lässt die App nicht an die Kamera. Öffne MTC in Safari oder Chrome.', false);
+  const pose = loadPose();
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: c.face, width: { ideal: 640 }, height: { ideal: 480 } } });
+  } catch (e) {
+    const n = e && e.name;
+    return camError(n === 'NotAllowedError' || n === 'SecurityError' ? 'Die App darf die Kamera nicht benutzen. Erlaube die Kamera für MTC in den Einstellungen deines Handys und versuch es nochmal.'
+      : n === 'NotFoundError' || n === 'OverconstrainedError' ? 'Es wurde keine Kamera gefunden.' : 'Die Kamera ließ sich nicht starten. Ist sie in einer anderen App geöffnet?', true);
+  }
+  if (cam !== c) { stream.getTracks().forEach(t => t.stop()); return; }
+  c.stream = stream;
+  const v = $('cam-v');
+  v.srcObject = stream;
+  v.classList.toggle('mirror', c.face === 'user');
+  try { await v.play(); } catch (e) {}
+  try { const d = await navigator.mediaDevices.enumerateDevices(); $('cam-flip').hidden = d.filter(q => q.kind === 'videoinput').length < 2; } catch (e) {}
+  if (cam !== c || c.stream !== stream) return;
+  if (!c.pl) {
+    camChip(store.get('poseOk', 0) ? 'Bewegungserkennung startet …' : 'Bewegungserkennung wird geladen (einmalig) …');
+    try { c.pl = await pose; } catch (e) { return camError('Die Bewegungserkennung konnte nicht geladen werden. Prüfe deine Internetverbindung und versuch es nochmal.', true); }
+    if (cam !== c || c.stream !== stream) return;
+  }
+  c.phase = c.cnt ? 'run' : 'wait';
+  camChip(c.cnt ? 'Zählt mit' : 'Stell dich so hin, dass die Kamera dich ganz sieht', c.cnt ? 'live' : '');
+  const loop = c.loop;
+  const step = () => { if (cam !== c || c.loop !== loop) return; camFrame(c); c.raf = requestAnimationFrame(step); };
+  c.raf = requestAnimationFrame(step);
+}
+function camFrame(c) {
+  const v = $('cam-v');
+  if (!v || v.readyState < 2 || !v.videoWidth || v.currentTime === c.lastT) return;
+  c.lastT = v.currentTime;
+  const now = performance.now();
+  let res = null;
+  try { c.ts = Math.max(c.ts + 1, Math.round(now)); res = c.pl.detectForVideo(v, c.ts); }
+  catch (e) {
+    // Grafikkarte macht Probleme: einmal auf den Prozessor umschalten
+    if (!c.cpu) { c.cpu = true; c.pl = null; camStop(); camChip('Bewegungserkennung startet neu …'); loadPose(true).then(pl => { if (cam === c) { c.pl = pl; camStart(); } }, () => camError('Die Bewegungserkennung läuft auf diesem Handy leider nicht.', false)); }
+    return;
+  }
+  const lm = res && res.landmarks && res.landmarks[0];
+  const sig = lm ? camSignals(lm, v.videoWidth, v.videoHeight, c.kinds) : {};
+  const seen = Object.keys(sig).length > 0;
+  camDraw(c, v, lm, sig);
+  if (c.phase === 'wait') {
+    c.seen = seen ? (c.seen || now) : 0;
+    if (c.seen && now - c.seen > 500) { c.phase = 'cd'; c.cdEnd = now + 3000; c.cdN = 0; camChip('Bereit machen', ''); }
+  } else if (c.phase === 'cd') {
+    if (!seen) { c.lost = c.lost || now; if (now - c.lost > 800) { c.phase = 'wait'; c.seen = 0; $('cam-cd').textContent = ''; camChip('Stell dich so hin, dass die Kamera dich ganz sieht'); } return; }
+    c.lost = 0;
+    const left = Math.ceil((c.cdEnd - now) / 1000);
+    if (left > 0) { if (left !== c.cdN) { c.cdN = left; $('cam-cd').textContent = left; tone('tick'); } return; }
+    $('cam-cd').textContent = '';
+    c.phase = 'run'; c.cnt = repCounter(); c.adj = c.reps; tone('go');
+    $('cam-count').hidden = false;
+    camChip('Zählt mit', 'live');
+  } else if (c.phase === 'run') {
+    if (!seen) { c.lost = c.lost || now; if (now - c.lost > 700) camChip('Ich sehe dich gerade nicht ganz', 'warn'); return; }
+    if (c.lost) { c.lost = 0; camChip(c.goalHit ? 'Ziel erreicht!' : 'Zählt mit', 'live'); }
+    if (c.cnt.push(now, sig)) {
+      c.reps = Math.max(0, c.cnt.reps + c.adj);
+      camShowCount();
+      const n = $('cam-n'); n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop');
+      if (c.goal && c.reps >= c.goal && !c.goalHit) { c.goalHit = true; tone('end'); camChip('Ziel erreicht!', 'live'); }
+      else tone('rep');
+    }
+  }
+}
+// Körperpunkte über dem Video: Linien in Cyan, das zählende Gelenk in Lila
+function camDraw(c, v, lm, sig) {
+  const cv = $('cam-c');
+  if (!cv) return;
+  const dpr = Math.min(2, window.devicePixelRatio || 1), W = Math.round(cv.clientWidth * dpr), H = Math.round(cv.clientHeight * dpr);
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const g = cv.getContext('2d');
+  g.clearRect(0, 0, W, H);
+  if (!lm) return;
+  const vw = v.videoWidth, vh = v.videoHeight, sc = Math.max(W / vw, H / vh), ox = (W - vw * sc) / 2, oy = (H - vh * sc) / 2, mir = c.face === 'user';
+  const P = i => { const p = lm[i]; let px = ox + p.x * vw * sc; if (mir) px = W - px; return [px, oy + p.y * vh * sc]; };
+  const ok = i => lm[i] && (lm[i].visibility == null || lm[i].visibility >= 0.5);
+  g.lineCap = 'round'; g.lineWidth = 4 * dpr; g.strokeStyle = 'rgba(95,225,255,0.75)';
+  g.shadowColor = 'rgba(95,225,255,0.6)'; g.shadowBlur = 8 * dpr;
+  CAM_LINES.forEach(([a, b]) => { if (!ok(a) || !ok(b)) return; const A = P(a), B = P(b); g.beginPath(); g.moveTo(A[0], A[1]); g.lineTo(B[0], B[1]); g.stroke(); });
+  // zählendes Gelenk (bzw. alle möglichen, solange noch keins feststeht)
+  const lock = c.cnt && c.cnt.lock;
+  g.strokeStyle = '#b57bff'; g.fillStyle = '#b57bff'; g.shadowColor = 'rgba(181,123,255,0.8)'; g.lineWidth = 6 * dpr;
+  Object.keys(sig).forEach(n => {
+    if (lock && n !== lock) return;
+    const t = CAM_JOINTS[n.slice(0, -1)][n.slice(-1) === 'R' ? 1 : 0], A = P(t[0]), B = P(t[1]), C = P(t[2]);
+    g.beginPath(); g.moveTo(A[0], A[1]); g.lineTo(B[0], B[1]); g.lineTo(C[0], C[1]); g.stroke();
+    g.beginPath(); g.arc(B[0], B[1], 9 * dpr, 0, Math.PI * 2); g.fill();
+  });
+  g.shadowBlur = 0;
+}
+function camClose(save) {
+  if (!cam) return;
+  const c = cam; cam = null;
+  camStop(c);
+  const el = $('cam'); el.hidden = true; el.innerHTML = '';
+  document.body.classList.remove('timing');
+  if (!active) { wakeOff(); return; }
+  if (!save || !c.reps || active.x[c.j] !== c.x) return;
+  const s = c.x.sets[c.k];
+  if (!s || s[2]) return;
+  s[1] = String(c.reps);
+  if (s[0] === '') s[0] = c.kg != null ? String(c.kg) : '0';
+  s[2] = 1; saveActive();
+  keepScroll(renderTrain);
+  const n = workoutCount();
+  if (n.done === n.all) toast('Alle Sätze geschafft! Tippe auf „Training beenden“.');
+  else { startRest(c.x.p || 90, c.j); toast('Satz ' + (c.k + 1) + ' eingetragen: ' + c.reps + ' Wdh.'); }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && cam) camClose(false); });
+// Kamera aus, wenn die App in den Hintergrund geht; beim Zurückkommen läuft sie weiter
+document.addEventListener('visibilitychange', () => {
+  if (!cam || cam.phase === 'intro' || cam.phase === 'err') return;
+  if (document.visibilityState === 'hidden') camStop();
+  else camStart();
+});
 
 /* ================================================================== */
 /* Fortschritt                                                         */
@@ -2899,7 +3306,7 @@ function bindSkill(el, again) {
 }
 
 /* ---------- Training als Bild teilen (Story-Format 1080 × 1920) ---------- */
-// Trainierte Muskeln: Hauptmuskeln leuchten orange, mittrainierte lila
+// Trainierte Muskeln leuchten orange; mittrainierte etwas schwächer (Werte unter 0,85 würden ins Lila kippen)
 function sessionLoads(s) {
   const main = {}, sec = {}, t = {};
   s.x.forEach(x => {
@@ -2907,8 +3314,8 @@ function sessionLoads(s) {
     if (BY_ID[g]) main[g] = (main[g] || 0) + n;
     if (lib) lib[5].forEach(sg => { if (sg !== g && BY_ID[sg]) sec[sg] = (sec[sg] || 0) + n; });
   });
-  for (const g in sec) t[g] = Math.min(0.6, 0.42 + sec[g] * 0.03);
-  for (const g in main) t[g] = Math.min(1, 0.7 + main[g] * 0.05);
+  for (const g in sec) t[g] = 0.88;
+  for (const g in main) t[g] = 1;
   return t;
 }
 const isTimed = x => { const L = libEx(x.k); return !!(L && /\d\s*s\b/.test(L[1])); };   // Halteübungen: Wert = Sekunden
@@ -3001,33 +3408,109 @@ async function sessionImage(s, withLogo) {
   return cv;
 }
 const canvasBlob = cv => new Promise(res => { try { cv.toBlob(b => res(b), 'image/png'); } catch (e) { res(null); } });
-async function shareSession(s, btn) {
+
+/* ---------- Selfie-Bild „Training geschafft!“ (Story-Format 1080 × 1920) ---------- */
+// Foto wählen (Kamera oder Galerie). Muss direkt im Tipp starten, sonst blockt das Handy die Auswahl.
+function pickPhoto() {
+  return new Promise(res => {
+    let inp = $('photo-in');
+    if (!inp) {
+      inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.id = 'photo-in';
+      inp.setAttribute('aria-hidden', 'true'); inp.tabIndex = -1;
+      inp.style.cssText = 'position:fixed;left:-200px;top:0;width:1px;height:1px;opacity:0';
+      document.body.appendChild(inp);
+    }
+    inp.value = '';
+    inp.onchange = () => res((inp.files && inp.files[0]) || null);
+    inp.oncancel = () => res(null);
+    inp.click();
+  });
+}
+const fileImg = file => new Promise(res => {
+  const u = URL.createObjectURL(file), i = new Image();
+  i.onload = () => res(i); i.onerror = () => { URL.revokeObjectURL(u); res(null); }; i.src = u;
+});
+async function selfieImage(img, withLogo) {
+  const W = 1080, H = 1920, cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const c = cv.getContext('2d'), SANS = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif', BRAND = '"Chakra Petch", ' + SANS;
+  try { await document.fonts.load('600 30px "Chakra Petch"'); } catch (e) {}
+  c.fillStyle = '#04070c'; c.fillRect(0, 0, W, H);
+  // Foto füllt das Bild; bei sehr hohen Fotos bleibt eher der Kopf drin
+  const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height, sc = Math.max(W / iw, H / ih), dw = iw * sc, dh = ih * sc;
+  c.drawImage(img, (W - dw) / 2, (H - dh) * 0.35, dw, dh);
+  // dunkler Verlauf unten, damit die Schrift auf jedem Foto lesbar ist
+  const g = c.createLinearGradient(0, 1180, 0, H);
+  g.addColorStop(0, 'rgba(4,7,12,0)'); g.addColorStop(0.45, 'rgba(4,7,12,0.5)'); g.addColorStop(1, 'rgba(4,7,12,0.92)');
+  c.fillStyle = g; c.fillRect(0, 1180, W, H - 1180);
+  // Schrift klein unten, über dem Bereich, den Instagram mit der Antwortleiste verdeckt
+  c.textBaseline = 'alphabetic'; c.textAlign = 'center';
+  c.shadowColor = 'rgba(0,0,0,0.5)'; c.shadowBlur = 16;
+  c.fillStyle = '#ffffff'; c.font = '800 62px ' + SANS; c.fillText('Training geschafft!', W / 2, 1546);
+  c.shadowBlur = 0;
+  const bar = c.createLinearGradient(W / 2 - 60, 0, W / 2 + 60, 0); bar.addColorStop(0, '#5fe1ff'); bar.addColorStop(1, '#b57bff');
+  c.fillStyle = bar; rrect(c, W / 2 - 60, 1574, 120, 5, 2.5); c.fill();
+  const logo = withLogo ? await loadImg('logo.png') : null;
+  const txt = 'Inspired by MTC Coaching';
+  c.font = '600 30px ' + BRAND; c.letterSpacing = '2px';
+  const tw = c.measureText(txt).width, lh = 66, lw = logo ? logo.width / logo.height * lh : 0, gap = logo ? 16 : 0, x0 = (W - lw - gap - tw) / 2, cy = 1642;
+  c.shadowColor = 'rgba(0,0,0,0.5)'; c.shadowBlur = 12;
+  if (logo) c.drawImage(logo, x0, cy - lh / 2, lw, lh);
+  c.textAlign = 'left'; c.textBaseline = 'middle'; c.fillStyle = 'rgba(233,242,251,0.94)'; c.fillText(txt, x0 + lw + gap, cy + 2);
+  c.shadowBlur = 0; c.letterSpacing = '0px'; c.textBaseline = 'alphabetic';
+  return cv;
+}
+
+/* ---------- Teilen: Selfie oder 3D-Mann ---------- */
+// kind 'selfie': erst Foto wählen, dann Bild bauen; '3d': Bild mit dem 3D-Mann und den Werten
+async function shareSession(s, btn, kind) {
   if (!s || s.c || !s.x.length || (btn && btn.disabled)) return;
+  const selfie = kind === 'selfie';
+  let photo = null;
+  if (selfie) {
+    const file = await pickPhoto();
+    if (!file) return;
+    photo = await fileImg(file);
+    if (!photo) { toast('Dieses Foto lässt sich nicht öffnen. Nimm ein anderes.'); return; }
+  }
   const label = btn ? btn.innerHTML : '';
   if (btn) { btn.disabled = true; btn.textContent = 'Bild wird erstellt …'; }
   await new Promise(r => setTimeout(r, 30));
+  const make = withLogo => selfie ? selfieImage(photo, withLogo) : sessionImage(s, withLogo);
   let blob = null;
-  try { blob = await canvasBlob(await sessionImage(s, true)); } catch (e) { blob = null; }
-  if (!blob) { try { blob = await canvasBlob(await sessionImage(s, false)); } catch (e) { blob = null; } }   // falls das Logo das Bild sperrt
-  if (btn) { btn.disabled = false; btn.innerHTML = label; }
+  try { blob = await canvasBlob(await make(true)); } catch (e) { blob = null; }
+  if (!blob) { try { blob = await canvasBlob(await make(false)); } catch (e) { blob = null; } }   // falls das Logo das Bild sperrt
+  if (photo) URL.revokeObjectURL(photo.src);
+  if (btn && btn.isConnected) { btn.disabled = false; btn.innerHTML = label; }
   if (!blob) { toast('Das Bild konnte nicht erstellt werden'); return; }
-  const name = 'MTC-Training-' + new Date(s.at).toISOString().slice(0, 10) + '.png', url = URL.createObjectURL(blob);
+  const name = 'MTC-' + (selfie ? 'Selfie' : 'Training') + '-' + new Date(s.at).toISOString().slice(0, 10) + '.png', url = URL.createObjectURL(blob);
   const file = typeof File === 'function' ? new File([blob], name, { type: 'image/png' }) : null;
   const canShare = !!(file && navigator.canShare && navigator.share && navigator.canShare({ files: [file] }));
   // Im Artifact gibt es keine Downloads: dort nur gedrückt halten bzw. Rechtsklick
   const saveHTML = HOSTED ? '<a class="btn wide" id="sh-dl" href="' + url + '" download="' + name + '">Bild speichern</a><p class="small muted">Oder halte das Bild gedrückt und wähle „Sichern“.</p>'
     : '<p class="small muted">' + (touchUI ? 'Halte das Bild gedrückt und wähle „Sichern“.' : 'Rechtsklick auf das Bild und „Bild speichern unter“ wählen.') + '</p>';
-  modal('<h3>Dein Training als Bild</h3><img class="share-img" src="' + url + '" alt="Trainingsbild mit dem 3D-Modell und deinen Werten">' +
+  if (shareSession.url) URL.revokeObjectURL(shareSession.url);   // Bild aus dem vorigen Fenster
+  shareSession.url = url;
+  const other = selfie
+    ? '<button type="button" class="text-btn" id="sh-again">' + ICON_CAMERA + 'Anderes Foto</button><button type="button" class="text-btn" id="sh-swap">' + ICON_FIGURE + 'Bild mit 3D-Mann</button>'
+    : '<button type="button" class="text-btn" id="sh-swap">' + ICON_CAMERA + 'Lieber ein Selfie</button>';
+  modal('<h3>' + (selfie ? 'Dein Selfie für die Story' : 'Dein Training als Bild') + '</h3>' +
+    '<img class="share-img" src="' + url + '" alt="' + (selfie ? 'Dein Foto mit „Training geschafft!“ und dem MTC-Logo' : 'Trainingsbild mit dem 3D-Modell und deinen Werten') + '">' +
     '<div class="share-acts">' + (canShare ? '<button type="button" class="btn wide" id="sh-go">' + ICON_SHARE + 'Teilen</button>' : saveHTML) + '</div>' +
+    '<div class="share-alt">' + other + '</div>' +
     '<button type="button" class="text-btn" id="sh-close">Schließen</button>', (m, close) => {
     m.firstChild.classList.add('share');
     const done = () => { close(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
     m.querySelector('#sh-close').addEventListener('click', done);
     const go = m.querySelector('#sh-go');
     if (go) go.addEventListener('click', async () => {
-      try { await navigator.share({ files: [file], title: 'Mein Training', text: 'Mein Training mit MTC Fitness Coaching' }); done(); }
+      try { await navigator.share({ files: [file], title: 'Mein Training', text: 'Training geschafft! Mit MTC Fitness Coaching' }); done(); }
       catch (e) { if (!e || e.name !== 'AbortError') m.querySelector('.share-acts').innerHTML = saveHTML; }   // z. B. im Artifact gesperrt
     });
+    // Wechsel bleibt im selben Tipp, damit die Fotoauswahl aufgeht
+    const sw = m.querySelector('#sh-swap'), ag = m.querySelector('#sh-again');
+    sw.addEventListener('click', () => shareSession(s, sw, selfie ? '3d' : 'selfie'));
+    if (ag) ag.addEventListener('click', () => shareSession(s, ag, 'selfie'));
   }, { left: false });
 }
 

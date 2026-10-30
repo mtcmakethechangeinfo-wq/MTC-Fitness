@@ -1,8 +1,8 @@
 /* MTC Fitness Coaching: Offline-Speicher. Wird beim Bauen erzeugt, nicht von Hand ändern. */
-const VERSION = 'b8ff8cd793';
+const VERSION = '6963718151';
 const CACHE = 'mtc-' + VERSION;
 const FILES = {
-  "./": "38ee241a43b6",
+  "./": "7aeb88e11d7c",
   "data/body.b64.txt": "1cb0dca44316",
   "data/body.json": "4a6d57d0f546",
   "fonts/chakra-petch-600.woff2": "4d6d5f0b31b3",
@@ -23,6 +23,15 @@ const FILES = {
   "vendor/three/examples/js/shaders/CopyShader.js": "249592106188",
   "vendor/three/examples/js/shaders/LuminosityHighPassShader.js": "3c8552bb514a"
 };
+// Große Dateien, die erst bei Bedarf geladen werden (Kamera zählt): beim Update nur übernehmen, nie vorab laden
+const LAZY = {
+  "vendor/pose/pose_landmarker_lite.task": "59929e1d1ee9",
+  "vendor/pose/vision_bundle.js": "904ebb379140",
+  "vendor/pose/wasm/vision_wasm_internal.js": "e7fd9858e8e8",
+  "vendor/pose/wasm/vision_wasm_internal.wasm": "6a5c64584c2a",
+  "vendor/pose/wasm/vision_wasm_nosimd_internal.js": "438d1fe8ff7f",
+  "vendor/pose/wasm/vision_wasm_nosimd_internal.wasm": "8a3092d34c79"
+};
 
 self.addEventListener('install', e => {
   e.waitUntil((async () => {
@@ -42,7 +51,10 @@ self.addEventListener('install', e => {
       if (!res.ok) throw new Error(f + ' ' + res.status);
       await cache.put(f, res);
     }));
-    await cache.put('__hashes', new Response(JSON.stringify(FILES)));
+    await Promise.all(Object.keys(LAZY).map(async f => {
+      if (old && oldHashes[f] === LAZY[f]) { const r = await old.match(f); if (r) await cache.put(f, r); }
+    }));
+    await cache.put('__hashes', new Response(JSON.stringify(Object.assign({}, FILES, LAZY))));
   })());
 });
 self.addEventListener('activate', e => {
